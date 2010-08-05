@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/FullWidth"
+    android:orientation="vertical" >
+    <LinearLayout style="@style/ActionBar" >
+        <ImageView style="@style/ActionBarLogo" />
+        
+        <View style="@style/Spring" />
+    
+        <ImageView style="@style/ActionBarSeparator" />
+        <ImageView style="@style/ActionBarAction"
+            android:id="@+id/ab_profile"
+            android:src="@drawable/icons_profile" />
+        
+        <ImageView style="@style/ActionBarSeparator" />
+        <ImageView style="@style/ActionBarAction"
+            android:id="@+id/ab_new_event"
+            android:src="@drawable/icons_plus" />
+    </LinearLayout>
+    
+    <LinearLayout style="@style/Dashboard">
+        <LinearLayout style="@style/DashboardRow">
+            <Button style="@style/DashboardButton"
+                android:id="@+id/dashboard_events_nearby"
+                android:text="@string/dashboard_events_nearby"
+                android:drawableTop="@drawable/dashboard_events_nearby"/>
+            <Button style="@style/DashboardButton"
+                android:id="@+id/dashboard_events_friends"
+                android:text="@string/dashboard_events_friends"
+                android:drawableTop="@drawable/dashboard_events_friends"/>
+        </LinearLayout>
+
+        <LinearLayout style="@style/DashboardRow">
+            <Button style="@style/DashboardButton"
+                android:id="@+id/dashboard_events_category"
+                android:text="@string/dashboard_events_category"
+                android:drawableTop="@drawable/dashboard_events_category"/>
+            <Button style="@style/DashboardButton"
+                android:id="@+id/dashboard_events_new"
+                android:text="@string/dashboard_events_new"
+                android:drawableTop="@drawable/dashboard_events_new"/>
+        </LinearLayout>
+
+        <LinearLayout style="@style/DashboardRow">
+            <Button style="@style/DashboardButton"
+                android:id="@+id/dashboard_profile"
+                android:text="@string/dashboard_profile"
+                android:drawableTop="@drawable/dashboard_profile"/>
+            <Button style="@style/DashboardButton" 
+                android:id="@+id/dashboard_account"
+                android:text="@string/dashboard_account"
+                android:drawableTop="@drawable/dashboard_account"/>
+        </LinearLayout>
+    </LinearLayout>
+    
+</LinearLayout>

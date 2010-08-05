@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+	<LinearLayout
+	    style="@style/ActionBar" >
+		<ImageView style="@style/ActionBarLogo" />
+		
+		<View style="@style/Spring" />
+	
+	    <ImageView style="@style/ActionBarSeparator" />
+		<ImageView style="@style/ActionBarAction"
+			android:id="@+id/ab_profile"
+		    android:src="@drawable/icons_profile" />
+	</LinearLayout>
+    
+	<ScrollView style="@style/FullWidth">
+	<LinearLayout style="@style/EventNew"
+		android:orientation="vertical" >
+	    
+		<LinearLayout style="@style/EventNewTitle"
+			android:paddingTop="0dp" >
+			<TextView style="@style/EventNewTitleText"
+				android:text="@string/events_new_title_where" />
+			<View style="@style/EventNewTitleBorder" />
+		</LinearLayout>
+		<EditText style="@style/EventNewField"
+		    android:hint="@string/events_new_where"
+		    android:autoText="true"
+		    android:id="@+id/events_new_where" />
+	    
+		<LinearLayout style="@style/EventNewTitle" >
+			<TextView style="@style/EventNewTitleText"
+				android:text="@string/events_new_title_what" />
+			<View style="@style/EventNewTitleBorder" />
+		</LinearLayout>
+		<EditText style="@style/EventNewField"
+		    android:hint="@string/events_new_desc"
+		    android:autoText="true"
+		    android:id="@+id/events_new_desc" />
+		
+		<LinearLayout style="@style/EventNewTitle" >
+			<TextView style="@style/EventNewTitleText"
+				android:text="@string/events_new_title_when" />
+			<View style="@style/EventNewTitleBorder" />
+		</LinearLayout>
+		
+			<LinearLayout style="@style/EventNewField"
+			    android:layout_height="wrap_content" >
+				<TextView style="@style/FormElementTitle"
+					android:text="@string/events_new_date_title" />
+				<TextView style="@style/FormElementValue"
+					android:text="@string/events_new_date_default"
+					android:id="@+id/events_new_date" />
+				<Button style="@style/WrapAll"
+					android:text="@string/events_new_button_change"
+					android:id="@+id/events_new_date_change" />
+			</LinearLayout>
+			
+			<LinearLayout style="@style/EventNewField"
+			    android:layout_height="wrap_content" >
+				<TextView style="@style/FormElementTitle"
+					android:text="@string/events_new_time_title" />
+				<TextView style="@style/FormElementValue"
+					android:text="@string/events_new_time_default"
+					android:id="@+id/events_new_time" />
+				<Button style="@style/WrapAll"
+					android:text="@string/events_new_button_change"
+					android:id="@+id/events_new_time_change" />
+			</LinearLayout>
+		
+		
+		<LinearLayout style="@style/EventNewTitle" >
+			<TextView style="@style/EventNewTitleText"
+				android:text="@string/events_new_title_who" />
+			<View style="@style/EventNewTitleBorder" />
+		</LinearLayout>
+		
+			<LinearLayout style="@style/EventNewBroadcast">
+				<TextView style="@style/EventNewBroadcastText"
+					android:text="@string/events_new_broadcast" />
+				<View style="@style/Spring" />
+				<ToggleButton style="@style/WrapAll"
+					android:id="@+id/events_new_broadcast" />
+			</LinearLayout>
+		
+			<EditText style="@style/EventNewField"
+			    android:hint="@string/events_new_cat"
+			    android:autoText="true"
+			    android:visibility="gone"
+			    android:id="@+id/events_new_cat" />
+		
+		<LinearLayout style="@style/FullWidth"
+		    android:layout_height="wrap_content" >
+			<View style="@style/Spring" />
+			<Button style="@style/WrapAll"
+				android:text="@string/events_new_button_submit"
+				android:id="@+id/events_new_submit" />
+		</LinearLayout>
+	</LinearLayout>
+	</ScrollView>
+</LinearLayout>

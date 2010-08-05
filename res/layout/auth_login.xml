@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:padding="10px" >
+	<ImageView 
+		android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"
+	    android:paddingTop="5px"
+	    android:paddingBottom="10px"
+	    android:src="@drawable/logo_large" />
+	    
+	<EditText
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content"
+	    android:hint="@string/auth_login_username"
+	    android:id="@+id/auth_login_username" />
+	<EditText
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content"
+	    android:hint="@string/auth_login_password"
+	    android:password="true"
+	    android:id="@+id/auth_login_password" />
+	
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="right" >
+		<Button
+			android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content"
+		    android:gravity="center"
+		    android:text="@string/auth_login_login"
+		    android:id="@+id/auth_login_button" />
+	</LinearLayout> 
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="left" >
+		<TextView
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content"
+		    android:paddingRight="5px"
+		    android:text="@string/auth_login_new" />
+		<TextView
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content"
+		    android:text="@string/auth_login_reg"
+		    android:clickable="true"
+		    android:textColor="#35a09f"
+		    android:id="@+id/auth_login_reg" />
+	</LinearLayout> 
+
+</LinearLayout> 

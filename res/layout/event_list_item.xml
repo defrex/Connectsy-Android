@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/EventListItem" >
+    
+	<ImageView style="@style/EventListItemAvatar"
+	    android:src="@drawable/avatar_default"
+	    android:id="@+id/event_list_item_avatar" />
+	    
+	<LinearLayout style="@style/EventListItemTextSection" >
+		<LinearLayout style="@style/EventListItemTextSectionTop" >
+		
+			<TextView style="@style/EventListItemTextTop"
+				android:text="by " />
+		
+			<TextView style="@style/EventListItemUsername"
+			    android:id="@+id/event_list_item_username"
+			    android:clickable="true" />
+			
+			<TextView style="@style/EventListItemTextTop"
+				android:text=" at " />
+		
+			<TextView style="@style/EventListItemTextTop"
+			    android:id="@+id/event_list_item_where" />
+		</LinearLayout>
+		
+		<LinearLayout style="@style/EventListItemTextSectionBottom" >
+		    
+			<TextView style="@style/EventListItemDesc"
+			    android:id="@+id/event_list_item_desc" />
+		    
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

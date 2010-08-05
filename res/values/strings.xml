@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Connectsy</string>
+    
+    <string name="menu_logout">Logout</string>
+    <string name="menu_settings">Settings</string>
+    
+    <string name="dashboard_events_nearby">Nearby Activity</string>
+    <string name="dashboard_events_friends">Friends Activity</string>
+    <string name="dashboard_events_category">Category</string>
+    <string name="dashboard_events_new">Create Event</string>
+    <string name="dashboard_profile">Profile</string>
+    <string name="dashboard_account">Account</string>
+    
+    <string name="auth_login_username">username</string>
+    <string name="auth_login_password">password</string>
+    <string name="auth_login_login">Sign In</string>
+    <string name="auth_login_reg">Sign Up</string>
+    <string name="auth_login_new">Don\'t have and account?</string>
+    <string name="auth_register_register">Register</string>
+    
+    
+    <string name="events_new_title_where">Where</string>
+    <string name="events_new_title_what">What</string>
+    <string name="events_new_title_when">When</string>
+    <string name="events_new_title_who">Who</string>
+    
+    <string name="events_new_button_change">Change</string>
+    <string name="events_new_where">Where are you going?</string>
+    <string name="events_new_desc">What are you doing?</string>
+    <string name="events_new_date_title">Date:</string>
+    <string name="events_new_date_default">Today</string>
+    <string name="events_new_time_title">Time:</string>
+    <string name="events_new_time_default">2pm</string>
+    <string name="events_new_broadcast">Broadcast:</string>
+    <string name="events_new_cat">Category</string>
+    <string name="events_new_button_submit">Create Event</string>
+    
+    <string name="event_view_attend">Attend!</string>
+    <string name="attendant_status_0">Invited</string>
+    <string name="attendant_status_1">Attending</string>
+    <string name="attendant_status_2">Maybe Attending</string>
+    <string name="attendant_status_3">Not Attending</string>
+    <string name="attendant_status_4">Running Late</string>
+    
+    <string name="preferences_user">User preferances</string>
+    <string name="preference_avatar">Select Avatar</string>
+</resources>

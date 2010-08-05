@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.connectsy"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application 
+	    	android:icon="@drawable/icon" 
+	    	android:label="@string/app_name"
+	    	android:theme="@style/Theme.Consy">
+        <activity android:name=".Launcher"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Dashboard" />
+        
+        <activity android:name=".events.EventList" />
+        <activity android:name=".events.EventNew" />
+        <activity android:name=".events.EventView">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.connectsy.event" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".users.Register" />
+        <activity android:name=".users.Login" />
+        <activity android:name=".users.Logout"
+                  android:theme="@android:style/Theme.NoDisplay" />
+        <activity android:name=".users.UserView">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.connectsy.user" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+		
+        <activity android:name=".settings.Preferences"
+        	android:theme="@android:style/Theme.Black.NoTitleBar" />
+        
+    </application>
+    <uses-sdk android:minSdkVersion="3" />
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest> 
