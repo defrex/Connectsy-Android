@@ -19,6 +19,16 @@
 	<ScrollView style="@style/FullWidth">
 	<LinearLayout style="@style/EventNew"
 		android:orientation="vertical" >
+        
+        <LinearLayout style="@style/EventNewTitle" >
+            <TextView style="@style/EventNewTitleText"
+                android:text="@string/events_new_title_what" />
+            <View style="@style/EventNewTitleBorder" />
+        </LinearLayout>
+        <EditText style="@style/EventNewField"
+            android:hint="@string/events_new_desc"
+            android:autoText="true"
+            android:id="@+id/events_new_desc" />
 	    
 		<LinearLayout style="@style/EventNewTitle"
 			android:paddingTop="0dp" >
@@ -30,16 +40,6 @@
 		    android:hint="@string/events_new_where"
 		    android:autoText="true"
 		    android:id="@+id/events_new_where" />
-	    
-		<LinearLayout style="@style/EventNewTitle" >
-			<TextView style="@style/EventNewTitleText"
-				android:text="@string/events_new_title_what" />
-			<View style="@style/EventNewTitleBorder" />
-		</LinearLayout>
-		<EditText style="@style/EventNewField"
-		    android:hint="@string/events_new_desc"
-		    android:autoText="true"
-		    android:id="@+id/events_new_desc" />
 		
 		<LinearLayout style="@style/EventNewTitle" >
 			<TextView style="@style/EventNewTitleText"

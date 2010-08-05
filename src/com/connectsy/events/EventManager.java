@@ -43,7 +43,7 @@ public class EventManager extends DataManager {
 		
 		public Event(JSONObject response) throws JSONException{
 			JSONObject event = response.getJSONObject("event");
-			ID = event.getJSONObject("_id").getString("$oid");
+			ID = event.getString("id");
 			revision = event.getString("revision");
 			created = event.getInt("created");
 			creator = event.getString("creator");
@@ -156,6 +156,6 @@ public class EventManager extends DataManager {
 			refreshEventsReturn(response);
 		pendingUpdates--;
 		if (pendingUpdates == 0)
-			listener.onDataUpdate(returnCode);
+			listener.onDataUpdate(returnCode, response);
 	}
 }

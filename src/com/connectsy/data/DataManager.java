@@ -17,7 +17,7 @@ public class DataManager implements ApiRequestListener {
 	public DataUpdateListener listener;
 	
 	public interface DataUpdateListener{
-		public void onDataUpdate(int code);
+		public void onDataUpdate(int code, String response);
 		public void onRemoteError(int httpStatus, int code);
 	}
 	

@@ -72,7 +72,7 @@ public class EventList extends Activity implements DataUpdateListener,
         return MainMenu.onOptionsItemSelected(this, item);
     }
 
-	public void onDataUpdate(int code) {
+	public void onDataUpdate(int code, String response) {
 		updateData();
 		setRefreshing(false);
 	}

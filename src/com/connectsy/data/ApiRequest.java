@@ -56,11 +56,11 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 			url = Settings.API_DOMAIN+path+"?";
 			if (getArgs == null)
 				getArgs = new ArrayList<NameValuePair>();
-			if (authorized){
-				String token = data.getString("token", "tokenfail");
-					token = URLEncoder.encode(token, "UTF-8");
-				getArgs.add(new BasicNameValuePair("token", token));
-			}
+//			if (authorized){
+//				String token = data.getString("token", "tokenfail");
+//				token = URLEncoder.encode(token, "UTF-8");
+//				getArgs.add(new BasicNameValuePair("token", token));
+//			}
 			for (NameValuePair arg : getArgs)
 				url += arg.getName()+"="+arg.getValue()+"&";
 			
@@ -76,6 +76,10 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 				request = post;
 			}else if (method == Method.DELETE){
 				// TODO
+			}
+			if (authorized){
+				String token = data.getString("token", "tokenfail");
+				request.addHeader("Authenticate", "Token "+token);
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -111,7 +115,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		if (response == null){
 			apiListener.onApiRequestError(0, retCode);
 			return;
-		}else if(response.getStatusLine().getStatusCode() != 200){
+		}else if(response.getStatusLine().getStatusCode()-200 > 100){
 			apiListener.onApiRequestError(response.getStatusLine().getStatusCode(), 
 					retCode);
 			return;

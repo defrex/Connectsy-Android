@@ -53,7 +53,7 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
 
 	public void onApiRequestFinish(int status, String response, int code) {
 		loadingDialog.dismiss();
-		if (status == 200){
+		if (status == 201){
 			EditText usernameText = (EditText)findViewById(R.id.auth_register_username);
 			EditText passwordText = (EditText)findViewById(R.id.auth_register_password);
 		    

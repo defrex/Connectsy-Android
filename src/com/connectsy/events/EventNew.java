@@ -3,11 +3,15 @@ package com.connectsy.events;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -190,19 +194,21 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         return MainMenu.onOptionsItemSelected(this, item);
     }
 
-	public void onDataUpdate(int code) {
+	public void onDataUpdate(int code, String response) {
 		loadingDialog.dismiss();
-		this.finish();
+		try {
+			JSONObject e = new JSONObject(response);
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+			i.putExtra("com.connectsy.events.revision", e.getString("revision"));
+			startActivity(i);
+			this.finish();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onRemoteError(int httpStatus, int code) {
 		loadingDialog.dismiss();
 	}
-
-	@Override
-	public void finish() {
-		super.finish();
-	}
-	
-	
 }

@@ -58,6 +58,6 @@ public class UserManager extends DataManager {
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		listener.onDataUpdate(returnCode);
+		listener.onDataUpdate(returnCode, response);
 	}
 }

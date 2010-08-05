@@ -81,18 +81,13 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
     
 	public void onApiRequestFinish(int status, String strResponse, int code){
 		if (loadingDialog != null) loadingDialog.dismiss();
-		try {
-			JSONObject response = new JSONObject(strResponse);
-			SharedPreferences data = DataManager.getCache(this);
-            SharedPreferences.Editor dataEditor = data.edit(); 
-            dataEditor.putString("token", response.getString("token"));
-            dataEditor.putString("username", username);
-            dataEditor.commit();
-            setResult(RESULT_OK);
-            this.finish();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		SharedPreferences data = DataManager.getCache(this);
+        SharedPreferences.Editor dataEditor = data.edit(); 
+        dataEditor.putString("token", strResponse);
+        dataEditor.putString("username", username);
+        dataEditor.commit();
+        setResult(RESULT_OK);
+        this.finish();
 	}
 
 	public void onApiRequestError(int status, int code) {

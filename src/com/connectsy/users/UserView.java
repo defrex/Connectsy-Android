@@ -88,7 +88,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     	}
     }
 
-	public void onDataUpdate(int code) {
+	public void onDataUpdate(int code, String response) {
     	update();
 		setRefreshing(false);
 	}

@@ -99,14 +99,13 @@ public class EventView extends Activity implements DataUpdateListener,
 	        TextView where = (TextView)findViewById(R.id.event_view_where);
 	        where.setText(event.where);
 	        TextView when = (TextView)findViewById(R.id.event_view_when);
-	        when.setText(event.when);
+	        when.setText(Integer.toString(event.when));
 	        TextView what = (TextView)findViewById(R.id.event_view_what);
 	        what.setText(event.description);
 	        
 	        ImageView avatar = (ImageView)findViewById(R.id.event_view_avatar);
-	        DrawableManager dm = new DrawableManager();
 	        String avyUrl = Settings.API_DOMAIN+"/users/"+event.creator+"/avatar/";
-	        dm.fetchDrawableOnThread(avyUrl, avatar);
+	        new DrawableManager().fetchDrawableOnThread(avyUrl, avatar);
         }
     }
 
@@ -126,16 +125,19 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	private void refresh(){
-		eventManager.refreshEvent(eventRev, REFRESH_EVENT);
-		pendingOperations++;
-		
-		attManager.refreshAttendants(REFRESH_ATTENDANTS);
-		pendingOperations++;
-		
-		setRefreshing(true);
+		if (eventManager != null){
+			eventManager.refreshEvent(eventRev, REFRESH_EVENT);
+			pendingOperations++;
+		}
+		if (attManager != null){
+			attManager.refreshAttendants(REFRESH_ATTENDANTS);
+			pendingOperations++;
+		}
+		if (pendingOperations > 0)
+			setRefreshing(true);
 	}
 
-	public void onDataUpdate(int code) {
+	public void onDataUpdate(int code, String response) {
 //		if (code == REFRESH_EVENT)
 //		else if (code == REFRESH_ATTENDANTS)
 //		else  if (code == ATT_SET)

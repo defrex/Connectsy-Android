@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.connectsy.data.DataManager;
-import com.connectsy.events.EventList;
 import com.connectsy.users.Login;
 
 public class Launcher extends Activity {
@@ -32,7 +31,7 @@ public class Launcher extends Activity {
                 SharedPreferences.Editor dataEditor = DataManager.getCache(this).edit(); 
                 dataEditor.putBoolean("authed", true);
                 dataEditor.commit();
-            	startActivity(new Intent(this, EventList.class));
+            	startActivity(new Intent(this, Dashboard.class));
             }
         }
         this.finish();

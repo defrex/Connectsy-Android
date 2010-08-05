@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import com.connectsy.events.EventList;
 import com.connectsy.events.EventManager;
 import com.connectsy.events.EventNew;
+import com.connectsy.settings.MainMenu;
 
 public class Dashboard extends Activity implements OnClickListener {
 	
@@ -67,4 +70,12 @@ public class Dashboard extends Activity implements OnClickListener {
 		
 		startActivity(i);
 	}
+    
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return MainMenu.onCreateOptionsMenu(menu);
+	}
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return MainMenu.onOptionsItemSelected(this, item);
+    }
 }

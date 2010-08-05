@@ -76,11 +76,11 @@ public final class R {
         public static final int events_new_cat=0x7f090021;
         public static final int events_new_date=0x7f09001c;
         public static final int events_new_date_change=0x7f09001d;
-        public static final int events_new_desc=0x7f09001b;
+        public static final int events_new_desc=0x7f09001a;
         public static final int events_new_submit=0x7f090022;
         public static final int events_new_time=0x7f09001e;
         public static final int events_new_time_change=0x7f09001f;
-        public static final int events_new_where=0x7f09001a;
+        public static final int events_new_where=0x7f09001b;
         public static final int preferances_avatar_button=0x7f09002c;
         public static final int user_view_avatar=0x7f09002a;
         public static final int user_view_username=0x7f09002b;

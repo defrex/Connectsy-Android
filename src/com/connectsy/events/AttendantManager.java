@@ -134,6 +134,6 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		listener.onDataUpdate(returnCode);
+		listener.onDataUpdate(returnCode, response);
 	}
 }
