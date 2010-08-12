@@ -164,9 +164,9 @@ public class EventManager extends DataManager {
 			json.put("client", "Connectsy for Android");
 			Location loc = locManager.getLocation();
 			if (loc != null){
-				JSONObject jLoc = new JSONObject();
-				jLoc.put("lat", loc.getLatitude());
-				jLoc.put("lng", loc.getLongitude());
+				JSONArray jLoc = new JSONArray();
+				jLoc.put(loc.getLatitude());
+				jLoc.put(loc.getLongitude());
 				json.put("posted_from", jLoc);
 			}
 		} catch (JSONException e) {
