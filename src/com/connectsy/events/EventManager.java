@@ -1,6 +1,7 @@
 package com.connectsy.events;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -9,7 +10,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.location.Location;
 
+import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
@@ -25,6 +28,7 @@ public class EventManager extends DataManager {
 	private Filter filter;
 	private ArrayList<Event> events;
 	private ApiRequest getEventsRequest;
+	private LocManager locManager;
 	
 	public enum Filter{ALL, CATEGORY, FRIENDS}
 	
@@ -60,12 +64,20 @@ public class EventManager extends DataManager {
 		super(c, l);
 		filter = f;
 		category = cat;
+		locManager = new LocManager(c);
 		
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(); 
 		if (filter == Filter.FRIENDS)
 			args.add(new BasicNameValuePair("friends", "true"));
 		else if (filter == Filter.CATEGORY)
 			args.add(new BasicNameValuePair("category", category));
+        
+		Location loc = locManager.getLocation();
+		if (loc != null){
+			args.add(new BasicNameValuePair("lat", Double.toString(loc.getLatitude())));
+			args.add(new BasicNameValuePair("lng", Double.toString(loc.getLongitude())));
+		}
+		
 		getEventsRequest = new ApiRequest(this, c, Method.GET, 
 				"/events/", null, args, true, GET_EVENTS);
 	}
@@ -89,6 +101,15 @@ public class EventManager extends DataManager {
 	
 	public void refreshEvents(int sentReturnCode){
 		returnCode = sentReturnCode;
+
+		Location loc = locManager.getLocation();
+		if (loc != null){
+			List<NameValuePair> args = getEventsRequest.getGetArgs();
+			args.add(new BasicNameValuePair("lat", Double.toString(loc.getLatitude())));
+			args.add(new BasicNameValuePair("lng", Double.toString(loc.getLongitude())));
+			getEventsRequest.setGetArgs(args);
+		}
+		
 		getEventsRequest.execute();
 		pendingUpdates++;
 	}
@@ -141,6 +162,13 @@ public class EventManager extends DataManager {
 			json.put("desc", event.description);
 			json.put("category", event.category);
 			json.put("client", "Connectsy for Android");
+			Location loc = locManager.getLocation();
+			if (loc != null){
+				JSONObject jLoc = new JSONObject();
+				jLoc.put("lat", loc.getLatitude());
+				jLoc.put("lng", loc.getLongitude());
+				json.put("posted_from", jLoc);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

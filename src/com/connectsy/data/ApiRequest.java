@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
@@ -37,30 +35,40 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 
 	private static final String TAG = "ApiRequest";
 
-	private ApiRequestListener apiListener;
-	private SharedPreferences data;
-	private int retCode;
 	private String url;
 	private HttpRequestBase request;
 	private DefaultHttpClient client = new DefaultHttpClient();
+	private ApiRequestListener apiListener;
+	private SharedPreferences data;
+	private Method method;
+	private String path;
+	private String body;
+	private List<NameValuePair> getArgs;
+	private boolean authorized;
+	private int retCode;
 	
 	public static enum Method { GET, PUT, POST, DELETE }
 	
-	public ApiRequest(ApiRequestListener listener, Context c, Method method, 
-			String path, String body, List<NameValuePair> getArgs, 
-			boolean authorized, int returnCode){
+	public ApiRequest(ApiRequestListener listener, Context c, Method pMethod, 
+			String pPath, String pBody, List<NameValuePair> pGetArgs, 
+			boolean pAuthorized, int returnCode){
 		apiListener = listener;
-		retCode = returnCode;
 		data = DataManager.getCache(c);
+		method = pMethod;
+		path = pPath;
+		body = pBody;
+		getArgs = pGetArgs;
+		authorized = pAuthorized;
+		retCode = returnCode;
+		
+		prepRequest();
+	}
+	
+	private void prepRequest(){
 		try {
 			url = Settings.API_DOMAIN+path+"?";
 			if (getArgs == null)
 				getArgs = new ArrayList<NameValuePair>();
-//			if (authorized){
-//				String token = data.getString("token", "tokenfail");
-//				token = URLEncoder.encode(token, "UTF-8");
-//				getArgs.add(new BasicNameValuePair("token", token));
-//			}
 			for (NameValuePair arg : getArgs)
 				url += arg.getName()+"="+arg.getValue()+"&";
 			
@@ -84,6 +92,14 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<NameValuePair> getGetArgs(){
+		return getArgs;
+	}
+	public void setGetArgs(List<NameValuePair> pGetArgs){
+		getArgs = pGetArgs;
+		prepRequest();
 	}
 	
 	public String getCached(){

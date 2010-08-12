@@ -3,30 +3,33 @@
     style="@style/FullWidth"
     android:orientation="vertical" >
     
-	<LinearLayout style="@style/ActionBar" >
-		<ImageView style="@style/ActionBarLogo" />
-		
-		<View style="@style/Spring" />
-	
-	    <ImageView style="@style/ActionBarSeparator" />
-		<ImageView style="@style/ActionBarAction"
-			android:id="@+id/ab_refresh"
-		    android:src="@drawable/icons_refresh" />
-        <ProgressBar style="@style/ActionBarAction"
-            android:id="@+id/ab_refresh_spinner"
-		    android:src="@drawable/icons_refresh"
-            android:visibility="gone" />
-	
-	    <ImageView style="@style/ActionBarSeparator" />
-		<ImageView style="@style/ActionBarAction"
-			android:id="@+id/ab_profile"
-		    android:src="@drawable/icons_profile" />
-		
-	    <ImageView style="@style/ActionBarSeparator" />
-		<ImageView style="@style/ActionBarAction"
-			android:id="@+id/ab_new_event"
-		    android:src="@drawable/icons_plus" />
-	</LinearLayout>
+    <FrameLayout style="@style/ActionBarFrame">
+        <ImageView style="@style/ActionBarBackground" />
+        <LinearLayout style="@style/ActionBar" >
+            <ImageView style="@style/ActionBarLogo" />
+            
+            <View style="@style/Spring" />
+            
+            <ImageView style="@style/ActionBarSeparator" />
+            <ImageView style="@style/ActionBarAction"
+                android:id="@+id/ab_refresh"
+                android:src="@drawable/icons_refresh" />
+            <ProgressBar style="@style/ActionBarAction"
+                android:id="@+id/ab_refresh_spinner"
+                android:src="@drawable/icons_refresh"
+                android:visibility="gone" />
+        
+            <ImageView style="@style/ActionBarSeparator" />
+            <ImageView style="@style/ActionBarAction"
+                android:id="@+id/ab_profile"
+                android:src="@drawable/icons_profile" />
+            
+            <ImageView style="@style/ActionBarSeparator" />
+            <ImageView style="@style/ActionBarAction"
+                android:id="@+id/ab_new_event"
+                android:src="@drawable/icons_plus" />
+        </LinearLayout>
+    </FrameLayout>
 	
 	<LinearLayout style="@style/EventViewTop" >
 	

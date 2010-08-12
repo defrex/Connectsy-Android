@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +25,7 @@ import com.connectsy.events.EventManager.Filter;
 import com.connectsy.settings.MainMenu;
 
 public class EventList extends Activity implements DataUpdateListener, 
-		OnClickListener, OnItemClickListener {
+		OnClickListener, OnItemClickListener, LocationListener {
 	private static final String TAG = "EventList";
 	private EventsAdapter adapter;
     private EventManager eventManager = null;
@@ -128,5 +130,25 @@ public class EventList extends Activity implements DataUpdateListener,
 		i.setType("vnd.android.cursor.item/vnd.connectsy.event");
 		i.putExtra("com.connectsy.events.revision", event.revision);
 		startActivity(i);
+	}
+
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
 	}
 }

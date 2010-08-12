@@ -2,21 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/FullWidth"
     android:orientation="vertical" >
-    <LinearLayout style="@style/ActionBar" >
-        <ImageView style="@style/ActionBarLogo" />
-        
-        <View style="@style/Spring" />
-    
-        <ImageView style="@style/ActionBarSeparator" />
-        <ImageView style="@style/ActionBarAction"
-            android:id="@+id/ab_profile"
-            android:src="@drawable/icons_profile" />
-        
-        <ImageView style="@style/ActionBarSeparator" />
-        <ImageView style="@style/ActionBarAction"
-            android:id="@+id/ab_new_event"
-            android:src="@drawable/icons_plus" />
-    </LinearLayout>
+    <FrameLayout style="@style/ActionBarFrame">
+        <ImageView style="@style/ActionBarBackground" />
+	    <LinearLayout style="@style/ActionBar" >
+	        <ImageView style="@style/ActionBarLogo" />
+	        
+	        <View style="@style/Spring" />
+	    
+	        <ImageView style="@style/ActionBarSeparator" />
+	        <ImageView style="@style/ActionBarAction"
+	            android:id="@+id/ab_profile"
+	            android:src="@drawable/icons_profile" />
+	        
+	        <ImageView style="@style/ActionBarSeparator" />
+	        <ImageView style="@style/ActionBarAction"
+	            android:id="@+id/ab_new_event"
+	            android:src="@drawable/icons_plus" />
+	    </LinearLayout>
+    </FrameLayout>
     
     <LinearLayout style="@style/Dashboard">
         <LinearLayout style="@style/DashboardRow">
@@ -28,20 +31,17 @@
                 android:id="@+id/dashboard_events_friends"
                 android:text="@string/dashboard_events_friends"
                 android:drawableTop="@drawable/dashboard_events_friends"/>
-        </LinearLayout>
-
-        <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_events_category"
                 android:text="@string/dashboard_events_category"
                 android:drawableTop="@drawable/dashboard_events_category"/>
+        </LinearLayout>
+
+        <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_events_new"
                 android:text="@string/dashboard_events_new"
                 android:drawableTop="@drawable/dashboard_events_new"/>
-        </LinearLayout>
-
-        <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_profile"
                 android:text="@string/dashboard_profile"
@@ -52,5 +52,14 @@
                 android:drawableTop="@drawable/dashboard_account"/>
         </LinearLayout>
     </LinearLayout>
+    
+    <FrameLayout style="@style/DashboardExtra">
+        <ImageView style="@style/DashboardExtraBackgroundTop" />
+        <com.google.android.maps.MapView 
+            style="@style/DashboardExtraMap"
+            android:id="@+id/dashboard_map"
+            android:clickable="true"
+            android:apiKey="ABQIAAAAYggx37JHJFKcocoP_wbXFxRqUdc5X9g0MErBOqUNFxhhEEAAnxTxGJ8k9o-6QaRXSGKDWZgruf41nA" />
+    </FrameLayout>
     
 </LinearLayout>

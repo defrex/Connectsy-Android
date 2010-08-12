@@ -1,6 +1,5 @@
 package com.connectsy;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,8 +14,10 @@ import com.connectsy.events.EventList;
 import com.connectsy.events.EventManager;
 import com.connectsy.events.EventNew;
 import com.connectsy.settings.MainMenu;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapView;
 
-public class Dashboard extends Activity implements OnClickListener {
+public class Dashboard extends MapActivity implements OnClickListener {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,9 @@ public class Dashboard extends Activity implements OnClickListener {
         profile.setOnClickListener(this);
         Button account = (Button)findViewById(R.id.dashboard_account);
         account.setOnClickListener(this);
+        
+        MapView mapView = (MapView) findViewById(R.id.dashboard_map);
+        mapView.setBuiltInZoomControls(false);
     }
 
 	public void onClick(View v) {
@@ -78,4 +82,10 @@ public class Dashboard extends Activity implements OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         return MainMenu.onOptionsItemSelected(this, item);
     }
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

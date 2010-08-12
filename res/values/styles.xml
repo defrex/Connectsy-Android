@@ -39,40 +39,50 @@
         <item name="android:layout_weight">1</item>
     </style>
     
-    <style name="ActionBar">
+    <style name="ActionBarFrame">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/title_height</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/actionbar_bg</item>
+        <item name="android:layout_height">@dimen/actionbar_height</item>
     </style>
-	    <style name="ActionBarLogo">
-	        <item name="android:layout_marginTop">2dp</item>
-	        <item name="android:layout_width">wrap_content</item>
-	        <item name="android:layout_height">40dp</item>
-	        <item name="android:src">@drawable/logo</item>
-	    </style>
-	    <style name="ActionBarAction">
-	        <item name="android:layout_width">@dimen/title_height</item>
-	        <item name="android:layout_height">fill_parent</item>
-	        <item name="android:clickable">true</item>
-	        <item name="android:padding">@dimen/title_action_padding</item>
-	    </style>
-	    <style name="ActionBarSpinner" parent="@android:style/Widget.ProgressBar.Small">
-	        <item name="android:layout_width">@dimen/title_height</item>
-	        <item name="android:layout_height">fill_parent</item>
-	        <item name="android:clickable">true</item>
-	        <item name="android:padding">@dimen/title_action_padding</item>
-	    </style>
-	    <style name="ActionBarSeparator">
-	        <item name="android:layout_width">1px</item>
-	        <item name="android:layout_height">fill_parent</item>
-	        <item name="android:background">@color/actionbar_separator</item>
-	    </style>
+        <style name="ActionBarBackground">
+            <item name="android:layout_width">fill_parent</item>
+            <item name="android:layout_height">@dimen/actionbar_height</item>
+            <item name="android:background">@drawable/actionbar_bg</item>
+        </style>
+        <style name="ActionBar">
+            <item name="android:layout_width">fill_parent</item>
+            <item name="android:layout_height">@dimen/actionbar_height</item>
+            <item name="android:orientation">horizontal</item>
+            <item name="android:gravity">center_vertical</item>
+        </style>
+		    <style name="ActionBarLogo">
+		        <item name="android:layout_width">wrap_content</item>
+		        <item name="android:layout_height">wrap_content</item>
+		        <item name="android:src">@drawable/logo</item>
+		    </style>
+		    <style name="ActionBarAction">
+		        <item name="android:layout_width">@dimen/actionbar_height</item>
+		        <item name="android:layout_height">fill_parent</item>
+		        <item name="android:clickable">true</item>
+		        <item name="android:padding">@dimen/title_action_padding</item>
+		    </style>
+		    <style name="ActionBarSpinner" parent="@android:style/Widget.ProgressBar.Small">
+		        <item name="android:layout_width">@dimen/actionbar_height</item>
+		        <item name="android:layout_height">fill_parent</item>
+		        <item name="android:clickable">true</item>
+		        <item name="android:padding">@dimen/title_action_padding</item>
+		    </style>
+		    <style name="ActionBarSeparator">
+		        <item name="android:layout_width">2px</item>
+		        <item name="android:layout_height">@dimen/actionbar_height</item>
+	            <item name="android:src">@drawable/actionbar_seperator</item>
+		    </style>
     
     <style name="Dashboard" parent="FullWidth">
         <item name="android:orientation">vertical</item>
+        <item name="android:layout_height">400dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:padding">6dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:padding">2dp</item>
     </style>
 	    <style name="DashboardRow" parent="FullWidth">
 	        <item name="android:orientation">horizontal</item>
@@ -81,33 +91,55 @@
 	    </style>
 		    <style name="DashboardButton">
 		        <item name="android:layout_gravity">center_vertical</item>
-		        <item name="android:layout_width">fill_parent</item>
+		        <item name="android:layout_width">96dp</item>
 		        <item name="android:layout_height">wrap_content</item>
-		        <item name="android:layout_weight">1</item>
+                <item name="android:layout_weight">1</item>
+                <item name="android:layout_margin">2dp</item>
 		        <item name="android:gravity">center_horizontal</item>
-		        <item name="android:textSize">16sp</item>
-                <item name="android:textStyle">bold</item>
+		        <item name="android:textSize">14sp</item>
+                <item name="android:textStyle">normal</item>
                 <item name="android:textColor">@color/text_grey</item>
 		        <item name="android:background">@null</item>
 		    </style>
-    
-    <style name="EventListHeading" parent="FullWidth">
-        <item name="android:orientation">horizontal</item>
-        <item name="android:layout_height">30dp</item>
-    </style>
-        <style name="EventListHeadingArrow">
-            <item name="android:layout_width">30dp</item>
-            <item name="android:layout_height">30dp</item>
-            <item name="android:layout_marginRight">5dp</item>
-            <item name="android:paddingTop">7dp</item>
-            <item name="android:paddingBottom">10dp</item>
-            <item name="android:paddingLeft">6dp</item>
-            <item name="android:paddingRight">5dp</item>
-            <item name="android:gravity">center</item>
+        <style name="DashboardExtra" parent="FullWidth">
+            <item name="android:layout_weight">1</item>
+            <item name="android:layout_height">300dp</item>
+            <item name="android:background">@color/consy_dark_green</item>
         </style>
-        <style name="EventListHeadingText" parent="WrapAll">
-            <item name="android:textSize">18sp</item>
-            <item name="android:textStyle">bold</item>
+            <style name="DashboardExtraBackgroundTop" parent="FullWidth">
+                <item name="android:layout_height">5dp</item>
+                <item name="android:background">@drawable/dashboard_extra_top</item>
+            </style>
+            <style name="DashboardExtraMap" parent="FillAll">
+                <item name="android:layout_weight">1</item>
+            </style>
+    
+    <style name="EventListHeadingWrapper" parent="FullWidth">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_height">31dp</item>
+    </style>
+	    <style name="EventListHeading" parent="FullWidth">
+	        <item name="android:orientation">horizontal</item>
+	        <item name="android:layout_height">30dp</item>
+	    </style>
+	        <style name="EventListHeadingArrow">
+	            <item name="android:layout_width">30dp</item>
+	            <item name="android:layout_height">30dp</item>
+	            <item name="android:layout_marginRight">5dp</item>
+	            <item name="android:paddingTop">7dp</item>
+	            <item name="android:paddingBottom">10dp</item>
+	            <item name="android:paddingLeft">6dp</item>
+	            <item name="android:paddingRight">5dp</item>
+	            <item name="android:gravity">center</item>
+	        </style>
+	        <style name="EventListHeadingText" parent="WrapAll">
+	            <item name="android:textSize">18sp</item>
+	            <item name="android:textStyle">bold</item>
+	        </style>
+        <style name="EventListHeadingBorder">
+            <item name="android:layout_height">1dp</item>
+            <item name="android:layout_width">fill_parent</item>
+            <item name="android:background">@color/light_grey</item>
         </style>
     
     <style name="EventListItem" parent="FullWidth">
