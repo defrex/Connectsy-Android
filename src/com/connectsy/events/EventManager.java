@@ -79,7 +79,8 @@ public class EventManager extends DataManager {
 		}
 		
 		getEventsRequest = new ApiRequest(this, c, Method.GET, 
-				"/events/", null, args, true, GET_EVENTS);
+				"/events/", true, GET_EVENTS);
+		getEventsRequest.setGetArgs(args);
 	}
 	
 	public ArrayList<Event> getEvents(){
@@ -127,7 +128,7 @@ public class EventManager extends DataManager {
 	
 	private ApiRequest getEventRequest(String revision){
 		return new ApiRequest(this, context, Method.GET, 
-				"/events/"+revision+"/", null, null, true, GET_EVENT);
+				"/events/"+revision+"/", true, GET_EVENT);
 	}
 	
 	public Event getEvent(String revision){
@@ -173,8 +174,10 @@ public class EventManager extends DataManager {
 			e.printStackTrace();
 		}
 		
-		new ApiRequest(this, context, Method.POST, "/events/", json.toString(), 
-				null, true, CREATE_EVENT).execute();
+		ApiRequest r = new ApiRequest(this, context, Method.POST, 
+				"/events/", true, CREATE_EVENT);
+		r.setBodyString(json.toString());
+		r.execute();
 		pendingUpdates++;
 	}
 	

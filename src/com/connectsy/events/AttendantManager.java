@@ -61,7 +61,8 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 			args.add(new BasicNameValuePair("timestamp", 
 					Integer.toString(data.getInt("attendants.timestamp", 0))));
 		apiRequest = new ApiRequest(this, context, Method.GET, 
-				"/events/"+eventID+"/attendants/", null, args, true, GET_ATTS);
+				"/events/"+eventID+"/attendants/", true, GET_ATTS);
+		apiRequest.setGetArgs(args);
 	}
 	
 	public Attendant getAttendant(String username){
@@ -124,9 +125,10 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		try {
 			JSONObject kwargs = new JSONObject();
 			kwargs.put("status", status);
-			new ApiRequest(this, context, Method.POST, 
-					"/events/"+eventID+"/attendants/", kwargs.toString(), 
-					null, true, SET_ATTS).execute();
+			ApiRequest r = new ApiRequest(this, context, Method.POST, 
+					"/events/"+eventID+"/attendants/", true, SET_ATTS);
+			r.setBodyString(kwargs.toString());
+			r.execute();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

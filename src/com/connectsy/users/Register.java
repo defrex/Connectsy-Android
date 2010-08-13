@@ -43,8 +43,10 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
         	JSONObject body = new JSONObject();
         	body.put("password", password);
         	
-			new ApiRequest(this, this, Method.PUT, "/users/"+username+"/", 
-					body.toString(), null, false, 0).execute();
+			ApiRequest r = new ApiRequest(this, this, Method.PUT, "/users/"+username+"/", 
+					false, 0);
+			r.setBodyString(body.toString());
+			r.execute();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

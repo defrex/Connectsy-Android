@@ -1,6 +1,7 @@
 package com.connectsy.data;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,12 +16,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -42,26 +45,23 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	private SharedPreferences data;
 	private Method method;
 	private String path;
-	private String body;
-	private List<NameValuePair> getArgs;
 	private boolean authorized;
 	private int retCode;
+	private String body;
+	private InputStream stream;
+	private Long streamLength;
+	private List<NameValuePair> getArgs;
 	
 	public static enum Method { GET, PUT, POST, DELETE }
 	
 	public ApiRequest(ApiRequestListener listener, Context c, Method pMethod, 
-			String pPath, String pBody, List<NameValuePair> pGetArgs, 
-			boolean pAuthorized, int returnCode){
+			String pPath, boolean pAuthorized, int returnCode){
 		apiListener = listener;
 		data = DataManager.getCache(c);
 		method = pMethod;
 		path = pPath;
-		body = pBody;
-		getArgs = pGetArgs;
 		authorized = pAuthorized;
 		retCode = returnCode;
-		
-		prepRequest();
 	}
 	
 	private void prepRequest(){
@@ -80,7 +80,11 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 				request = post;
 			}else if (method == Method.PUT){
 				HttpPut post = new HttpPut(url);
-				post.setEntity(new StringEntity(body));
+				if (body != null){
+					post.setEntity(new StringEntity(body));
+				}else if (stream != null){
+					post.setEntity(new InputStreamEntity(stream, streamLength));
+				}
 				request = post;
 			}else if (method == Method.DELETE){
 				// TODO
@@ -101,6 +105,14 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		getArgs = pGetArgs;
 		prepRequest();
 	}
+
+	public void setBodyString(String pBody){
+		body = pBody;
+	}
+	public void setBodyFile(AssetFileDescriptor file) throws IOException{
+		stream = file.createInputStream();
+		streamLength = file.getLength();
+	}
 	
 	public String getCached(){
 		return data.getString(url, null);
@@ -111,6 +123,11 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		request.setURI(new URI(url));
 	}
 	
+	@Override
+	protected void onPreExecute() {
+		prepRequest();
+	}
+
 	protected HttpResponse doInBackground(Void...arg0) {
 		HttpResponse response;
 		try {

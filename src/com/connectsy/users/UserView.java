@@ -1,7 +1,14 @@
 package com.connectsy.users;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import android.app.Activity;
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore.Images;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +18,7 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
+import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.settings.Settings;
@@ -24,6 +32,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     private User user;
     private String username;
     private static final int REFRESH_USER = 0;
+    private static final int SELECT_AVATAR = 1;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,21 +56,42 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     }
 	
 	private void update(){
-    	user = userManager.getUser(username);
+    	user = userManager.getUser();
     	
         TextView uname = (TextView)findViewById(R.id.user_view_username);
         uname.setText(username);
 		
         ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-        DrawableManager dm = new DrawableManager();
         String avyUrl = Settings.API_DOMAIN+"/users/"+username+"/avatar/";
-        dm.fetchDrawableOnThread(avyUrl, avatar);
+        new DrawableManager().fetchDrawableOnThread(avyUrl, avatar);
+        if (username.equals(DataManager.getCache(this).getString("username", null))){
+        	avatar.setClickable(true);
+        	avatar.setOnClickListener(this);
+        }
         
 //		if (user != null){
 //			// for later
 //		}
 	}
     
+	private void changeAvatar(){
+		startActivityForResult(new Intent(Intent.ACTION_PICK, 
+				Images.Media.INTERNAL_CONTENT_URI), SELECT_AVATAR);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
+	    if (requestCode == SELECT_AVATAR && resultCode == Activity.RESULT_OK) {
+			Uri selectedImage = data.getData();
+			try {
+				userManager.uploadAvatar(selectedImage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	    } 
+	}
+	
     public boolean onCreateOptionsMenu(Menu menu) {
         return MainMenu.onCreateOptionsMenu(menu);
 	}
@@ -72,9 +102,10 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 
 	public void onClick(View v) {
     	if (v.getId() == R.id.ab_refresh) refresh();
+    	if (v.getId() == R.id.user_view_avatar) changeAvatar();
 	}
 	private void refresh(){
-		userManager.refreshUser(username, REFRESH_USER);
+		userManager.refreshUser(REFRESH_USER);
 		setRefreshing(true);
 	}
 	
