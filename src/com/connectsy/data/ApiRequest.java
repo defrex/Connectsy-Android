@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
@@ -51,6 +52,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	private InputStream stream;
 	private Long streamLength;
 	private List<NameValuePair> getArgs;
+	private List<NameValuePair> headers = new ArrayList<NameValuePair>();
 	
 	public static enum Method { GET, PUT, POST, DELETE }
 	
@@ -93,6 +95,9 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 				String token = data.getString("token", "tokenfail");
 				request.addHeader("Authenticate", "Token "+token);
 			}
+
+			for (NameValuePair header : headers)
+				request.addHeader(header.getName(), header.getValue());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -103,7 +108,10 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	}
 	public void setGetArgs(List<NameValuePair> pGetArgs){
 		getArgs = pGetArgs;
-		prepRequest();
+	}
+
+	public void setHeader(String headerName, String headerValue){
+		headers.add(new BasicNameValuePair(headerName, headerValue));
 	}
 
 	public void setBodyString(String pBody){

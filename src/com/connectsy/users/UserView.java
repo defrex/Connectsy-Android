@@ -1,11 +1,9 @@
 package com.connectsy.users;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;

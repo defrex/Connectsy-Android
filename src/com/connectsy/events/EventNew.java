@@ -1,6 +1,7 @@
 package com.connectsy.events;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.json.JSONException;
@@ -130,25 +131,44 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
                     updateTimeDisplay();
                 }
             };
-
-    private void updateTimeDisplay() {
-        mDateDisplay.setText(
-            new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(mMonth + 1).append("-")
-                    .append(mDay).append("-")
-                    .append(mYear));
-        mTimeDisplay.setText(
-            new StringBuilder()
-                    .append(pad(mHour)).append(":")
-                    .append(pad(mMinute)));
+            
+    private Calendar getCal(){
+    	Calendar c = Calendar.getInstance();
+    	c.set(mYear, mMonth, mDay, mHour, mMinute);
+    	return c;
     }
-    
-    private static String pad(int c) {
-        if (c >= 10)
-            return String.valueOf(c);
-        else
-            return "0" + String.valueOf(c);
+            
+    private void updateTimeDisplay() {
+    	Calendar selected = getCal();
+    	Calendar today = Calendar.getInstance();
+    	SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+    	String timeString = timeFormat.format(selected.getTime());
+        mTimeDisplay.setText(timeString);
+        
+    	String dateString;
+    	
+    	if (selected.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+    			&& selected.get(Calendar.YEAR) == today.get(Calendar.YEAR)){
+    		if (selected.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH))
+    			dateString = "Today";
+    		else if (selected.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)+1)
+    			dateString = "Tomorrow";
+    		else{
+    			dateString = new SimpleDateFormat("E the d").format(selected.getTime());
+    			// This is here because apparently Java is a shitty programming
+    			// language...
+    			String[] thArray = new String[] {
+    					"st","nd","rd","th","th","th","th","th","th","th",
+    					"th","th","th","th","th","th","th","th","th","th",
+    					"st","nd","rd","th","th","th","th","th","th","th",
+    					"st" };
+    			dateString = dateString+thArray[selected.get(Calendar.DAY_OF_MONTH)];
+    		}
+    	}else{
+    		dateString = new SimpleDateFormat("MMM d, yyyy").format(selected.getTime());
+    	}
+        
+        mDateDisplay.setText(dateString);
     }
     
     private void broadcastToggle(){

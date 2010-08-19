@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
@@ -20,7 +21,6 @@ public class UserManager extends DataManager {
 	private static final int GET_USER = 0;
 	private static final int UPLOAD_AVATAR = 1;
 	
-	private ApiRequest apiRequest;
 	private String username;
 	
 	public class User{
@@ -67,6 +67,7 @@ public class UserManager extends DataManager {
 		ApiRequest r = new ApiRequest(this, context, Method.PUT, 
 				"/users/"+username+"/avatar/", true, UPLOAD_AVATAR);
 		r.setBodyFile(file);
+		r.setHeader("Content-Type", context.getContentResolver().getType(avatar));
 		r.execute();
 	}
 	

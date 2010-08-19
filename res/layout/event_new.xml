@@ -23,6 +23,7 @@
 		android:orientation="vertical" >
         
         <LinearLayout style="@style/EventNewTitle" >
+            <View style="@style/EventNewTitleBorderTop" />
             <TextView style="@style/EventNewTitleText"
                 android:text="@string/events_new_title_what" />
             <View style="@style/EventNewTitleBorder" />
@@ -34,6 +35,7 @@
 	    
 		<LinearLayout style="@style/EventNewTitle"
 			android:paddingTop="0dp" >
+            <View style="@style/EventNewTitleBorderTop" />
 			<TextView style="@style/EventNewTitleText"
 				android:text="@string/events_new_title_where" />
 			<View style="@style/EventNewTitleBorder" />
@@ -44,6 +46,7 @@
 		    android:id="@+id/events_new_where" />
 		
 		<LinearLayout style="@style/EventNewTitle" >
+            <View style="@style/EventNewTitleBorderTop" />
 			<TextView style="@style/EventNewTitleText"
 				android:text="@string/events_new_title_when" />
 			<View style="@style/EventNewTitleBorder" />
@@ -75,6 +78,7 @@
 		
 		
 		<LinearLayout style="@style/EventNewTitle" >
+            <View style="@style/EventNewTitleBorderTop" />
 			<TextView style="@style/EventNewTitleText"
 				android:text="@string/events_new_title_who" />
 			<View style="@style/EventNewTitleBorder" />
