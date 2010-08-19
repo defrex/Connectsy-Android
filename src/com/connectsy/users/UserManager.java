@@ -1,14 +1,15 @@
 package com.connectsy.users;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
@@ -56,6 +57,26 @@ public class UserManager extends DataManager {
 	}
 	
 	public void refreshUser(int sentReturnCode){
+		returnCode = sentReturnCode;
+		new ApiRequest(this, context, Method.GET, 
+				"/users/"+username+"/", true, GET_USER).execute();
+	}
+	
+	public ArrayList<User> getFriends(){
+		String friendString = new ApiRequest(this, context, Method.GET, 
+				"/users/"+username+"/", true, GET_USER).getCached();
+		ArrayList<User> friends = new ArrayList<User>();
+		try {
+			JSONArray jsonFriends = new JSONArray(friendString);
+			for (int i=0;i<jsonFriends.length();i++)
+				friends.add(new User(jsonFriends.getJSONObject(i)));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return friends;
+	}
+	
+	public void refreshFriends(int sentReturnCode){
 		returnCode = sentReturnCode;
 		new ApiRequest(this, context, Method.GET, 
 				"/users/"+username+"/", true, GET_USER).execute();

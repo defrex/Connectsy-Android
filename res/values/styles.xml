@@ -263,5 +263,18 @@
 	        </style>
      
      
+    <style name="UserListItem" parent="FullWidth">
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+        <style name="UserListItemAvatar">
+            <item name="android:layout_width">50dp</item>
+            <item name="android:layout_height">50dp</item>
+        </style>
+        <style name="UserListItemUsername" parent="FullWidth">
+            <item name="android:textStyle">bold</item>
+            <item name="android:textColor">@color/link_blue</item>
+        </style>
      
 </resources>

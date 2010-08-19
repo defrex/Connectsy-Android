@@ -1,6 +1,7 @@
 package com.connectsy.users;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,24 +12,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
+import com.connectsy.events.EventsAdapter;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
 import com.wilson.android.library.DrawableManager;
 
-public class UserView extends Activity implements OnClickListener, DataUpdateListener {
+public class UserView extends Activity implements OnClickListener, 
+		DataUpdateListener, OnItemClickListener {
     @SuppressWarnings("unused")
 	private static final String TAG = "UserView";
     private UserManager userManager;
     private User user;
     private String username;
+    private UserAdapter adapter;
     private static final int REFRESH_USER = 0;
     private static final int SELECT_AVATAR = 1;
     
@@ -67,9 +74,22 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
         	avatar.setOnClickListener(this);
         }
         
-//		if (user != null){
-//			// for later
-//		}
+		if (user != null){
+			ArrayList<User> friends = userManager.getFriends();
+	        if (adapter != null){
+	        	adapter.clear();
+	        	for (int n = 0;n < friends.size();n++)
+	        		adapter.add(friends.get(n));
+	    		adapter.notifyDataSetChanged();
+	        }else{
+	            adapter = new UserAdapter(this, R.layout.user_list_item, friends);
+	        }
+			
+	        ListView lv = (ListView)findViewById(R.id.friends_list);
+	        lv.setOnItemClickListener(this);
+	        lv.setAdapter(adapter);
+	        
+		}
 	}
     
 	private void changeAvatar(){
@@ -124,5 +144,10 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 
 	public void onRemoteError(int httpStatus, int code) {
 		setRefreshing(false);
+	}
+
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		// TODO Auto-generated method stub
+		
 	}
 }
