@@ -189,6 +189,8 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         String strWhere = where.getText().toString();
         String strCat = cat.getText().toString();
         
+        ToggleButton bcast = (ToggleButton)findViewById(R.id.events_new_broadcast);
+        
         SharedPreferences data = getSharedPreferences("consy", 0);
         String username = data.getString("username", "username_fail");
 
@@ -202,6 +204,7 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         event.when = when;
         event.category = strCat;
         event.creator = username;
+        event.broadcast = bcast.isChecked();
         eventManager.createEvent(event, 0);
         loadingDialog = ProgressDialog.show(this, "", "Posting event...", true);
     }

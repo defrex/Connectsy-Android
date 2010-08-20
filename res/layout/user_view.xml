@@ -31,21 +31,29 @@
         </LinearLayout>
     </FrameLayout>
 	
-	<LinearLayout style="@style/EventViewTop" >
+	<LinearLayout style="@style/UserViewTop" >
 	
-		<ImageView style="@style/EventViewAvatar"
+		<ImageView style="@style/UserViewAvatar"
             android:src="@drawable/avatar_default"
 			android:id="@+id/user_view_avatar" />
 			
-		<LinearLayout style="@style/EventViewTopRight" >
+		<LinearLayout style="@style/UserViewTopRight" >
 			
-			<TextView style="@style/EventViewWhere"
+			<TextView style="@style/UserViewUsername"
 				android:id="@+id/user_view_username" />
+			
+			<Button style="@style/UserViewBefriend"
+			    android:id="@+id/user_view_befriend"
+			    android:visibility="invisible" />
 			
 		</LinearLayout>
 	</LinearLayout>
 	
-	
+    
+    <ListView android:id="@+id/pending_friends_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
     <ListView android:id="@+id/friends_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

@@ -262,19 +262,37 @@
 	            <item name="android:textSize">14sp</item>
 	        </style>
      
+     <style name="UserViewTop" parent="FullWidth">
+         <item name="android:orientation">horizontal</item>
+     </style>
+         <style name="UserViewAvatar">
+             <item name="android:layout_margin">5dp</item>
+             <item name="android:layout_width">100dp</item>
+             <item name="android:layout_height">100dp</item>
+         </style>
+         <style name="UserViewTopRight" parent="FullWidth">
+             <item name="android:orientation">vertical</item>
+         </style>
+             <style name="UserViewUsername" parent="WrapAll">
+                 <item name="android:textSize">24sp</item>
+                 <item name="android:textStyle">bold</item>
+             </style>
+	     <style name="UserViewBefriend" parent="FullWidth">
+	         <item name="android:textSize">14sp</item>
+	     </style>
      
-    <style name="UserListItem" parent="FullWidth">
-        <item name="android:padding">5dp</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-        <style name="UserListItemAvatar">
-            <item name="android:layout_width">50dp</item>
-            <item name="android:layout_height">50dp</item>
-        </style>
-        <style name="UserListItemUsername" parent="FullWidth">
-            <item name="android:textStyle">bold</item>
-            <item name="android:textColor">@color/link_blue</item>
-        </style>
      
+	    <style name="UserListItem" parent="FullWidth">
+	        <item name="android:padding">5dp</item>
+	        <item name="android:layout_height">60dp</item>
+	        <item name="android:textSize">16sp</item>
+	    </style>
+	        <style name="UserListItemAvatar">
+	            <item name="android:layout_width">50dp</item>
+	            <item name="android:layout_height">50dp</item>
+	        </style>
+	        <style name="UserListItemUsername" parent="FullWidth">
+	            <item name="android:textStyle">bold</item>
+	            <item name="android:textColor">@color/link_blue</item>
+	        </style>
 </resources>

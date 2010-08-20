@@ -1,7 +1,6 @@
 package com.connectsy.events;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -11,6 +10,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
@@ -27,7 +27,6 @@ public class EventManager extends DataManager {
 	private String category;
 	private Filter filter;
 	private ArrayList<Event> events;
-	private ApiRequest getEventsRequest;
 	private LocManager locManager;
 	
 	public enum Filter{ALL, CATEGORY, FRIENDS}
@@ -41,6 +40,7 @@ public class EventManager extends DataManager {
 		public int when;
 		public String category;
 		public String location;
+		public boolean broadcast;
 		public int created;
 
 		public Event(){}
@@ -55,6 +55,10 @@ public class EventManager extends DataManager {
 			where = event.getString("where");
 			when = event.getInt("when");
 			category = event.getString("category");
+			// TODO: broadcast isn't optional, I just don't want to pitch my data 
+			// right now.
+			if (event.has("broadcast"))
+				broadcast = event.getBoolean("broadcast");
 			if (event.has("location"))
 				location = event.getString("location");
 		}
@@ -65,28 +69,32 @@ public class EventManager extends DataManager {
 		filter = f;
 		category = cat;
 		locManager = new LocManager(c);
-		
+	}
+	
+	private ApiRequest getEventsRequest(){
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(); 
 		if (filter == Filter.FRIENDS)
 			args.add(new BasicNameValuePair("friends", "true"));
 		else if (filter == Filter.CATEGORY)
 			args.add(new BasicNameValuePair("category", category));
-        
+		
 		Location loc = locManager.getLocation();
 		if (loc != null){
 			args.add(new BasicNameValuePair("lat", Double.toString(loc.getLatitude())));
 			args.add(new BasicNameValuePair("lng", Double.toString(loc.getLongitude())));
 		}
 		
-		getEventsRequest = new ApiRequest(this, c, Method.GET, 
+		ApiRequest request = new ApiRequest(this, context, Method.GET, 
 				"/events/", true, GET_EVENTS);
-		getEventsRequest.setGetArgs(args);
+		request.setGetArgs(args);
+		return request;
 	}
 	
 	public ArrayList<Event> getEvents(){
 		events = new ArrayList<Event>();
-		String eventsCache = getEventsRequest.getCached();
-		if (eventsCache == null) return events;
+		String eventsCache = getEventsRequest().getCached();
+		if (eventsCache == null) 
+			return events;
 		try {
 			JSONArray revisions = new JSONObject(eventsCache)
 					.getJSONArray("events");
@@ -102,16 +110,7 @@ public class EventManager extends DataManager {
 	
 	public void refreshEvents(int sentReturnCode){
 		returnCode = sentReturnCode;
-
-		Location loc = locManager.getLocation();
-		if (loc != null){
-			List<NameValuePair> args = getEventsRequest.getGetArgs();
-			args.add(new BasicNameValuePair("lat", Double.toString(loc.getLatitude())));
-			args.add(new BasicNameValuePair("lng", Double.toString(loc.getLongitude())));
-			getEventsRequest.setGetArgs(args);
-		}
-		
-		getEventsRequest.execute();
+		getEventsRequest().execute();
 		pendingUpdates++;
 	}
 	
@@ -162,6 +161,7 @@ public class EventManager extends DataManager {
 			json.put("when", event.when);
 			json.put("desc", event.description);
 			json.put("category", event.category);
+			json.put("broadcast", event.broadcast);
 			json.put("client", "Connectsy for Android");
 			Location loc = locManager.getLocation();
 			if (loc != null){

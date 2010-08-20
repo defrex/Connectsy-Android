@@ -78,7 +78,8 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 				request = new HttpGet(url);
 			}else if (method == Method.POST){
 				HttpPost post = new HttpPost(url);
-				post.setEntity(new StringEntity(body));
+				if (body != null)
+					post.setEntity(new StringEntity(body));
 				request = post;
 			}else if (method == Method.PUT){
 				HttpPut post = new HttpPut(url);
@@ -123,6 +124,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	}
 	
 	public String getCached(){
+		prepRequest();
 		return data.getString(url, null);
 	}
 	

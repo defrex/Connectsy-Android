@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,7 +23,6 @@ import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.events.EventsAdapter;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
@@ -36,8 +36,13 @@ public class UserView extends Activity implements OnClickListener,
     private User user;
     private String username;
     private UserAdapter adapter;
+    private UserAdapter pendingAdapter;
+    private int operationsPending = 0;
     private static final int REFRESH_USER = 0;
     private static final int SELECT_AVATAR = 1;
+    private static final int BEFRIEND = 2;
+    private static final int REFRESH_FRIENDS = 3;
+    private static final int REFRESH_PENDING_FRIENDS = 4;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +80,7 @@ public class UserView extends Activity implements OnClickListener,
         }
         
 		if (user != null){
-			ArrayList<User> friends = userManager.getFriends();
+			ArrayList<User> friends = userManager.getFriends(false);
 	        if (adapter != null){
 	        	adapter.clear();
 	        	for (int n = 0;n < friends.size();n++)
@@ -89,12 +94,45 @@ public class UserView extends Activity implements OnClickListener,
 	        lv.setOnItemClickListener(this);
 	        lv.setAdapter(adapter);
 	        
+	        String curUser = UserManager.getCache(this).getString("username", "");
+	        if (!user.username.equals(curUser)){
+	        	boolean isFriend = false;
+	        	for (int i = 0;i < friends.size();i++)
+	        		if (friends.get(i).username.equals(curUser))
+	        			isFriend = true;
+	        	if (!isFriend){
+	        		Button f = (Button)findViewById(R.id.user_view_befriend);
+	        		f.setVisibility(Button.VISIBLE);
+	        		f.setText("Become friends!");
+	        		f.setOnClickListener(this);
+	        	}
+	        }else{
+				ArrayList<User> pendingFriends = userManager.getFriends(true);
+		        if (pendingAdapter != null){
+		        	pendingAdapter.clear();
+		        	for (int n = 0;n < pendingFriends.size();n++)
+		        		pendingAdapter.add(pendingFriends.get(n));
+		        	pendingAdapter.notifyDataSetChanged();
+		        }else{
+		        	pendingAdapter = new UserAdapter(this, R.layout.user_list_item, friends);
+		        }
+				
+		        ListView plv = (ListView)findViewById(R.id.pending_friends_list);
+		        plv.setOnItemClickListener(this);
+		        plv.setAdapter(pendingAdapter);
+	        }
 		}
 	}
     
 	private void changeAvatar(){
 		startActivityForResult(new Intent(Intent.ACTION_PICK, 
 				Images.Media.INTERNAL_CONTENT_URI), SELECT_AVATAR);
+	}
+	
+	private void befriend(){
+		userManager.befriend(BEFRIEND);
+		operationsPending++;
+		setRefreshing(true);
 	}
 	
 	@Override
@@ -121,9 +159,13 @@ public class UserView extends Activity implements OnClickListener,
 	public void onClick(View v) {
     	if (v.getId() == R.id.ab_refresh) refresh();
     	if (v.getId() == R.id.user_view_avatar) changeAvatar();
+    	if (v.getId() == R.id.user_view_befriend) befriend();
 	}
 	private void refresh(){
 		userManager.refreshUser(REFRESH_USER);
+		userManager.refreshFriends(false, REFRESH_FRIENDS);
+		userManager.refreshFriends(true, REFRESH_PENDING_FRIENDS);
+		operationsPending += 3;
 		setRefreshing(true);
 	}
 	
@@ -138,8 +180,16 @@ public class UserView extends Activity implements OnClickListener,
     }
 
 	public void onDataUpdate(int code, String response) {
+		if (code == BEFRIEND){
+    		Button f = (Button)findViewById(R.id.user_view_befriend);
+    		f.setVisibility(Button.VISIBLE);
+		}
     	update();
-		setRefreshing(false);
+		operationsPending--;
+		if (operationsPending < 1){
+			setRefreshing(false);
+			operationsPending = 0;
+		}
 	}
 
 	public void onRemoteError(int httpStatus, int code) {

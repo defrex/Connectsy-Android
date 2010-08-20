@@ -3,6 +3,8 @@ package com.connectsy.users;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
@@ -21,6 +24,7 @@ public class UserManager extends DataManager {
 
 	private static final int GET_USER = 0;
 	private static final int UPLOAD_AVATAR = 1;
+	private static final int BEFRIEND = 2;
 	
 	private String username;
 	
@@ -62,24 +66,48 @@ public class UserManager extends DataManager {
 				"/users/"+username+"/", true, GET_USER).execute();
 	}
 	
-	public ArrayList<User> getFriends(){
-		String friendString = new ApiRequest(this, context, Method.GET, 
-				"/users/"+username+"/", true, GET_USER).getCached();
+	private ApiRequest getFriendsRequest(boolean pending){
+		ApiRequest r = new ApiRequest(this, context, Method.GET, 
+				"/users/"+username+"/friends/", true, GET_USER);
+		if (pending){
+			ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(); 
+			args.add(new BasicNameValuePair("pending", "true"));
+			r.setGetArgs(args);
+		}
+		return r;
+	}
+	
+	public ArrayList<User> getFriends(boolean pending){
+		String friendString = getFriendsRequest(pending).getCached();
 		ArrayList<User> friends = new ArrayList<User>();
-		try {
-			JSONArray jsonFriends = new JSONArray(friendString);
-			for (int i=0;i<jsonFriends.length();i++)
-				friends.add(new User(jsonFriends.getJSONObject(i)));
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if (friendString != null){
+			try {
+				JSONArray jsonFriends = new JSONObject(friendString).getJSONArray("friends");
+				for (int i=0;i<jsonFriends.length();i++){
+					ApiRequest r = new ApiRequest(this, context, Method.GET, 
+							"/users/"+jsonFriends.getString(i)+"/", true, GET_USER);
+					String uString = r.getCached();
+					if (uString != null)
+						friends.add(new User(new JSONObject(uString)));
+					else
+						r.execute();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 		return friends;
 	}
 	
-	public void refreshFriends(int sentReturnCode){
+	public void refreshFriends(boolean pending, int sentReturnCode){
 		returnCode = sentReturnCode;
-		new ApiRequest(this, context, Method.GET, 
-				"/users/"+username+"/", true, GET_USER).execute();
+		getFriendsRequest(pending).execute();
+	}
+	
+	public void befriend(int sentReturnCode){
+		returnCode = sentReturnCode;
+		new ApiRequest(this, context, Method.POST, 
+				"/users/"+username+"/friends/", true, BEFRIEND).execute();
 	}
 	
 	public void uploadAvatar(Uri avatar) throws IOException{
@@ -94,6 +122,7 @@ public class UserManager extends DataManager {
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
+		Log.d(TAG, response);
 		listener.onDataUpdate(returnCode, response);
 	}
 }
