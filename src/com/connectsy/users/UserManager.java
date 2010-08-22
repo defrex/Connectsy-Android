@@ -32,13 +32,17 @@ public class UserManager extends DataManager {
 		public String username;
 		public String revision;
 		public int created;
+		public boolean friendStatusPending = false;
 		
 		public User(){}
 		
 		public User(JSONObject user) throws JSONException{
 			username = user.getString("username");
 			revision = user.getString("revision");
-			//created = user.getInt("created");
+			if (user.has("friend_status_pending"))
+				friendStatusPending = user.getBoolean("friend_status_pending");
+			if (user.has("created"))
+				created = user.getInt("created");
 		}
 	}
 	
@@ -87,10 +91,13 @@ public class UserManager extends DataManager {
 					ApiRequest r = new ApiRequest(this, context, Method.GET, 
 							"/users/"+jsonFriends.getString(i)+"/", true, GET_USER);
 					String uString = r.getCached();
-					if (uString != null)
-						friends.add(new User(new JSONObject(uString)));
-					else
+					if (uString != null){
+						JSONObject userJSON = new JSONObject(uString);
+						userJSON.put("friend_status_pending", pending);
+						friends.add(new User(userJSON));
+					}else{
 						r.execute();
+					}
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();

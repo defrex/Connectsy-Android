@@ -88,14 +88,16 @@ public final class R {
         public static final int events_new_time=0x7f09001f;
         public static final int events_new_time_change=0x7f090020;
         public static final int events_new_where=0x7f09001c;
-        public static final int friends_list=0x7f090031;
-        public static final int pending_friends_list=0x7f090030;
-        public static final int preferances_avatar_button=0x7f090032;
+        public static final int friends_list=0x7f090033;
+        public static final int pending_friends_list=0x7f090032;
+        public static final int pending_friends_list_title=0x7f090031;
+        public static final int preferances_avatar_button=0x7f090034;
         public static final int user_list_item_avatar=0x7f09002b;
+        public static final int user_list_item_confirm=0x7f09002d;
         public static final int user_list_item_username=0x7f09002c;
-        public static final int user_view_avatar=0x7f09002d;
-        public static final int user_view_befriend=0x7f09002f;
-        public static final int user_view_username=0x7f09002e;
+        public static final int user_view_avatar=0x7f09002e;
+        public static final int user_view_befriend=0x7f090030;
+        public static final int user_view_username=0x7f09002f;
     }
     public static final class layout {
         public static final int actionbar=0x7f030000;
@@ -207,11 +209,15 @@ public final class R {
         public static final int Spring=0x7f080002;
         public static final int Theme=0x7f080000;
         public static final int Theme_Consy=0x7f080001;
-        public static final int UserListItem=0x7f08003f;
-        public static final int UserListItemAvatar=0x7f080040;
-        public static final int UserListItemUsername=0x7f080041;
+        public static final int UserListItem=0x7f080041;
+        public static final int UserListItemAvatar=0x7f080042;
+        public static final int UserListItemConfirm=0x7f080045;
+        public static final int UserListItemMiddle=0x7f080043;
+        public static final int UserListItemUsername=0x7f080044;
         public static final int UserViewAvatar=0x7f08003b;
         public static final int UserViewBefriend=0x7f08003e;
+        public static final int UserViewFreindListTitle=0x7f08003f;
+        public static final int UserViewPendingFreindListTitle=0x7f080040;
         public static final int UserViewTop=0x7f08003a;
         public static final int UserViewTopRight=0x7f08003c;
         public static final int UserViewUsername=0x7f08003d;

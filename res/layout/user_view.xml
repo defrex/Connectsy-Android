@@ -50,10 +50,15 @@
 	</LinearLayout>
 	
     
+    <TextView style="@style/UserViewPendingFreindListTitle"
+        android:text="Pending Freind Requests"
+        android:id="@+id/pending_friends_list_title" />
     <ListView android:id="@+id/pending_friends_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
     
+    <TextView style="@style/UserViewFreindListTitle"
+        android:text="Friends" />
     <ListView android:id="@+id/friends_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

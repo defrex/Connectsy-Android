@@ -277,9 +277,15 @@
                  <item name="android:textSize">24sp</item>
                  <item name="android:textStyle">bold</item>
              </style>
-	     <style name="UserViewBefriend" parent="FullWidth">
-	         <item name="android:textSize">14sp</item>
-	     </style>
+         <style name="UserViewBefriend" parent="FullWidth">
+             <item name="android:textSize">14sp</item>
+         </style>
+     <style name="UserViewFreindListTitle" parent="FullWidth">
+         <item name="android:textSize">14sp</item>
+     </style>
+     <style name="UserViewPendingFreindListTitle" parent="UserViewFreindListTitle">
+         <item name="android:visibility">invisible</item>
+     </style>
      
      
 	    <style name="UserListItem" parent="FullWidth">
@@ -291,8 +297,18 @@
 	            <item name="android:layout_width">50dp</item>
 	            <item name="android:layout_height">50dp</item>
 	        </style>
-	        <style name="UserListItemUsername" parent="FullWidth">
-	            <item name="android:textStyle">bold</item>
-	            <item name="android:textColor">@color/link_blue</item>
-	        </style>
+            <style name="UserListItemMiddle" parent="FullHeight">
+                <item name="android:layout_weight">1</item>
+                <item name="android:orientation">vertical</item>
+            </style>
+	            <style name="UserListItemUsername" parent="FullWidth">
+	                <item name="android:textStyle">bold</item>
+	                <item name="android:textColor">@color/link_blue</item>
+	            </style>
+            <style name="UserListItemConfirm">
+                <item name="android:textSize">14sp</item>
+                <item name="android:visibility">invisible</item>
+                <item name="android:layout_width">50dp</item>
+                <item name="android:layout_height">50dp</item>
+            </style>
 </resources>

@@ -29,9 +29,10 @@ import com.connectsy.users.UserManager.User;
 import com.wilson.android.library.DrawableManager;
 
 public class UserView extends Activity implements OnClickListener, 
-		DataUpdateListener, OnItemClickListener {
+		DataUpdateListener {
     @SuppressWarnings("unused")
 	private static final String TAG = "UserView";
+    private String curUsername;
     private UserManager userManager;
     private User user;
     private String username;
@@ -59,13 +60,18 @@ public class UserView extends Activity implements OnClickListener,
         abRefresh.setOnClickListener(this);
         
         username = getIntent().getExtras().getString("com.connectsy.user.username");
+        curUsername = UserManager.getCache(this).getString("username", "");
 
     	userManager = new UserManager(this, this, username);
-    	update();
+    	
+		updateUserDisplay();
+		updateFriendsDisplay();
+		updatePendingFriendsDisplay();
+		
     	refresh();
     }
 	
-	private void update(){
+    private void updateUserDisplay(){
     	user = userManager.getUser();
     	
         TextView uname = (TextView)findViewById(R.id.user_view_username);
@@ -78,51 +84,59 @@ public class UserView extends Activity implements OnClickListener,
         	avatar.setClickable(true);
         	avatar.setOnClickListener(this);
         }
+    }
+    
+    private void updateFriendsDisplay(){
+		ArrayList<User> friends = userManager.getFriends(false);
+        if (adapter != null){
+        	adapter.clear();
+        	for (int n = 0;n < friends.size();n++)
+        		adapter.add(friends.get(n));
+    		adapter.notifyDataSetChanged();
+        }else{
+            adapter = new UserAdapter(this, R.layout.user_list_item, friends);
+        }
+        ((ListView) findViewById(R.id.friends_list)).setAdapter(adapter);
         
 		if (user != null){
-			ArrayList<User> friends = userManager.getFriends(false);
-	        if (adapter != null){
-	        	adapter.clear();
-	        	for (int n = 0;n < friends.size();n++)
-	        		adapter.add(friends.get(n));
-	    		adapter.notifyDataSetChanged();
-	        }else{
-	            adapter = new UserAdapter(this, R.layout.user_list_item, friends);
-	        }
-			
-	        ListView lv = (ListView)findViewById(R.id.friends_list);
-	        lv.setOnItemClickListener(this);
-	        lv.setAdapter(adapter);
-	        
-	        String curUser = UserManager.getCache(this).getString("username", "");
-	        if (!user.username.equals(curUser)){
+	        if (!user.username.equals(curUsername)){
 	        	boolean isFriend = false;
 	        	for (int i = 0;i < friends.size();i++)
-	        		if (friends.get(i).username.equals(curUser))
+	        		if (friends.get(i).username.equals(curUsername))
 	        			isFriend = true;
+        		Button f = (Button)findViewById(R.id.user_view_befriend);
 	        	if (!isFriend){
-	        		Button f = (Button)findViewById(R.id.user_view_befriend);
 	        		f.setVisibility(Button.VISIBLE);
 	        		f.setText("Become friends!");
 	        		f.setOnClickListener(this);
+	        	}else{
+	        		f.setVisibility(Button.INVISIBLE);
 	        	}
-	        }else{
-				ArrayList<User> pendingFriends = userManager.getFriends(true);
-		        if (pendingAdapter != null){
-		        	pendingAdapter.clear();
-		        	for (int n = 0;n < pendingFriends.size();n++)
-		        		pendingAdapter.add(pendingFriends.get(n));
-		        	pendingAdapter.notifyDataSetChanged();
-		        }else{
-		        	pendingAdapter = new UserAdapter(this, R.layout.user_list_item, friends);
-		        }
-				
-		        ListView plv = (ListView)findViewById(R.id.pending_friends_list);
-		        plv.setOnItemClickListener(this);
-		        plv.setAdapter(pendingAdapter);
 	        }
 		}
-	}
+    }
+    
+    private void updatePendingFriendsDisplay(){
+		if (user != null && user.username.equals(curUsername)){
+			ArrayList<User> pendingFriends = userManager.getFriends(true);
+			if (pendingFriends.size() > 0){
+				TextView title = (TextView)findViewById(R.id.pending_friends_list_title);
+				title.setVisibility(TextView.VISIBLE);
+			}
+	        if (pendingAdapter != null){
+	        	pendingAdapter.clear();
+	        	for (int n = 0;n < pendingFriends.size();n++)
+	        		pendingAdapter.add(pendingFriends.get(n));
+	        	pendingAdapter.notifyDataSetChanged();
+	        }else{
+	        	pendingAdapter = new UserAdapter(this, R.layout.user_list_item, 
+	        			pendingFriends);
+	        }
+			
+	        ListView plv = (ListView)findViewById(R.id.pending_friends_list);
+	        plv.setAdapter(pendingAdapter);
+		}
+    }
     
 	private void changeAvatar(){
 		startActivityForResult(new Intent(Intent.ACTION_PICK, 
@@ -183,8 +197,12 @@ public class UserView extends Activity implements OnClickListener,
 		if (code == BEFRIEND){
     		Button f = (Button)findViewById(R.id.user_view_befriend);
     		f.setVisibility(Button.VISIBLE);
-		}
-    	update();
+		}else if (code == REFRESH_USER)
+			updateUserDisplay();
+		else if (code == REFRESH_FRIENDS)
+			updateFriendsDisplay();
+		else if (code == REFRESH_PENDING_FRIENDS)
+			updatePendingFriendsDisplay();
 		operationsPending--;
 		if (operationsPending < 1){
 			setRefreshing(false);
@@ -194,10 +212,5 @@ public class UserView extends Activity implements OnClickListener,
 
 	public void onRemoteError(int httpStatus, int code) {
 		setRefreshing(false);
-	}
-
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
-		
 	}
 }

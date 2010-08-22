@@ -5,9 +5,16 @@
     <ImageView style="@style/UserListItemAvatar"
         android:src="@drawable/avatar_default"
         android:id="@+id/user_list_item_avatar" />
+    
+    <LinearLayout style="@style/UserListItemMiddle">
+	    <TextView style="@style/UserListItemUsername"
+	        android:id="@+id/user_list_item_username"
+	        android:clickable="true" />
+    </LinearLayout>
         
-    <TextView style="@style/UserListItemUsername"
-        android:id="@+id/user_list_item_username"
+    <Button style="@style/UserListItemConfirm"
+        android:id="@+id/user_list_item_confirm"
+        android:text="confirm"
         android:clickable="true" />
-        
+    
 </LinearLayout>

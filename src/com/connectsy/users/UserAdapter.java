@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.connectsy.R;
+import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
 import com.wilson.android.library.DrawableManager;
@@ -46,6 +48,22 @@ public class UserAdapter extends ArrayAdapter<User> {
         DrawableManager dm = new DrawableManager();
         String avyUrl = Settings.API_DOMAIN+"/users/"+user.username+"/avatar/";
         dm.fetchDrawableOnThread(avyUrl, avatar);
+        
+        if (user.friendStatusPending){
+        	Button confirm = (Button)view.findViewById(R.id.user_list_item_confirm);
+        	confirm.setVisibility(Button.VISIBLE);
+        	confirm.setOnClickListener(new Button.OnClickListener(){
+        		private DataUpdateListener l = new DataUpdateListener() {
+					public void onRemoteError(int httpStatus, int code) {}
+					public void onDataUpdate(int code, String response) {}
+				};
+        		
+    			public void onClick(View v) {
+    				UserManager manager = new UserManager(context, l, user.username);
+    				manager.befriend(0);
+    			}
+            });
+        }
         
         return view;
 	}
