@@ -2,6 +2,7 @@ package com.connectsy.events;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.json.JSONException;
@@ -23,11 +24,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.ToggleButton;
 
 import com.connectsy.R;
+import com.connectsy.categories.CategoryManager;
+import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.settings.MainMenu;
@@ -36,6 +39,7 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 	private final String TAG = "NewEvent";
 	private ProgressDialog loadingDialog;
     private EventManager eventManager;
+    private Category category;
 	
     // where we display the selected date and time
     private TextView mDateDisplay;
@@ -60,15 +64,19 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         
         Button dateButton = (Button)findViewById(R.id.events_new_date_change);
         dateButton.setOnClickListener(this);
-
         Button timeButton = (Button)findViewById(R.id.events_new_time_change);
         timeButton.setOnClickListener(this);
         
+        Button everyone = (Button)findViewById(R.id.events_new_who_everyone);
+        everyone.setOnClickListener(this);
+        Button friends = (Button)findViewById(R.id.events_new_who_friends);
+        friends.setOnClickListener(this);
+        friends.setSelected(true);
+        LinearLayout category = (LinearLayout)findViewById(R.id.events_new_cat);
+        category.setOnClickListener(this);
+        
         Button submitButton = (Button)findViewById(R.id.events_new_submit);
         submitButton.setOnClickListener(this);
-        
-        ToggleButton broadcast = (ToggleButton)findViewById(R.id.events_new_broadcast);
-        broadcast.setOnClickListener(this);
         
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
@@ -86,13 +94,34 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         	showDialog(TIME_DIALOG_ID);
         }else if (id == R.id.events_new_date_change){
         	showDialog(DATE_DIALOG_ID);
-	    }else if (id == R.id.events_new_broadcast){
-        	broadcastToggle();
+	    }else if (id == R.id.events_new_who_everyone){
+        	setWho("everyone");
+	    }else if (id == R.id.events_new_who_friends){
+        	setWho("friends");
+	    }else if (id == R.id.events_new_cat){
+        	getCategory();
 	    }else if (id == R.id.events_new_submit){
         	submitData();
 	    }else{
 	    	Log.d("events", "bad view is for button");
 	    }
+	}
+	
+	private void getCategory(){
+		ArrayList<Category> categories = new CategoryManager(this, this).getCategories();
+		Intent i = new Intent(Intent.ACTION_CHOOSER);
+		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
+		i.putExtra("com.connectsy.categories", Category.serializeList(categories));
+		startActivityForResult(i, 0);
+	}
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		try {
+			category = new Category(data.getExtras().getString("com.connectsy.category"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		TextView title = (TextView)findViewById(R.id.events_new_category_title);
+		title.setText(category.name);
 	}
 	
     @Override
@@ -171,12 +200,21 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         mDateDisplay.setText(dateString);
     }
     
-    private void broadcastToggle(){
-    	ToggleButton broadcast = (ToggleButton)findViewById(R.id.events_new_broadcast);
-    	if (broadcast.isChecked())
+    private void setEnabled(Button enabled, Button disabled){
+		enabled.setSelected(true);
+		disabled.setSelected(false);
+	}
+    
+    private void setWho(String who){
+    	Button ev = (Button)findViewById(R.id.events_new_who_everyone);
+    	Button fr = (Button)findViewById(R.id.events_new_who_friends);
+    	if (who == "everyone"){
 	        findViewById(R.id.events_new_cat).setVisibility(View.VISIBLE);
-    	else
+	        setEnabled(ev, fr);
+    	}else{
 	        findViewById(R.id.events_new_cat).setVisibility(View.GONE);
+	        setEnabled(fr, ev);
+    	}
     }
 
     private void submitData() {
@@ -188,8 +226,8 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         String strDesc = desc.getText().toString();
         String strWhere = where.getText().toString();
         String strCat = cat.getText().toString();
-        
-        ToggleButton bcast = (ToggleButton)findViewById(R.id.events_new_broadcast);
+        Button bcast = (Button)findViewById(R.id.events_new_who_everyone);
+        Button friends = (Button)findViewById(R.id.events_new_who_friends);
         
         SharedPreferences data = getSharedPreferences("consy", 0);
         String username = data.getString("username", "username_fail");
@@ -204,7 +242,8 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         event.when = when;
         event.category = strCat;
         event.creator = username;
-        event.broadcast = bcast.isChecked();
+        event.broadcast = bcast.isSelected();
+        event.friends = friends.isSelected();
         eventManager.createEvent(event, 0);
         loadingDialog = ProgressDialog.show(this, "", "Posting event...", true);
     }

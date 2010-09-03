@@ -31,7 +31,7 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
 		final Context context = getContext();
 		final Attendant att = getItem(position);
 		
-		LayoutInflater inflater = LayoutInflater.from(getContext());
+		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.attendant_list_item, parent, false);
 		
         TextView username = (TextView)view.findViewById(R.id.attendant_list_item_username);

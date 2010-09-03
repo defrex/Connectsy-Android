@@ -8,4 +8,13 @@
     <color name="light_grey">#ff444444</color>
     
     <color name="actionbar_separator">#40ffffff</color>
+    
+    <color name="button_start">#aa35a09f</color>
+    <color name="button_end">#ff35a09f</color>
+    <color name="button_stroke">#ff333333</color>
+    <color name="button_text">#ffffffff</color>
+    
+    <color name="highlight_button_start">#ffccf8a4</color>
+    <color name="highlight_button_end">#66ccf8a4</color>
+    <color name="highlight_button_text">#ff000000</color>
 </resources>

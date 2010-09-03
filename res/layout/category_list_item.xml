@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/FullWidth" >
+    <TextView style="@style/FullWidth"
+        android:padding="5dp"
+        android:id="@+id/category_list_item_name" />
+</LinearLayout>

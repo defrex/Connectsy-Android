@@ -41,6 +41,8 @@ public class EventManager extends DataManager {
 		public String category;
 		public String location;
 		public boolean broadcast;
+		public boolean friends;
+		public ArrayList<Integer> someFriends;
 		public int created;
 
 		public Event(){}
@@ -162,6 +164,7 @@ public class EventManager extends DataManager {
 			json.put("desc", event.description);
 			json.put("category", event.category);
 			json.put("broadcast", event.broadcast);
+			json.put("friends", event.friends);
 			json.put("client", "Connectsy for Android");
 			Location loc = locManager.getLocation();
 			if (loc != null){

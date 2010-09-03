@@ -39,6 +39,14 @@
         <item name="android:layout_weight">1</item>
     </style>
     
+    <style name="Button" parent="WrapAll">
+        <item name="android:background">@drawable/button</item>
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+    
     <style name="ActionBarFrame">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/actionbar_height</item>
@@ -203,12 +211,16 @@
             <item name="android:layout_marginRight">5dp</item>
             <item name="android:layout_marginLeft">5dp</item>
 	    </style>
-		    <style name="EventNewBroadcast" parent="EventNewField">
+		    <style name="EventNewWho" parent="EventNewField">
         		<item name="android:orientation">horizontal</item>
 		    </style>
-			    <style name="EventNewBroadcastText" parent="FormElementTitle">
-			    	<item name="android:gravity">center_vertical</item>
-			    </style>
+                <style name="EventNewWhoEveryone" parent="Button">
+                   <item name="android:layout_weight">1</item>
+                </style>
+                <style name="EventNewWhoFriends" parent="Button">
+                   <item name="android:layout_weight">1</item>
+                   <item name="android:state_selected">true</item>
+                </style>
     
     <style name="EventView" parent="FillAll">
    		<item name="android:padding">5dp</item>

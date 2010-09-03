@@ -29,6 +29,14 @@
             </intent-filter>
         </activity>
         
+        <activity android:name=".categories.CategorySelector">
+            <intent-filter>
+                <action android:name="android.intent.action.CHOOSER" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.connectsy.category" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
         <activity android:name=".users.Register" />
         <activity android:name=".users.Login" />
         <activity android:name=".users.Logout"
