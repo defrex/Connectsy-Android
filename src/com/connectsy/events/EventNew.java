@@ -115,13 +115,15 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 		startActivityForResult(i, 0);
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		try {
-			category = new Category(data.getExtras().getString("com.connectsy.category"));
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if (resultCode == RESULT_OK){
+			try {
+				category = new Category(data.getExtras().getString("com.connectsy.category"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			TextView title = (TextView)findViewById(R.id.events_new_category_title);
+			title.setText(category.name);
 		}
-		TextView title = (TextView)findViewById(R.id.events_new_category_title);
-		title.setText(category.name);
 	}
 	
     @Override
@@ -222,27 +224,25 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
     	
         EditText desc = (EditText) findViewById(R.id.events_new_desc);
         EditText where = (EditText) findViewById(R.id.events_new_where);
-        EditText cat = (EditText) findViewById(R.id.events_new_cat);
         String strDesc = desc.getText().toString();
         String strWhere = where.getText().toString();
-        String strCat = cat.getText().toString();
         Button bcast = (Button)findViewById(R.id.events_new_who_everyone);
         Button friends = (Button)findViewById(R.id.events_new_who_friends);
         
         SharedPreferences data = getSharedPreferences("consy", 0);
         String username = data.getString("username", "username_fail");
 
-        int when = (int) new Timestamp(mYear, mMonth, mDay, mHour, mMinute, 0, 0)
-        		.getTime();
+        int when = (int) new Timestamp(mYear, mMonth, mDay, mHour, mMinute, 0, 0).getTime();
         
         eventManager = new EventManager(this, this, null, null);
         Event event = eventManager.new Event();
         event.description = strDesc;
         event.where = strWhere;
         event.when = when;
-        event.category = strCat;
         event.creator = username;
         event.broadcast = bcast.isSelected();
+        if (event.broadcast && category != null)
+        	event.category = category.name;
         event.friends = friends.isSelected();
         eventManager.createEvent(event, 0);
         loadingDialog = ProgressDialog.show(this, "", "Posting event...", true);

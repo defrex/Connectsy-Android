@@ -221,6 +221,14 @@
                    <item name="android:layout_weight">1</item>
                    <item name="android:state_selected">true</item>
                 </style>
+            <style name="EventNewCategory" parent="FullWidth">
+                <item name="android:orientation">vertical</item>
+                <item name="android:layout_marginTop">5dp</item>
+                <item name="android:layout_marginBottom">5dp</item>
+            </style>
+                <style name="EventNewCategoryTitle" parent="FormElementTitle">
+                    <item name="android:padding">10dp</item>
+                </style>
     
     <style name="EventView" parent="FillAll">
    		<item name="android:padding">5dp</item>

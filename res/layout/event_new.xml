@@ -96,14 +96,15 @@
                 android:id="@+id/events_new_who_friends" />
         </LinearLayout>
         
-        <LinearLayout style="@style/EventNewWho"
+        <LinearLayout style="@style/EventNewCategory"
             android:clickable="true" 
             android:visibility="gone"
             android:id="@+id/events_new_cat">
-            <TextView style="@style/FormElementTitle"
+            <View style="@style/EventNewTitleBorder" />
+            <TextView style="@style/EventNewCategoryTitle"
                  android:id="@+id/events_new_category_title"
                  android:text="Select a Category" />
-            <View style="@style/Spring" />
+            <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
 		
 		<LinearLayout style="@style/FullWidth"
