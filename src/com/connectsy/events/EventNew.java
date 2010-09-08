@@ -86,6 +86,8 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         mMinute = c.get(Calendar.MINUTE);
         
         updateTimeDisplay();
+        
+        CategoryManager.precacheCategories(this);
     }
 
 	public void onClick(View v) {
@@ -108,10 +110,10 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 	}
 	
 	private void getCategory(){
-		ArrayList<Category> categories = new CategoryManager(this, this).getCategories();
 		Intent i = new Intent(Intent.ACTION_CHOOSER);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
-		i.putExtra("com.connectsy.categories", Category.serializeList(categories));
+		//ArrayList<Category> categories = new CategoryManager(this, this).getCategories();
+		//i.putExtra("com.connectsy.categories", Category.serializeList(categories));
 		startActivityForResult(i, 0);
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){

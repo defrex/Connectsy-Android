@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.connectsy.data.ApiRequest;
+import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
 
 public class CategoryManager extends DataManager {
@@ -20,7 +22,6 @@ public class CategoryManager extends DataManager {
 		public Category(String json) throws JSONException{
 			JSONObject catJSON = new JSONObject(json);
 			name = catJSON.getString("name");
-			id = catJSON.getInt("id");
 			if (catJSON.has("categories"))
 				categories = Category.deserializeList(catJSON.getString("categories"));
 		}
@@ -29,7 +30,6 @@ public class CategoryManager extends DataManager {
 			JSONObject ret = new JSONObject();
 			try {
 				ret.put("name", name);
-				ret.put("id", id);
 				if (categories != null)
 					ret.put("categories", Category.serializeList(categories));
 			} catch (JSONException e) {
@@ -58,14 +58,27 @@ public class CategoryManager extends DataManager {
 		super(c, l);
 	}
 	
+	private ApiRequest getRequest(){
+		return new ApiRequest(this, context, Method.GET, "/categories/", false, 0);
+	}
+	
 	public ArrayList<Category> getCategories(){
 		ArrayList<Category> cats = new ArrayList<Category>();
 		try {
-			cats = Category.deserializeList("[{\"name\": \"Category One\", \"id\": 1}, {\"name\": \"Category Two\", \"id\": 2, \"categories\": [{\"name\": \"Category Two One\", \"id\": 3}, {\"name\": \"Category Two Two\", \"id\": 4}]}]");
+			ApiRequest r = getRequest();
+			if (r.getCached() != null)
+				cats = Category.deserializeList(r.getCached());
+			else
+				r.execute();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return cats;
+	}
+
+	public static void precacheCategories(Context c){
+		ApiRequest r = new ApiRequest(null, c, Method.GET, "/categories/", false, 0);
+		if (r.getCached() == null) r.execute();
 	}
 }

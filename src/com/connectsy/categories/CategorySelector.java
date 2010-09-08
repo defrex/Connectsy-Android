@@ -27,12 +27,16 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
         
         Intent i = getIntent();
         ArrayList<Category> categories = null;
-		try {
-			categories = Category.deserializeList(i.getExtras()
-					.getString("com.connectsy.categories"));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+        if (i.hasExtra("com.connectsy.categories")){
+			try {
+				categories = Category.deserializeList(i.getExtras()
+						.getString("com.connectsy.categories"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+        }else{
+        	categories = new CategoryManager(this, this).getCategories();
+        }
         adapter = new CategoryAdapter(this, R.layout.category_list_item, categories);
         ListView lv = (ListView)findViewById(R.id.category_list);
         lv.setOnItemClickListener(this);
@@ -61,7 +65,12 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		returnCategory(data.getExtras().getString("com.connectsy.category"));
 	}
-
-	public void onDataUpdate(int code, String response) {}
+	
+	public void onDataUpdate(int code, String response) {
+		ArrayList<Category> categories = new CategoryManager(this, this).getCategories();
+	    adapter = new CategoryAdapter(this, R.layout.category_list_item, categories);
+	    ListView lv = (ListView)findViewById(R.id.category_list);
+	    lv.setAdapter(adapter);
+	}
 	public void onRemoteError(int httpStatus, int code) {}
 }

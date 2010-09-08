@@ -156,19 +156,19 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 
 	protected void onPostExecute(HttpResponse response) {
 		if (response == null){
-			apiListener.onApiRequestError(0, retCode);
+			if (apiListener != null) apiListener.onApiRequestError(0, retCode);
 			return;
 		}else if(response.getStatusLine().getStatusCode()-200 > 100){
-			apiListener.onApiRequestError(response.getStatusLine().getStatusCode(), 
-					retCode);
+			if (apiListener != null) apiListener.onApiRequestError(
+					response.getStatusLine().getStatusCode(), retCode);
 			return;
 		}
 		String responseString = getResponseString(response);
 		if (responseString != null && request.getMethod() == "GET"){
 			data.edit().putString(url, responseString).commit();
 		}
-		apiListener.onApiRequestFinish(response.getStatusLine().getStatusCode(), 
-				responseString, retCode);
+		if (apiListener != null) apiListener.onApiRequestFinish(
+				response.getStatusLine().getStatusCode(), responseString, retCode);
 	}
 	
 	private String getResponseString(HttpResponse response){
