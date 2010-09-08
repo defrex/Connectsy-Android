@@ -28,7 +28,7 @@ public class UserManager extends DataManager {
 	
 	private String username;
 	
-	public class User{
+	public static class User{
 		public String username;
 		public String revision;
 		public int created;
@@ -36,7 +36,8 @@ public class UserManager extends DataManager {
 		
 		public User(){}
 		
-		public User(JSONObject user) throws JSONException{
+		public User(String userString) throws JSONException{
+			JSONObject user = new JSONObject(userString);
 			username = user.getString("username");
 			revision = user.getString("revision");
 			if (user.has("friend_status_pending"))
@@ -44,12 +45,44 @@ public class UserManager extends DataManager {
 			if (user.has("created"))
 				created = user.getInt("created");
 		}
+		
+		public String serialize(){
+			JSONObject ret = new JSONObject();
+			try {
+				ret.put("username", username);
+				ret.put("revision", revision);
+				ret.put("created", created);
+				ret.put("friendStatusPending", friendStatusPending);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return ret.toString();
+		}
+		
+		public static ArrayList<User> deserializeList(String usersStr) throws JSONException{
+			JSONArray usersJSON = new JSONArray(usersStr);
+			ArrayList<User> users = new ArrayList<User>();
+			for(int i=0;i<usersJSON.length();i++)
+				users.add(new User(usersJSON.getString(i)));
+			return users;
+		}
+		
+		public static String serializeList(ArrayList<User> users){
+			JSONArray usersJSON = new JSONArray();
+			for (int i=0;i<users.size();i++)
+				usersJSON.put(users.get(i).serialize());
+			return usersJSON.toString();
+		}
 	}
 	
 	public UserManager(Context c, DataUpdateListener passedListener, 
 			String pUsername) {
 		super(c, passedListener);
-		username = pUsername;
+		if (pUsername != null){
+			username = pUsername;
+		}else{
+			username = UserManager.getCache(c).getString("username", "");
+		}
 	}
 	
 	public User getUser(){
@@ -57,7 +90,7 @@ public class UserManager extends DataManager {
 				"/users/"+username+"/", true, GET_USER).getCached();
 		if (userString == null) return null;
 		try {
-			return new User(new JSONObject(userString));
+			return new User(userString);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
@@ -94,7 +127,7 @@ public class UserManager extends DataManager {
 					if (uString != null){
 						JSONObject userJSON = new JSONObject(uString);
 						userJSON.put("friend_status_pending", pending);
-						friends.add(new User(userJSON));
+						friends.add(new User(userJSON.toString()));
 					}else{
 						r.execute();
 					}

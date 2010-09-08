@@ -94,7 +94,7 @@ public class UserView extends Activity implements OnClickListener,
         		adapter.add(friends.get(n));
     		adapter.notifyDataSetChanged();
         }else{
-            adapter = new UserAdapter(this, R.layout.user_list_item, friends);
+            adapter = new UserAdapter(this, R.layout.user_list_item, friends, false);
         }
         ((ListView) findViewById(R.id.friends_list)).setAdapter(adapter);
         
@@ -130,7 +130,7 @@ public class UserView extends Activity implements OnClickListener,
 	        	pendingAdapter.notifyDataSetChanged();
 	        }else{
 	        	pendingAdapter = new UserAdapter(this, R.layout.user_list_item, 
-	        			pendingFriends);
+	        			pendingFriends, false);
 	        }
 			
 	        ListView plv = (ListView)findViewById(R.id.pending_friends_list);

@@ -34,12 +34,15 @@ import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.settings.MainMenu;
+import com.connectsy.users.UserManager;
+import com.connectsy.users.UserManager.User;
 
 public class EventNew extends Activity implements OnClickListener, DataUpdateListener {
 	private final String TAG = "NewEvent";
 	private ProgressDialog loadingDialog;
     private EventManager eventManager;
     private Category category;
+    private ArrayList<User> chosenUsers;
 	
     // where we display the selected date and time
     private TextView mDateDisplay;
@@ -47,6 +50,8 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 	
     static final int TIME_DIALOG_ID = 0;
     static final int DATE_DIALOG_ID = 1;
+    static final int SELECT_CATEGORY = 2;
+    static final int SELECT_FRIENDS = 3;
     
     private int mYear;
     private int mMonth;
@@ -72,8 +77,12 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         Button friends = (Button)findViewById(R.id.events_new_who_friends);
         friends.setOnClickListener(this);
         friends.setSelected(true);
+        Button choose = (Button)findViewById(R.id.events_new_who_choose);
+        choose.setOnClickListener(this);
         LinearLayout category = (LinearLayout)findViewById(R.id.events_new_cat);
         category.setOnClickListener(this);
+        LinearLayout friendSelector = (LinearLayout)findViewById(R.id.events_new_friends_selected);
+        friendSelector.setOnClickListener(this);
         
         Button submitButton = (Button)findViewById(R.id.events_new_submit);
         submitButton.setOnClickListener(this);
@@ -100,8 +109,12 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         	setWho("everyone");
 	    }else if (id == R.id.events_new_who_friends){
         	setWho("friends");
+	    }else if (id == R.id.events_new_who_choose){
+        	setWho("choose");
 	    }else if (id == R.id.events_new_cat){
         	getCategory();
+	    }else if (id == R.id.events_new_friends_selected){
+        	selectFriends();
 	    }else if (id == R.id.events_new_submit){
         	submitData();
 	    }else{
@@ -109,22 +122,34 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 	    }
 	}
 	
+	private void selectFriends(){
+		Log.d(TAG, "selecting friends");
+		Intent i = new Intent(Intent.ACTION_CHOOSER);
+		i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+		ArrayList<User> users = new UserManager(this, this, null).getFriends(false);
+		i.putExtra("com.connectsy.users", User.serializeList(users));
+		startActivityForResult(i, SELECT_FRIENDS);
+	}
 	private void getCategory(){
 		Intent i = new Intent(Intent.ACTION_CHOOSER);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
 		//ArrayList<Category> categories = new CategoryManager(this, this).getCategories();
 		//i.putExtra("com.connectsy.categories", Category.serializeList(categories));
-		startActivityForResult(i, 0);
+		startActivityForResult(i, SELECT_CATEGORY);
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		if (resultCode == RESULT_OK){
-			try {
-				category = new Category(data.getExtras().getString("com.connectsy.category"));
-			} catch (JSONException e) {
-				e.printStackTrace();
+		try {
+			if (resultCode == RESULT_OK && requestCode == SELECT_CATEGORY){
+					category = new Category(data.getExtras()
+							.getString("com.connectsy.category"));
+				TextView title = (TextView)findViewById(R.id.events_new_category_title);
+				title.setText(category.name);
+			}else if (resultCode == RESULT_OK && requestCode == SELECT_FRIENDS){
+					chosenUsers = User.deserializeList(data.getExtras()
+							.getString("com.connectsy.users"));
 			}
-			TextView title = (TextView)findViewById(R.id.events_new_category_title);
-			title.setText(category.name);
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -204,20 +229,28 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         mDateDisplay.setText(dateString);
     }
     
-    private void setEnabled(Button enabled, Button disabled){
+    private void setEnabled(Button enabled, Button disabled, Button disabled2){
 		enabled.setSelected(true);
 		disabled.setSelected(false);
+		disabled2.setSelected(false);
 	}
     
     private void setWho(String who){
     	Button ev = (Button)findViewById(R.id.events_new_who_everyone);
     	Button fr = (Button)findViewById(R.id.events_new_who_friends);
+    	Button ch = (Button)findViewById(R.id.events_new_who_choose);
     	if (who == "everyone"){
+	        findViewById(R.id.events_new_friends_selected).setVisibility(View.GONE);
 	        findViewById(R.id.events_new_cat).setVisibility(View.VISIBLE);
-	        setEnabled(ev, fr);
-    	}else{
+	        setEnabled(ev, fr, ch);
+    	}else if (who == "choose"){
+	        findViewById(R.id.events_new_friends_selected).setVisibility(View.VISIBLE);
 	        findViewById(R.id.events_new_cat).setVisibility(View.GONE);
-	        setEnabled(fr, ev);
+	        setEnabled(ch, fr, ev);
+    	}else{
+	        findViewById(R.id.events_new_friends_selected).setVisibility(View.GONE);
+	        findViewById(R.id.events_new_cat).setVisibility(View.GONE);
+	        setEnabled(fr, ev, ch);
     	}
     }
 

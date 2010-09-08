@@ -61,7 +61,7 @@ public final class R {
         public static final int attendant_list_item_avatar=0x7f090002;
         public static final int attendant_list_item_status=0x7f090004;
         public static final int attendant_list_item_username=0x7f090003;
-        public static final int attendants_list=0x7f09002e;
+        public static final int attendants_list=0x7f090031;
         public static final int auth_login_button=0x7f090007;
         public static final int auth_login_password=0x7f090006;
         public static final int auth_login_reg=0x7f090008;
@@ -83,34 +83,39 @@ public final class R {
         public static final int event_list_item_desc=0x7f09001c;
         public static final int event_list_item_username=0x7f09001a;
         public static final int event_list_item_where=0x7f09001b;
-        public static final int event_view_attend=0x7f09002c;
-        public static final int event_view_attendants=0x7f09002d;
-        public static final int event_view_avatar=0x7f090028;
-        public static final int event_view_what=0x7f09002b;
-        public static final int event_view_when=0x7f09002a;
-        public static final int event_view_where=0x7f090029;
+        public static final int event_view_attend=0x7f09002f;
+        public static final int event_view_attendants=0x7f090030;
+        public static final int event_view_avatar=0x7f09002b;
+        public static final int event_view_what=0x7f09002e;
+        public static final int event_view_when=0x7f09002d;
+        public static final int event_view_where=0x7f09002c;
         public static final int events_list=0x7f090018;
-        public static final int events_new_cat=0x7f090025;
-        public static final int events_new_category_title=0x7f090026;
+        public static final int events_new_cat=0x7f090026;
+        public static final int events_new_category_title=0x7f090027;
         public static final int events_new_date=0x7f09001f;
         public static final int events_new_date_change=0x7f090020;
         public static final int events_new_desc=0x7f09001d;
-        public static final int events_new_submit=0x7f090027;
+        public static final int events_new_friends_selected=0x7f090028;
+        public static final int events_new_friends_selected_text=0x7f090029;
+        public static final int events_new_submit=0x7f09002a;
         public static final int events_new_time=0x7f090021;
         public static final int events_new_time_change=0x7f090022;
         public static final int events_new_where=0x7f09001e;
+        public static final int events_new_who_choose=0x7f090025;
         public static final int events_new_who_everyone=0x7f090023;
         public static final int events_new_who_friends=0x7f090024;
-        public static final int friends_list=0x7f090037;
-        public static final int pending_friends_list=0x7f090036;
-        public static final int pending_friends_list_title=0x7f090035;
-        public static final int preferances_avatar_button=0x7f090038;
-        public static final int user_list_item_avatar=0x7f09002f;
-        public static final int user_list_item_confirm=0x7f090031;
-        public static final int user_list_item_username=0x7f090030;
-        public static final int user_view_avatar=0x7f090032;
-        public static final int user_view_befriend=0x7f090034;
-        public static final int user_view_username=0x7f090033;
+        public static final int friends_list=0x7f09003c;
+        public static final int pending_friends_list=0x7f09003b;
+        public static final int pending_friends_list_title=0x7f09003a;
+        public static final int preferances_avatar_button=0x7f09003d;
+        public static final int user_list=0x7f090036;
+        public static final int user_list_item_avatar=0x7f090033;
+        public static final int user_list_item_confirm=0x7f090035;
+        public static final int user_list_item_select=0x7f090032;
+        public static final int user_list_item_username=0x7f090034;
+        public static final int user_view_avatar=0x7f090037;
+        public static final int user_view_befriend=0x7f090039;
+        public static final int user_view_username=0x7f090038;
     }
     public static final class layout {
         public static final int actionbar=0x7f030000;
@@ -125,7 +130,8 @@ public final class R {
         public static final int event_new=0x7f030009;
         public static final int event_view=0x7f03000a;
         public static final int user_list_item=0x7f03000b;
-        public static final int user_view=0x7f03000c;
+        public static final int user_selector=0x7f03000c;
+        public static final int user_view=0x7f03000d;
     }
     public static final class string {
         public static final int app_name=0x7f070000;

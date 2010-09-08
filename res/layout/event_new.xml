@@ -93,7 +93,7 @@
                 android:id="@+id/events_new_who_friends" />
             <Button style="@style/EventNewWhoFriends"
                 android:text="Choose"
-                android:id="@+id/events_new_who_friends" />
+                android:id="@+id/events_new_who_choose" />
         </LinearLayout>
         
         <LinearLayout style="@style/EventNewCategory"
@@ -104,6 +104,17 @@
             <TextView style="@style/EventNewCategoryTitle"
                  android:id="@+id/events_new_category_title"
                  android:text="Select a Category" />
+            <View style="@style/EventNewTitleBorder" />
+        </LinearLayout>
+        
+        <LinearLayout style="@style/EventNewCategory"
+            android:clickable="true" 
+            android:visibility="gone"
+            android:id="@+id/events_new_friends_selected">
+            <View style="@style/EventNewTitleBorder" />
+            <TextView style="@style/EventNewCategoryTitle"
+                 android:id="@+id/events_new_friends_selected_text"
+                 android:text="Select Friends" />
             <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
 		
