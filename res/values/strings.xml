@@ -18,6 +18,7 @@
     <string name="auth_login_reg">Sign Up</string>
     <string name="auth_login_new">Don\'t have and account?</string>
     <string name="auth_register_register">Register</string>
+    <string name="auth_register_password2">password again</string>
     
     
     <string name="events_new_title_where">Where</string>

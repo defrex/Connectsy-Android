@@ -36,8 +36,20 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
 	public void onClick(View arg0) {
     	EditText usernameText = (EditText)findViewById(R.id.auth_register_username);
     	EditText passwordText = (EditText)findViewById(R.id.auth_register_password);
+    	EditText password2Text = (EditText)findViewById(R.id.auth_register_password2);
+    	
     	String username = usernameText.getText().toString();
     	String password = passwordText.getText().toString();
+    	String password2 = password2Text.getText().toString();
+    	
+    	//check password equality
+    	if (!password.equals(password2)) {
+    		new AlertDialog.Builder(this)
+    			.setMessage("Passwords don't match")
+    			.setPositiveButton("Ok", null)
+    			.show();
+    		return;
+    	}
     	
         try {
         	JSONObject body = new JSONObject();
