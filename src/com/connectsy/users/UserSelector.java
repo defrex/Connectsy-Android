@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -17,7 +18,7 @@ import android.widget.ListView;
 import com.connectsy.R;
 import com.connectsy.users.UserManager.User;
 
-public class UserSelector extends Activity implements OnItemClickListener {
+public class UserSelector extends Activity implements OnItemClickListener, OnClickListener {
 	private String TAG = "UserSelector";
 	
     @Override
@@ -41,9 +42,16 @@ public class UserSelector extends Activity implements OnItemClickListener {
         lv.setAdapter(adapter);
         
         Button done = (Button)findViewById(R.id.user_select_done);
+        done.setOnClickListener(this);
     }
 
 	public void onItemClick(AdapterView<?> adapterView, View itemView, int position, long id) {
 		
+	}
+
+	public void onClick(View v) {
+		if (v.getId() == R.id.user_select_done){
+			
+		}
 	}
 }
