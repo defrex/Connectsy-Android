@@ -168,7 +168,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 			data.edit().putString(url, responseString).commit();
 		}
 		if (apiListener != null) apiListener.onApiRequestFinish(
-				response.getStatusLine().getStatusCode(), responseString, retCode);
+			response.getStatusLine().getStatusCode(), responseString, retCode);
 	}
 	
 	private String getResponseString(HttpResponse response){

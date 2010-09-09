@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.connectsy.R;
@@ -38,6 +39,8 @@ public class UserSelector extends Activity implements OnItemClickListener {
         ListView lv = (ListView)findViewById(R.id.user_list);
         lv.setOnItemClickListener(this);
         lv.setAdapter(adapter);
+        
+        Button done = (Button)findViewById(R.id.user_select_done);
     }
 
 	public void onItemClick(AdapterView<?> adapterView, View itemView, int position, long id) {

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
     
-    <FrameLayout style="@style/ActionBarFrame">
+    <FrameLayout style="@style/ActionBarFrame"
+        android:id="@+id/actionbar"
+        android:layout_alignParentTop="true" >
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
             <ImageView style="@style/ActionBarLogo" />
@@ -15,6 +17,17 @@
     <ListView 
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
+	    android:layout_below="@id/actionbar"
         android:id="@+id/user_list" />
     
-</LinearLayout>
+    <LinearLayout style="@style/BorderWrapperVert"
+        android:layout_alignParentBottom="true" >
+        <View style="@style/BorderVert" />
+	    <LinearLayout style="@style/UserSelectorDone" >
+	        <View style="@style/Spring" />
+	        <Button style="@style/Button"
+	            android:text="Select Friends"
+	            android:id="@+id/user_select_done" />
+	    </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -47,6 +47,14 @@
         <item name="android:layout_margin">5dp</item>
     </style>
     
+    <style name="BorderWrapperVert" parent="FullWidth">
+        <item name="android:orientation">vertical</item>
+    </style>
+	    <style name="BorderVert" parent="FullWidth">
+            <item name="android:layout_height">1dp</item>
+            <item name="android:background">#ffcccccc</item>
+	    </style>
+    
     <style name="ActionBarFrame">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">@dimen/actionbar_height</item>
@@ -331,4 +339,8 @@
                 <item name="android:layout_width">50dp</item>
                 <item name="android:layout_height">50dp</item>
             </style>
+        <style name="UserSelectorDone" parent="FullWidth">
+            <item name="android:orientation">horizontal</item>
+            <item name="android:layout_height">@dimen/actionbar_height</item>
+        </style>
 </resources>
