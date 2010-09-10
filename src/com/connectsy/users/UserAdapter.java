@@ -1,6 +1,7 @@
 package com.connectsy.users;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,15 +24,26 @@ import com.wilson.android.library.DrawableManager;
 
 public class UserAdapter extends ArrayAdapter<User> {
 	private boolean multi;
+	private HashMap<Integer, Boolean> selected = new HashMap<Integer, Boolean>();
 	
 	public UserAdapter(Context context, int viewResourceId,
 			ArrayList<User> users, boolean selectMultiple) {
 		super(context, viewResourceId, users);
 		multi = selectMultiple;
 	}
-
+	
+	public ArrayList<User> getSelected(){
+		ArrayList<User> users = new ArrayList<User>();
+		for (HashMap.Entry<Integer, Boolean> entry : selected.entrySet()) {
+			if (entry.getValue()){
+				users.add(getItem(entry.getKey()));
+			}
+		}
+		return users;
+	}
+	
 	@Override
-	public View getView (int position, View convertView, ViewGroup parent) {
+	public View getView (final int position, View convertView, ViewGroup parent) {
 		final Context context = getContext();
 		final User user = getItem(position);
 		
@@ -39,6 +53,11 @@ public class UserAdapter extends ArrayAdapter<User> {
 		if (multi){
 			CheckBox sel = (CheckBox)view.findViewById(R.id.user_list_item_select);
 			sel.setVisibility(CheckBox.VISIBLE);
+			sel.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+			    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+			    	selected.put(position, isChecked);
+			    }
+			});
 		}
 		
         TextView username = (TextView)view.findViewById(R.id.user_list_item_username);

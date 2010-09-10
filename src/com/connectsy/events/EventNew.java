@@ -147,6 +147,13 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 			}else if (resultCode == RESULT_OK && requestCode == SELECT_FRIENDS){
 					chosenUsers = User.deserializeList(data.getExtras()
 							.getString("com.connectsy.users"));
+					String usersText = "";
+					for (int i=0;i<chosenUsers.size();i++){
+						usersText += chosenUsers.get(i).username;
+						usersText += " ";
+					}
+					TextView users = (TextView)findViewById(R.id.events_new_friends_selected_text);
+					users.setText(usersText);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -279,6 +286,7 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         if (event.broadcast && category != null)
         	event.category = category.name;
         event.friends = friends.isSelected();
+        event.someFriends = chosenUsers;
         eventManager.createEvent(event, 0);
         loadingDialog = ProgressDialog.show(this, "", "Posting event...", true);
     }

@@ -10,12 +10,12 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.users.UserManager.User;
 
 public class EventManager extends DataManager {
 	private static final String TAG = "EventManager";
@@ -42,7 +42,7 @@ public class EventManager extends DataManager {
 		public String location;
 		public boolean broadcast;
 		public boolean friends;
-		public ArrayList<Integer> someFriends;
+		public ArrayList<User> someFriends;
 		public int created;
 
 		public Event(){}
@@ -63,6 +63,10 @@ public class EventManager extends DataManager {
 				broadcast = event.getBoolean("broadcast");
 			if (event.has("location"))
 				location = event.getString("location");
+		}
+		
+		public String formattedWhen(){
+			return "";
 		}
 	}
 	
@@ -166,6 +170,12 @@ public class EventManager extends DataManager {
 			json.put("broadcast", event.broadcast);
 			json.put("friends", event.friends);
 			json.put("client", "Connectsy for Android");
+			if (event.someFriends != null){
+				JSONArray chosen = new JSONArray();
+				for (int i=0;i<event.someFriends.size();i++)
+					chosen.put(event.someFriends.get(i).username);
+				json.put("invited", chosen);
+			}
 			Location loc = locManager.getLocation();
 			if (loc != null){
 				JSONArray jLoc = new JSONArray();

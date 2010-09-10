@@ -20,6 +20,7 @@ import com.connectsy.users.UserManager.User;
 
 public class UserSelector extends Activity implements OnItemClickListener, OnClickListener {
 	private String TAG = "UserSelector";
+	UserAdapter adapter;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class UserSelector extends Activity implements OnItemClickListener, OnCli
 				e.printStackTrace();
 			}
         }
-        UserAdapter adapter = new UserAdapter(this, R.layout.user_list_item, users, true);
+        adapter = new UserAdapter(this, R.layout.user_list_item, users, true);
         ListView lv = (ListView)findViewById(R.id.user_list);
         lv.setOnItemClickListener(this);
         lv.setAdapter(adapter);
@@ -51,7 +52,11 @@ public class UserSelector extends Activity implements OnItemClickListener, OnCli
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.user_select_done){
-			
+			String users = User.serializeList(adapter.getSelected());
+			Intent i = new Intent();
+			i.putExtra("com.connectsy.users", users);
+			setResult(RESULT_OK, i);
+			finish();
 		}
 	}
 }
