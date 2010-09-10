@@ -1,9 +1,9 @@
 package com.connectsy.events;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.connectsy.R;
+import com.connectsy.Utils;
 import com.connectsy.categories.CategoryManager;
 import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
@@ -43,6 +44,7 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
     private EventManager eventManager;
     private Category category;
     private ArrayList<User> chosenUsers;
+    private JSONObject eventJSON;
 	
     // where we display the selected date and time
     private TextView mDateDisplay;
@@ -52,6 +54,8 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
     static final int DATE_DIALOG_ID = 1;
     static final int SELECT_CATEGORY = 2;
     static final int SELECT_FRIENDS = 3;
+    static final int CREATE_EVENT = 4;
+    static final int INVITE_USERS = 5;
     
     private int mYear;
     private int mMonth;
@@ -204,35 +208,10 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
     }
             
     private void updateTimeDisplay() {
-    	Calendar selected = getCal();
-    	Calendar today = Calendar.getInstance();
-    	SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-    	String timeString = timeFormat.format(selected.getTime());
+    	Date selected = getCal().getTime();
+    	String dateString = Utils.DateUtils.formatDate(selected);
+    	String timeString = Utils.DateUtils.formatTime(selected);
         mTimeDisplay.setText(timeString);
-        
-    	String dateString;
-    	
-    	if (selected.get(Calendar.MONTH) == today.get(Calendar.MONTH)
-    			&& selected.get(Calendar.YEAR) == today.get(Calendar.YEAR)){
-    		if (selected.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH))
-    			dateString = "Today";
-    		else if (selected.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)+1)
-    			dateString = "Tomorrow";
-    		else{
-    			dateString = new SimpleDateFormat("E the d").format(selected.getTime());
-    			// This is here because apparently Java is a shitty programming
-    			// language...
-    			String[] thArray = new String[] {
-    					"st","nd","rd","th","th","th","th","th","th","th",
-    					"th","th","th","th","th","th","th","th","th","th",
-    					"st","nd","rd","th","th","th","th","th","th","th",
-    					"st" };
-    			dateString = dateString+thArray[selected.get(Calendar.DAY_OF_MONTH)];
-    		}
-    	}else{
-    		dateString = new SimpleDateFormat("MMM d, yyyy").format(selected.getTime());
-    	}
-        
         mDateDisplay.setText(dateString);
     }
     
@@ -269,7 +248,6 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         String strDesc = desc.getText().toString();
         String strWhere = where.getText().toString();
         Button bcast = (Button)findViewById(R.id.events_new_who_everyone);
-        Button friends = (Button)findViewById(R.id.events_new_who_friends);
         
         SharedPreferences data = getSharedPreferences("consy", 0);
         String username = data.getString("username", "username_fail");
@@ -285,9 +263,9 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         event.broadcast = bcast.isSelected();
         if (event.broadcast && category != null)
         	event.category = category.name;
-        event.friends = friends.isSelected();
-        event.someFriends = chosenUsers;
-        eventManager.createEvent(event, 0);
+        //event.friends = friends.isSelected();
+        //event.someFriends = chosenUsers;
+        eventManager.createEvent(event, CREATE_EVENT);
         loadingDialog = ProgressDialog.show(this, "", "Posting event...", true);
     }
     
@@ -300,15 +278,27 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
     }
 
 	public void onDataUpdate(int code, String response) {
-		loadingDialog.dismiss();
 		try {
-			JSONObject e = new JSONObject(response);
-			Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-			i.putExtra("com.connectsy.events.revision", e.getString("revision"));
-			startActivity(i);
-			this.finish();
+			if (code == CREATE_EVENT)
+				eventJSON = new JSONObject(response);
+	        Button friends = (Button)findViewById(R.id.events_new_who_friends);
+	        Button choose = (Button)findViewById(R.id.events_new_who_choose);
+			if (code == CREATE_EVENT && (friends.isSelected() || choose.isSelected())){
+				AttendantManager att = new AttendantManager(this, this, eventJSON.getString("id"));
+				if (choose.isSelected())
+					att.bulkInvite(chosenUsers, 0);
+				else
+					att.bulkInvite(null, 0);
+			}else{
+				loadingDialog.dismiss();
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+				i.putExtra("com.connectsy.events.revision", eventJSON.getString("revision"));
+				startActivity(i);
+				this.finish();
+			}
 		} catch (JSONException e) {
+			Log.d(TAG, response);
 			e.printStackTrace();
 		}
 	}

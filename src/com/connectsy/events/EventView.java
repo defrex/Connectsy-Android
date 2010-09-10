@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
+import com.connectsy.Utils.DateUtils;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.AttendantManager.Attendant;
 import com.connectsy.events.AttendantManager.Status;
@@ -99,7 +100,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	        TextView where = (TextView)findViewById(R.id.event_view_where);
 	        where.setText(event.where);
 	        TextView when = (TextView)findViewById(R.id.event_view_when);
-	        when.setText(Integer.toString(event.when));
+	        when.setText(DateUtils.formatTimestamp(event.when));
 	        TextView what = (TextView)findViewById(R.id.event_view_what);
 	        what.setText(event.description);
 	        

@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +17,7 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.users.UserManager.User;
 
 public class AttendantManager extends DataManager implements ApiRequestListener {
 	public static final String TAG = "AttendantManager";
@@ -127,6 +129,27 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 			kwargs.put("status", status);
 			ApiRequest r = new ApiRequest(this, context, Method.POST, 
 					"/events/"+eventID+"/attendants/", true, SET_ATTS);
+			r.setBodyString(kwargs.toString());
+			r.execute();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void bulkInvite(ArrayList<User> users, int passedReturnCode){
+		returnCode = passedReturnCode;
+		ApiRequest r = new ApiRequest(this, context, Method.POST, 
+				"/events/"+eventID+"/invites/", true, SET_ATTS);
+		try {
+			JSONObject kwargs = new JSONObject();
+			if (users != null){
+				JSONArray usersJSON = new JSONArray();
+				for (int i=0;i<users.size();i++)
+					usersJSON.put(users.get(i).username);
+				kwargs.put("users", usersJSON);
+			}else{
+				kwargs.put("users", "friends");
+			}
 			r.setBodyString(kwargs.toString());
 			r.execute();
 		} catch (JSONException e) {

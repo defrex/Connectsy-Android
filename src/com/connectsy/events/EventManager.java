@@ -64,10 +64,6 @@ public class EventManager extends DataManager {
 			if (event.has("location"))
 				location = event.getString("location");
 		}
-		
-		public String formattedWhen(){
-			return "";
-		}
 	}
 	
 	public EventManager(Context c, DataUpdateListener l, Filter f, String cat) {
@@ -168,14 +164,14 @@ public class EventManager extends DataManager {
 			json.put("desc", event.description);
 			json.put("category", event.category);
 			json.put("broadcast", event.broadcast);
-			json.put("friends", event.friends);
 			json.put("client", "Connectsy for Android");
-			if (event.someFriends != null){
-				JSONArray chosen = new JSONArray();
-				for (int i=0;i<event.someFriends.size();i++)
-					chosen.put(event.someFriends.get(i).username);
-				json.put("invited", chosen);
-			}
+//			json.put("friends", event.friends);
+//			if (event.someFriends != null){
+//				JSONArray chosen = new JSONArray();
+//				for (int i=0;i<event.someFriends.size();i++)
+//					chosen.put(event.someFriends.get(i).username);
+//				json.put("invited", chosen);
+//			}
 			Location loc = locManager.getLocation();
 			if (loc != null){
 				JSONArray jLoc = new JSONArray();

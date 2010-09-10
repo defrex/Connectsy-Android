@@ -94,7 +94,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 			}
 			if (authorized){
 				String token = data.getString("token", "tokenfail");
-				request.addHeader("Authenticate", "Token "+token);
+				request.addHeader("Authenticate", "Token auth="+token);
 			}
 
 			for (NameValuePair header : headers)
