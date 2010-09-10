@@ -5,8 +5,8 @@
     <string name="menu_logout">Logout</string>
     <string name="menu_settings">Settings</string>
     
-    <string name="dashboard_events_nearby">Nearby Activity</string>
-    <string name="dashboard_events_friends">Friends Activity</string>
+    <string name="dashboard_events_nearby">Everything</string>
+    <string name="dashboard_events_friends">Friends</string>
     <string name="dashboard_events_category">Category</string>
     <string name="dashboard_events_new">Create Event</string>
     <string name="dashboard_profile">Profile</string>
