@@ -16,6 +16,7 @@ import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.users.UserManager.User;
 
 public class EventManager extends DataManager {
 	private static final String TAG = "EventManager";
@@ -42,7 +43,7 @@ public class EventManager extends DataManager {
 		public String location;
 		public boolean broadcast;
 		public boolean friends;
-		public ArrayList<Integer> someFriends;
+		public ArrayList<User> someFriends;
 		public int created;
 
 		public Event(){}
@@ -113,7 +114,6 @@ public class EventManager extends DataManager {
 	public void refreshEvents(int sentReturnCode){
 		returnCode = sentReturnCode;
 		getEventsRequest().execute();
-		pendingUpdates++;
 	}
 	
 	private void refreshEventsReturn(String response){
@@ -149,7 +149,6 @@ public class EventManager extends DataManager {
 		String eventString = eventRequest.getCached();
 		if (eventString == null){
 			returnCode = passedReturnCode;
-			pendingUpdates++;
 			eventRequest.execute();
 		}
 	}
@@ -164,8 +163,14 @@ public class EventManager extends DataManager {
 			json.put("desc", event.description);
 			json.put("category", event.category);
 			json.put("broadcast", event.broadcast);
-			json.put("friends", event.friends);
 			json.put("client", "Connectsy for Android");
+//			json.put("friends", event.friends);
+//			if (event.someFriends != null){
+//				JSONArray chosen = new JSONArray();
+//				for (int i=0;i<event.someFriends.size();i++)
+//					chosen.put(event.someFriends.get(i).username);
+//				json.put("invited", chosen);
+//			}
 			Location loc = locManager.getLocation();
 			if (loc != null){
 				JSONArray jLoc = new JSONArray();
@@ -181,15 +186,12 @@ public class EventManager extends DataManager {
 				"/events/", true, CREATE_EVENT);
 		r.setBodyString(json.toString());
 		r.execute();
-		pendingUpdates++;
 	}
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
 		if (code == GET_EVENTS)
 			refreshEventsReturn(response);
-		pendingUpdates--;
-		if (pendingUpdates == 0)
-			listener.onDataUpdate(returnCode, response);
+		listener.onDataUpdate(returnCode, response);
 	}
 }

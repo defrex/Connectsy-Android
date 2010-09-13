@@ -64,7 +64,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	private String body;
 	private InputStream stream;
 	private Long streamLength;
-	private List<NameValuePair> getArgs;
+	private List<NameValuePair> getArgs = new ArrayList<NameValuePair>();
 	private List<NameValuePair> headers = new ArrayList<NameValuePair>();
 	
 	public static enum Method { GET, PUT, POST, DELETE }
@@ -92,8 +92,6 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	private void prepRequest(){
 		try {
 			url = Settings.API_DOMAIN+path+"?";
-			if (getArgs == null)
-				getArgs = new ArrayList<NameValuePair>();
 			for (NameValuePair arg : getArgs)
 				url += arg.getName()+"="+arg.getValue()+"&";
 			
@@ -117,7 +115,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 			}
 			if (authorized){
 				String token = data.getString("token", "tokenfail");
-				request.addHeader("Authenticate", "Token "+token);
+				request.addHeader("Authenticate", "Token auth="+token);
 			}
 
 			for (NameValuePair header : headers)
@@ -191,7 +189,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 			data.edit().putString(url, responseString).commit();
 		}
 		if (apiListener != null) apiListener.onApiRequestFinish(
-				response.getStatusLine().getStatusCode(), responseString, retCode);
+			response.getStatusLine().getStatusCode(), responseString, retCode);
 	}
 	
 	private String getResponseString(HttpResponse response){

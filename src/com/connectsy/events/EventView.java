@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
+import com.connectsy.Utils.DateUtils;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.AttendantManager.Attendant;
 import com.connectsy.events.AttendantManager.Status;
@@ -108,7 +110,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	        TextView where = (TextView)findViewById(R.id.event_view_where);
 	        where.setText(event.where);
 	        TextView when = (TextView)findViewById(R.id.event_view_when);
-	        when.setText(Integer.toString(event.when));
+	        when.setText(DateUtils.formatTimestamp(event.when));
 	        TextView what = (TextView)findViewById(R.id.event_view_what);
 	        what.setText(event.description);
 	        
@@ -153,7 +155,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	private void refresh(){
-		if (eventManager != null){
+		if (eventManager != null && eventManager.getEvent(eventRev) == null){
 			eventManager.refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
@@ -170,12 +172,15 @@ public class EventView extends Activity implements DataUpdateListener,
 
 	public void onDataUpdate(int code, String response) {
 //		if (code == REFRESH_EVENT)
+//			Log.d(TAG, "update REFRESH_EVENT");
 //		else if (code == REFRESH_ATTENDANTS)
+//			Log.d(TAG, "update REFRESH_ATTENDANTS");
 //		else  if (code == ATT_SET)
+//			Log.d(TAG, "update ATT_SET");
 		updateData();
 		updateDisplay();
 		pendingOperations--;
-		if (pendingOperations == 0)
+		if (pendingOperations <= 0)
 			setRefreshing(false);
 	}
 

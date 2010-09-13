@@ -62,7 +62,8 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		returnCategory(data.getExtras().getString("com.connectsy.category"));
+		if (resultCode == RESULT_OK)
+			returnCategory(data.getExtras().getString("com.connectsy.category"));
 	}
 	
 	public void onDataUpdate(int code, String response) {

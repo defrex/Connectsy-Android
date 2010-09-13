@@ -18,12 +18,7 @@
                 android:id="@+id/ab_refresh_spinner"
                 android:src="@drawable/icons_refresh"
                 android:visibility="gone" />
-        
-            <ImageView style="@style/ActionBarSeparator" />
-            <ImageView style="@style/ActionBarAction"
-                android:id="@+id/ab_profile"
-                android:src="@drawable/icons_profile" />
-            
+                
             <ImageView style="@style/ActionBarSeparator" />
             <ImageView style="@style/ActionBarAction"
                 android:id="@+id/ab_new_event"
@@ -37,28 +32,37 @@
             android:src="@drawable/avatar_default"
 			android:id="@+id/user_view_avatar" />
 			
-		<LinearLayout style="@style/UserViewTopRight" >
+		<TextView style="@style/UserViewUsername"
+			android:id="@+id/user_view_username" />
 			
-			<TextView style="@style/UserViewUsername"
-				android:id="@+id/user_view_username" />
+		<View style="@style/Spring" />
+		
+		<Button style="@style/UserViewBefriend"
+		    android:id="@+id/user_view_befriend"
+		    android:visibility="invisible" />
 			
-			<Button style="@style/UserViewBefriend"
-			    android:id="@+id/user_view_befriend"
-			    android:visibility="invisible" />
-			
-		</LinearLayout>
 	</LinearLayout>
 	
-    
-    <TextView style="@style/UserViewPendingFreindListTitle"
-        android:text="Pending Freind Requests"
-        android:id="@+id/pending_friends_list_title" />
+    <LinearLayout style="@style/ListTitle"
+        android:id="@+id/pending_friends_list_title"
+        android:visibility="gone" >
+        <View style="@style/ListTitleBorderTop" />
+        <TextView style="@style/ListTitleText"
+            android:text="Pending Freind Requests" />
+        <View style="@style/ListTitleBorder" />
+    </LinearLayout>
     <ListView android:id="@+id/pending_friends_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
     
-    <TextView style="@style/UserViewFreindListTitle"
-        android:text="Friends" />
+    
+    <LinearLayout style="@style/ListTitle"
+        android:id="@+id/pending_friends_list_title" >
+        <View style="@style/ListTitleBorderTop" />
+        <TextView style="@style/ListTitleText"
+            android:text="Friends" />
+        <View style="@style/ListTitleBorder" />
+    </LinearLayout>
     <ListView android:id="@+id/friends_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

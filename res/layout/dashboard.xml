@@ -8,11 +8,6 @@
 	        <ImageView style="@style/ActionBarLogo" />
 	        
 	        <View style="@style/Spring" />
-	    
-	        <ImageView style="@style/ActionBarSeparator" />
-	        <ImageView style="@style/ActionBarAction"
-	            android:id="@+id/ab_profile"
-	            android:src="@drawable/icons_profile" />
 	        
 	        <ImageView style="@style/ActionBarSeparator" />
 	        <ImageView style="@style/ActionBarAction"
@@ -31,25 +26,17 @@
                 android:id="@+id/dashboard_events_friends"
                 android:text="@string/dashboard_events_friends"
                 android:drawableTop="@drawable/dashboard_events_friends"/>
-            <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_events_category"
-                android:text="@string/dashboard_events_category"
-                android:drawableTop="@drawable/dashboard_events_category"/>
         </LinearLayout>
 
         <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_events_new"
-                android:text="@string/dashboard_events_new"
-                android:drawableTop="@drawable/dashboard_events_new"/>
+                android:id="@+id/dashboard_events_category"
+                android:text="@string/dashboard_events_category"
+                android:drawableTop="@drawable/dashboard_events_category"/>
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_profile"
                 android:text="@string/dashboard_profile"
                 android:drawableTop="@drawable/dashboard_profile"/>
-            <Button style="@style/DashboardButton" 
-                android:id="@+id/dashboard_account"
-                android:text="@string/dashboard_account"
-                android:drawableTop="@drawable/dashboard_account"/>
         </LinearLayout>
     </LinearLayout>
     
@@ -59,7 +46,7 @@
             style="@style/DashboardExtraMap"
             android:id="@+id/dashboard_map"
             android:clickable="true"
-            android:apiKey="ABQIAAAAYggx37JHJFKcocoP_wbXFxRqUdc5X9g0MErBOqUNFxhhEEAAnxTxGJ8k9o-6QaRXSGKDWZgruf41nA" />
+            android:apiKey="0rr3ewYP3KKBt3NHO9EqlrJSovDWNZeq7_nICmQ" />
     </FrameLayout>
     
 </LinearLayout>
