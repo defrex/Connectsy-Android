@@ -9,8 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -27,7 +27,6 @@ import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.events.EventList;
 import com.connectsy.events.EventManager;
-import com.connectsy.events.EventNew;
 import com.connectsy.settings.MainMenu;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -55,8 +54,8 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
         events_friends.setOnClickListener(this);
         Button events_category = (Button)findViewById(R.id.dashboard_events_category);
         events_category.setOnClickListener(this);
-        Button events_new = (Button)findViewById(R.id.dashboard_events_new);
-        events_new.setOnClickListener(this);
+        Button profile = (Button)findViewById(R.id.dashboard_profile);
+        profile.setOnClickListener(this);
 
         MapView mapView = (MapView) findViewById(R.id.dashboard_map);
         mapView.setBuiltInZoomControls(false);
@@ -69,8 +68,13 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
     }
     
 	public void onClick(View v) {
-		if (v.getId() == R.id.dashboard_events_new){
-    		startActivity(new Intent(this, EventNew.class));
+		if (v.getId() == R.id.dashboard_profile){
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+			SharedPreferences data = getSharedPreferences("consy", 0);
+			String username = data.getString("username", null);
+			i.putExtra("com.connectsy.user.username", username);
+			startActivity(i);
     		return;
 		}
 		Intent i = new Intent(this, EventList.class);

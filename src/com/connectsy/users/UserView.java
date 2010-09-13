@@ -12,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -51,8 +49,6 @@ public class UserView extends Activity implements OnClickListener,
         setContentView(R.layout.user_view);
 
         ActionBarHandler abHandler = new ActionBarHandler(this);
-        ImageView abProfile = (ImageView)findViewById(R.id.ab_profile);
-        abProfile.setOnClickListener(abHandler);
         ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
         abNewEvent.setOnClickListener(abHandler);
         
@@ -107,7 +103,7 @@ public class UserView extends Activity implements OnClickListener,
         		Button f = (Button)findViewById(R.id.user_view_befriend);
 	        	if (!isFriend){
 	        		f.setVisibility(Button.VISIBLE);
-	        		f.setText("Become friends!");
+	        		f.setText("F+");
 	        		f.setOnClickListener(this);
 	        	}else{
 	        		f.setVisibility(Button.INVISIBLE);

@@ -34,19 +34,9 @@
                 android:text="@string/dashboard_events_category"
                 android:drawableTop="@drawable/dashboard_events_category"/>
             <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_events_new"
-                android:text="@string/dashboard_events_new"
-                android:drawableTop="@drawable/dashboard_events_new"/>
-            <!--
-            <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_profile"
                 android:text="@string/dashboard_profile"
                 android:drawableTop="@drawable/dashboard_profile"/>
-            <Button style="@style/DashboardButton" 
-                android:id="@+id/dashboard_account"
-                android:text="@string/dashboard_account"
-                android:drawableTop="@drawable/dashboard_account"/>
-                 -->
         </LinearLayout>
     </LinearLayout>
     
