@@ -23,9 +23,7 @@ import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.settings.MainMenu;
-import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
-import com.wilson.android.library.DrawableManager;
 
 public class UserView extends Activity implements OnClickListener, 
 		DataUpdateListener {

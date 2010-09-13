@@ -19,9 +19,7 @@ import android.widget.TextView;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
-import com.wilson.android.library.DrawableManager;
 
 public class UserAdapter extends ArrayAdapter<User> {
 	private boolean multi;

@@ -18,14 +18,13 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
+import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.AttendantManager.Attendant;
 import com.connectsy.events.AttendantManager.Status;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.settings.MainMenu;
-import com.connectsy.settings.Settings;
 import com.connectsy.utils.DateUtils;
-import com.wilson.android.library.DrawableManager;
 
 public class EventView extends Activity implements DataUpdateListener, 
 		OnClickListener, OnItemClickListener {
@@ -104,8 +103,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	        when.setText(Html.fromHtml("<b>When:</b> "+DateUtils.formatTimestamp(event.when)));
 	        
 	        ImageView avatar = (ImageView)findViewById(R.id.event_view_avatar);
-	        String avyUrl = Settings.API_DOMAIN+"/users/"+event.creator+"/avatar/";
-	        new DrawableManager().fetchDrawableOnThread(avyUrl, avatar);
+	        new AvatarFetcher(this, event.creator, avatar);
         }
     }
 
