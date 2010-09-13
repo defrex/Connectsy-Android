@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
@@ -113,7 +114,6 @@ public class EventManager extends DataManager {
 	public void refreshEvents(int sentReturnCode){
 		returnCode = sentReturnCode;
 		getEventsRequest().execute();
-		pendingUpdates++;
 	}
 	
 	private void refreshEventsReturn(String response){
@@ -149,7 +149,6 @@ public class EventManager extends DataManager {
 		String eventString = eventRequest.getCached();
 		if (eventString == null){
 			returnCode = passedReturnCode;
-			pendingUpdates++;
 			eventRequest.execute();
 		}
 	}
@@ -187,15 +186,12 @@ public class EventManager extends DataManager {
 				"/events/", true, CREATE_EVENT);
 		r.setBodyString(json.toString());
 		r.execute();
-		pendingUpdates++;
 	}
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
 		if (code == GET_EVENTS)
 			refreshEventsReturn(response);
-		pendingUpdates--;
-		if (pendingUpdates == 0)
-			listener.onDataUpdate(returnCode, response);
+		listener.onDataUpdate(returnCode, response);
 	}
 }

@@ -46,7 +46,7 @@ public class DrawableManager {
     		return (Drawable) drawableMap.get(urlString);
     	}
 
-    	Log.d(this.getClass().getSimpleName(), "image url:" + urlString);
+    	//Log.d(this.getClass().getSimpleName(), "image url:" + urlString);
     	try {
     		InputStream is = fetch(urlString);
     		Drawable drawable = Drawable.createFromStream(is, "src");

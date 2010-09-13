@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -126,7 +127,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	private void refresh(){
-		if (eventManager != null){
+		if (eventManager != null && eventManager.getEvent(eventRev) == null){
 			eventManager.refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
@@ -140,12 +141,15 @@ public class EventView extends Activity implements DataUpdateListener,
 
 	public void onDataUpdate(int code, String response) {
 //		if (code == REFRESH_EVENT)
+//			Log.d(TAG, "update REFRESH_EVENT");
 //		else if (code == REFRESH_ATTENDANTS)
+//			Log.d(TAG, "update REFRESH_ATTENDANTS");
 //		else  if (code == ATT_SET)
+//			Log.d(TAG, "update ATT_SET");
 		updateData();
 		updateDisplay();
 		pendingOperations--;
-		if (pendingOperations == 0)
+		if (pendingOperations <= 0)
 			setRefreshing(false);
 	}
 
