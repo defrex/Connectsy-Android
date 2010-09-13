@@ -9,7 +9,7 @@ import com.connectsy.Launcher;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.settings.Settings;
 
-public class DataManager implements ApiRequestListener {
+public abstract class DataManager implements ApiRequestListener {
 	private static final String TAG = "DataManager";
 	public int returnCode;
 	public int pendingUpdates = 0;

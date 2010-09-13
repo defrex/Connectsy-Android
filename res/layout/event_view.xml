@@ -60,5 +60,12 @@
     <ListView android:id="@+id/attendants_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
+        
+    <!-- Comment List -->
+    <LinearLayout
+        style="@style/CommentList"
+        android:id="@+id/event_view_comments" >
+        <!-- Filled out in code -->
+    </LinearLayout>
     
 </LinearLayout>

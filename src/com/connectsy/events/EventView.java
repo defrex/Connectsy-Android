@@ -1,10 +1,12 @@
 package com.connectsy.events;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
@@ -33,6 +36,7 @@ public class EventView extends Activity implements DataUpdateListener,
     private String eventRev;
     private EventManager eventManager;
     private ArrayList<Attendant> attendants;
+    private CommentManager commentManager;
     private AttendantManager attManager;
     private AttendantsAdapter attAdapter;
     // This needs to change once invitations are in place.
@@ -40,9 +44,10 @@ public class EventView extends Activity implements DataUpdateListener,
     
     private int pendingOperations = 0;
     
-    private static int REFRESH_EVENT = 0;
-    private static int REFRESH_ATTENDANTS = 1;
-    private static int ATT_SET = 2;
+    private static final int REFRESH_EVENT = 0;
+    private static final int REFRESH_ATTENDANTS = 1;
+    private static final int ATT_SET = 2;
+    private static final int REFRESH_COMMENTS = 3;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,9 +71,13 @@ public class EventView extends Activity implements DataUpdateListener,
     }
     
     private void updateData(){
-        if (eventManager == null)
+        if (eventManager == null) {
         	eventManager = new EventManager(this, this, null, null);
-        event = eventManager.getEvent(eventRev);
+        	event = eventManager.getEvent(eventRev);
+        }
+        if (commentManager == null && event != null) {
+        	commentManager = new CommentManager(this, this, event);
+        }
         if (event != null){
 	        if (attManager == null)
 	        	attManager = new AttendantManager(this, this, event.ID);
@@ -106,6 +115,25 @@ public class EventView extends Activity implements DataUpdateListener,
 	        ImageView avatar = (ImageView)findViewById(R.id.event_view_avatar);
 	        String avyUrl = Settings.API_DOMAIN+"/users/"+event.creator+"/avatar/";
 	        new DrawableManager().fetchDrawableOnThread(avyUrl, avatar);
+        
+	        //reload comments
+	        LinearLayout comments = (LinearLayout)findViewById(R.id.event_view_comments);
+	        Collection<CommentManager.Comment> commentList = commentManager.getComments();
+	        LayoutInflater inflater = LayoutInflater.from(this);
+	        //only add after the last comment
+	        View lastComment = comments.getChildCount() > 0 ? comments.getChildAt(comments.getChildCount()) : null;
+	        boolean canAdd = false;
+	        for (CommentManager.Comment comment: commentList) {
+	        	//skip to the end of the list
+	        	if (!canAdd && lastComment == null || lastComment.getTag().equals(comment.getId())) {
+	        		canAdd = true;
+	        		if (lastComment != null)
+	        			continue;
+	        	}
+	        	
+	        	View view = inflater.inflate(R.layout.event_comment, comments);
+	        	((TextView)view.findViewById(R.id.comment_text)).setText(comment.getComment());
+	        }
         }
     }
 
@@ -132,6 +160,9 @@ public class EventView extends Activity implements DataUpdateListener,
 		if (attManager != null){
 			attManager.refreshAttendants(REFRESH_ATTENDANTS);
 			pendingOperations++;
+		}
+		if (commentManager != null) {
+			commentManager.refreshComments(REFRESH_COMMENTS);
 		}
 		if (pendingOperations > 0)
 			setRefreshing(true);
