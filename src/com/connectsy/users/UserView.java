@@ -116,8 +116,9 @@ public class UserView extends Activity implements OnClickListener,
 		if (user != null && user.username.equals(curUsername)){
 			ArrayList<User> pendingFriends = userManager.getFriends(true);
 			if (pendingFriends.size() > 0){
-				TextView title = (TextView)findViewById(R.id.pending_friends_list_title);
-				title.setVisibility(TextView.VISIBLE);
+				findViewById(R.id.pending_friends_list_title).setVisibility(TextView.VISIBLE);
+			}else{
+				findViewById(R.id.pending_friends_list_title).setVisibility(TextView.GONE);
 			}
 	        if (pendingAdapter != null){
 	        	pendingAdapter.clear();

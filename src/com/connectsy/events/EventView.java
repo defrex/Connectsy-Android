@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,8 +53,6 @@ public class EventView extends Activity implements DataUpdateListener,
         setContentView(R.layout.event_view);
 
         ActionBarHandler abHandler = new ActionBarHandler(this);
-        ImageView abProfile = (ImageView)findViewById(R.id.ab_profile);
-        abProfile.setOnClickListener(abHandler);
         ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
         abNewEvent.setOnClickListener(abHandler);
         
@@ -84,26 +83,25 @@ public class EventView extends Activity implements DataUpdateListener,
     }
 	
     private void updateDisplay(){
-        TextView attend = (TextView)findViewById(R.id.event_view_attend);
-        if (curUserStatus == Status.NOT_ATTENDING){
-        	attend.setOnClickListener(this);
-        }else if (curUserStatus == Status.ATTENDING){
-        	attend.setText("I'm running late!");
-        	attend.setOnClickListener(this);
-        }else if (curUserStatus == Status.LATE){
-        	attend.setText("Okay, I'm back on time.");
-        	attend.setOnClickListener(this);
+    	Button out = (Button)findViewById(R.id.event_view_attend_out);
+    	out.setOnClickListener(this);
+        Button in = (Button)findViewById(R.id.event_view_attend_in);
+    	in.setOnClickListener(this);
+        if (curUserStatus == Status.ATTENDING){
+        	in.setSelected(true);
+        	out.setSelected(false);
         }else{
-        	attend.setVisibility(0);
+        	out.setSelected(true);
+        	in.setSelected(false);
         }
         
         if (event != null){
 	        TextView where = (TextView)findViewById(R.id.event_view_where);
-	        where.setText(event.where);
-	        TextView when = (TextView)findViewById(R.id.event_view_when);
-	        when.setText(DateUtils.formatTimestamp(event.when));
+	        where.setText(Html.fromHtml("<b>Where:</b> "+event.where));
 	        TextView what = (TextView)findViewById(R.id.event_view_what);
-	        what.setText(event.description);
+	        what.setText(Html.fromHtml("<b>What:</b> "+event.description));
+	        TextView when = (TextView)findViewById(R.id.event_view_when);
+	        when.setText(Html.fromHtml("<b>When:</b> "+DateUtils.formatTimestamp(event.when)));
 	        
 	        ImageView avatar = (ImageView)findViewById(R.id.event_view_avatar);
 	        String avyUrl = Settings.API_DOMAIN+"/users/"+event.creator+"/avatar/";
@@ -114,13 +112,16 @@ public class EventView extends Activity implements DataUpdateListener,
 	public void onClick(View v) {
     	if (v.getId() == R.id.ab_refresh){ 
     		refresh();
-    	}else if (v.getId() == R.id.event_view_attend){
-    		if (curUserStatus == Status.NOT_ATTENDING)
-    			attManager.setStatus(Status.ATTENDING, ATT_SET);
-    		else if (curUserStatus == Status.ATTENDING)
-    			attManager.setStatus(Status.LATE, ATT_SET);
-    		else if (curUserStatus == Status.LATE)
-    			attManager.setStatus(Status.ATTENDING, ATT_SET);
+    	}else if (v.getId() == R.id.event_view_attend_in){
+    		findViewById(R.id.event_view_attend_in).setSelected(true);
+    		findViewById(R.id.event_view_attend_out).setSelected(false);
+        	attManager.setStatus(Status.ATTENDING, ATT_SET);
+    		pendingOperations++;
+    		setRefreshing(true);
+    	}else if (v.getId() == R.id.event_view_attend_out){
+    		findViewById(R.id.event_view_attend_out).setSelected(true);
+    		findViewById(R.id.event_view_attend_in).setSelected(false);
+        	attManager.setStatus(Status.NOT_ATTENDING, ATT_SET);
     		pendingOperations++;
     		setRefreshing(true);
     	}

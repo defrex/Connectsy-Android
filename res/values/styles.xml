@@ -47,6 +47,20 @@
         <item name="android:layout_margin">5dp</item>
     </style>
     
+    <style name="Toggle" parent="WrapAll">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+        <style name="ToggleButton" parent="Button">
+            <item name="android:layout_margin">0dp</item>
+        </style>
+            <style name="ToggleLeft" parent="ToggleButton">
+                <item name="android:background">@drawable/toggle_button_left</item>
+            </style>
+            <style name="ToggleRight" parent="ToggleButton">
+                <item name="android:background">@drawable/toggle_button_right</item>
+            </style>
+    
     <style name="BorderWrapperVert" parent="FullWidth">
         <item name="android:orientation">vertical</item>
     </style>
@@ -54,6 +68,7 @@
             <item name="android:layout_height">1dp</item>
             <item name="android:background">#ffcccccc</item>
 	    </style>
+        
     <style name="ListTitle" parent="FullWidth">
         <item name="android:orientation">vertical</item>
     </style>
@@ -254,26 +269,28 @@
        		<item name="android:orientation">horizontal</item>
 	    </style>
 		    <style name="EventViewAvatar">
-		    	
 		    	<item name="android:layout_margin">5dp</item>
-		    	<item name="android:layout_width">100dp</item>
-		    	<item name="android:layout_height">100dp</item>
+		    	<item name="android:layout_width">90dp</item>
+		    	<item name="android:layout_height">90dp</item>
 		    </style>
-		    <style name="EventViewTopRight" parent="FullWidth">
-	       		<item name="android:orientation">vertical</item>
+            <style name="EventViewTitle" parent="WrapAll">
+                <item name="android:textSize">14sp</item>
+                <item name="android:textStyle">bold</item>
+                <item name="android:paddingRight">5dp</item>
+            </style>
+            <style name="EventViewText" parent="WrapAll">
+                <item name="android:textSize">14sp</item>
+            </style>
+		    <style name="EventViewWhere" parent="WrapAll">
+		    	<item name="android:textSize">14sp</item>
 		    </style>
-			    <style name="EventViewWhere" parent="WrapAll">
-			    	<item name="android:textSize">24sp</item>
-			    	<item name="android:textStyle">bold</item>
-			    </style>
-			    <style name="EventViewWhen" parent="WrapAll">
-			    	<item name="android:textSize">16sp</item>
-			    </style>
-			    <style name="EventViewWhat" parent="WrapAll">
-			    	<item name="android:textSize">14sp</item>
-			    </style>
-	    <style name="EventViewAttend" parent="FullWidth">
-	    	<item name="android:textSize">14sp</item>
+            <style name="EventViewWhen" parent="WrapAll">
+                <item name="android:textSize">14sp</item>
+            </style>
+		    <style name="EventViewWhat" parent="WrapAll">
+		    	<item name="android:textSize">14sp</item>
+		    </style>
+	    <style name="EventViewAttend" parent="Button">
 	    </style>
     
     <style name="AttendantsListItem" parent="FullWidth">
