@@ -12,9 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.connectsy.R;
+import com.connectsy.data.AvatarFetcher;
 import com.connectsy.events.EventManager.Event;
-import com.connectsy.settings.Settings;
-import com.wilson.android.library.DrawableManager;
 
 public class EventsAdapter extends ArrayAdapter<Event> {
  
@@ -49,9 +48,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         where.setText(event.where);
         
         ImageView avatar = (ImageView)view.findViewById(R.id.event_list_item_avatar);
-        DrawableManager dm = new DrawableManager();
-        String avyUrl = Settings.API_DOMAIN+"/users/"+event.creator+"/avatar/";
-        dm.fetchDrawableOnThread(avyUrl, avatar);
+        new AvatarFetcher(context, event.creator, avatar);
         
         return view;
 	}

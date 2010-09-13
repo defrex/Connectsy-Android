@@ -13,9 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.connectsy.R;
+import com.connectsy.data.AvatarFetcher;
 import com.connectsy.events.AttendantManager.Attendant;
-import com.connectsy.settings.Settings;
-import com.wilson.android.library.DrawableManager;
 
 public class AttendantsAdapter extends ArrayAdapter<Attendant> {
 	@SuppressWarnings("unused")
@@ -53,9 +52,7 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         status.setText(status_text);
         
         ImageView avatar = (ImageView)view.findViewById(R.id.attendant_list_item_avatar);
-        DrawableManager dm = new DrawableManager();
-        String avyUrl = Settings.API_DOMAIN+"/users/"+att.username+"/avatar/";
-        dm.fetchDrawableOnThread(avyUrl, avatar);
+        new AvatarFetcher(context, att.username, avatar);
 		return view;
 	}
 

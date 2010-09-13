@@ -36,10 +36,10 @@
 	        <LinearLayout style="@style/Toggle">
                 <Button style="@style/ToggleLeft"
                     android:id="@+id/event_view_attend_out"
-                    android:text="OUT" />
+                    android:text="Out" />
                 <Button style="@style/ToggleRight"
                     android:id="@+id/event_view_attend_in"
-                    android:text="IN" />
+                    android:text="In" />
             </LinearLayout>
         </LinearLayout>
 		

@@ -42,11 +42,8 @@ public class EventList extends Activity implements DataUpdateListener,
         setContentView(R.layout.event_list);
         
         ActionBarHandler abHandler = new ActionBarHandler(this);
-        ImageView abProfile = (ImageView)findViewById(R.id.ab_profile);
-        abProfile.setOnClickListener(abHandler);
         ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
         abNewEvent.setOnClickListener(abHandler);
-
         ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
         abRefresh.setOnClickListener(this);
         

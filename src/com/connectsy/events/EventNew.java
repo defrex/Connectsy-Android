@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.connectsy.R;
-import com.connectsy.Utils;
 import com.connectsy.categories.CategoryManager;
 import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
@@ -37,6 +36,7 @@ import com.connectsy.events.EventManager.Event;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager;
 import com.connectsy.users.UserManager.User;
+import com.connectsy.utils.DateUtils;
 
 public class EventNew extends Activity implements OnClickListener, DataUpdateListener {
 	private final String TAG = "NewEvent";
@@ -209,8 +209,8 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
             
     private void updateTimeDisplay() {
     	Date selected = getCal().getTime();
-    	String dateString = Utils.DateUtils.formatDate(selected);
-    	String timeString = Utils.DateUtils.formatTime(selected);
+    	String dateString = DateUtils.formatDate(selected);
+    	String timeString = DateUtils.formatTime(selected);
         mTimeDisplay.setText(timeString);
         mDateDisplay.setText(dateString);
     }

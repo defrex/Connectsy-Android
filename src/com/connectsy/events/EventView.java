@@ -18,13 +18,13 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
-import com.connectsy.Utils.DateUtils;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.AttendantManager.Attendant;
 import com.connectsy.events.AttendantManager.Status;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.settings.Settings;
+import com.connectsy.utils.DateUtils;
 import com.wilson.android.library.DrawableManager;
 
 public class EventView extends Activity implements DataUpdateListener, 

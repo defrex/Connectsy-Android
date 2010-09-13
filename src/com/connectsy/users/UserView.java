@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
+import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.settings.MainMenu;
@@ -74,8 +75,7 @@ public class UserView extends Activity implements OnClickListener,
         uname.setText(username);
 		
         ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-        String avyUrl = Settings.API_DOMAIN+"/users/"+username+"/avatar/";
-        new DrawableManager().fetchDrawableOnThread(avyUrl, avatar);
+        new AvatarFetcher(this, user.username, avatar);
         if (username.equals(DataManager.getCache(this).getString("username", null))){
         	avatar.setClickable(true);
         	avatar.setOnClickListener(this);
