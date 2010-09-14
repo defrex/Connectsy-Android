@@ -84,7 +84,8 @@ public class CategoryManager extends DataManager {
 		long cached = DataManager.getCache(c).getLong("categories_cached", 0);
 		if (DateUtils.isCacheExpired(new Date(cached), 48) || r.getCached() == null){
 			r.execute();
-			DataManager.getCache(c).edit().putLong("categories_cached", new Date().getTime());
+			DataManager.getCache(c).edit()
+					.putLong("categories_cached", new Date().getTime()).commit();
 		}
 	}
 }

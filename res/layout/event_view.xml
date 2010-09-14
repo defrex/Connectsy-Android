@@ -55,11 +55,19 @@
         </LinearLayout>
 	</LinearLayout>
 	
-	<ListView android:id="@+id/event_view_attendants"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" />
+	<LinearLayout style="@style/TabBar">
+        <Button style="@style/TabBarButton"
+            android:id="@+id/event_view_comments"
+            android:text="Comments"/>
+        <Button style="@style/TabBarButton"
+            android:id="@+id/event_view_atts"
+            android:text="Attendants"/>
+	</LinearLayout>
 	
     <ListView android:id="@+id/attendants_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+    <ListView android:id="@+id/comments_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
     

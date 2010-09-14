@@ -65,6 +65,16 @@
                 <item name="android:background">@drawable/toggle_button_right</item>
             </style>
     
+    <style name="TabBar" parent="FullWidth">
+        <item name="android:orientation">horizontal</item>
+    </style>
+        <style name="TabBarButton" parent="Button">
+            <item name="android:layout_margin">0dp</item>
+            <item name="android:layout_width">fill_parent</item>
+            <item name="android:layout_weight">1</item>
+            <item name="android:background">@drawable/tabbar_button</item>
+        </style>
+    
     <style name="BorderWrapperVert" parent="FullWidth">
         <item name="android:orientation">vertical</item>
     </style>

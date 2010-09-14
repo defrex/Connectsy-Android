@@ -24,6 +24,7 @@ import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.categories.CategoryManager;
 import com.connectsy.categories.CategoryManager.Category;
+import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.EventManager.Filter;
@@ -60,6 +61,10 @@ public class EventList extends Activity implements DataUpdateListener,
 	        	category = b.getString("category");
         }else{
         	filter = Filter.ALL;
+        }
+        
+        if (filter == Filter.CATEGORY && category == null){
+        	category = DataManager.getCache(this).getString("category_saved", "All");
         }
         
         updateData();
@@ -114,6 +119,8 @@ public class EventList extends Activity implements DataUpdateListener,
 		if (resultCode == RESULT_OK && requestCode == SELECT_CATEGORY){
 			try {
 				category = new Category(data.getExtras().getString("com.connectsy.category")).name;
+				DataManager.getCache(this).edit()
+						.putString("category_saved", category).commit();
 				((TextView)findViewById(R.id.event_list_heading_text)).setText("Category: "+category);
 				updateData();
 				refresh();
