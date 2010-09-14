@@ -1,6 +1,5 @@
 package com.connectsy.events;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -11,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
@@ -24,9 +22,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	private final int GET_ATTS = 0;
 	private final int SET_ATTS = 1;
 	private String eventID;
-	private ApiRequest apiRequest;
 	private ArrayList<Attendant> attendants;
-	private SharedPreferences data;
 	
     public static final class Status{
 		public static final int INVITED = 0;
@@ -36,7 +32,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		public static final int LATE = 4;
     }
 	
-	public class Attendant{
+	public static class Attendant{
 		public String username;
 		public String eventID;
 		public int status;
@@ -48,23 +44,38 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 			eventID = jsonAttendant.getString("event");
 			status = jsonAttendant.getInt("status");
 		}
+		
+		public static ArrayList<Attendant> deserializeList(String attsString) throws JSONException{
+			ArrayList<Attendant> atts = new ArrayList<Attendant>();
+			JSONArray attsJSON = new JSONArray(attsString);
+			for (int i=0;i<attsJSON.length();i++)
+				atts.add(new Attendant(attsJSON.getJSONObject(i)));
+			return atts;
+		}
 	}
 	
-	public AttendantManager(Context c, DataUpdateListener l, String passedEventID) {
+	public AttendantManager(Context c, DataUpdateListener l, String eventID) {
 			super(c, l);
-			eventID = passedEventID;
-			data = DataManager.getCache(c);
-			createRequest();
+			this.eventID = eventID;
 	}
 	
-	private void createRequest(){
+	public AttendantManager(Context c, DataUpdateListener l, String eventID, 
+				ArrayList<Attendant> attendants) {
+			super(c, l);
+			this.eventID = eventID;
+			this.attendants = attendants;
+	}
+	
+	private ApiRequest getRequest(){
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
-		if (data.contains("attendants.timestamp"))
+		if (DataManager.getCache(context).contains("attendants.timestamp"))
 			args.add(new BasicNameValuePair("timestamp", 
-					Integer.toString(data.getInt("attendants.timestamp", 0))));
-		apiRequest = new ApiRequest(this, context, Method.GET, 
+					Integer.toString(DataManager.getCache(context)
+							.getInt("attendants.timestamp", 0))));
+		ApiRequest apiRequest = new ApiRequest(this, context, Method.GET, 
 				"/events/"+eventID+"/attendants/", true, GET_ATTS);
 		apiRequest.setGetArgs(args);
+		return apiRequest;
 	}
 	
 	public Attendant getAttendant(String username){
@@ -74,24 +85,22 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		return null;
 	}
 	
-	public int getCurrentUserStatus(){
-		String username = data.getString("username", null);
+	public Integer getCurrentUserStatus(){
+		String username = DataManager.getCache(context).getString("username", null);
 		Attendant att = getAttendant(username);
-		if (att != null){
-			return att.status;
-		}else{
-			// TODO: change this once invitations are in place
-			return Status.INVITED;
-		}
+		if (att != null) return att.status;
+		else return null;
 	}
 	
 	public ArrayList<Attendant> getAttendants(){
+		if (attendants != null) return attendants;
 		attendants = new ArrayList<Attendant>();
-		String attsString = apiRequest.getCached();
+		String attsString = getRequest().getCached();
 		if (attsString == null) return attendants;
 		try {
 			JSONObject json = new JSONObject(attsString);
-			data.edit().putInt("attendants.timestamp", json.getInt("timestamp"));
+			DataManager.getCache(context).edit().putInt("attendants.timestamp", 
+					json.getInt("timestamp")).commit();
 			JSONObject attsJSON = json.getJSONObject("attendants");
 			@SuppressWarnings("unchecked")
 			Iterator<String> keys = attsJSON.keys();
@@ -110,16 +119,11 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	
 	public void refreshAttendants(int sentReturnCode){
 		returnCode = sentReturnCode;
-		int timestamp = data.getInt("attendants.timestamp", 0);
-		if (timestamp != 0){
-			try {
-				apiRequest.addGetArg("timestamp", Integer.toString(timestamp));
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
+		ApiRequest apiRequest = getRequest();
+//		int timestamp = DataManager.getCache(context).getInt("attendants.timestamp", 0);
+//		if (timestamp != 0)
+//			apiRequest.addGetArg("timestamp", Integer.toString(timestamp));
 		apiRequest.execute();
-		createRequest();
 	}
 	
 	public void setStatus(int status, int passedReturnCode){
@@ -159,6 +163,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
+		attendants = null; getAttendants();
 		listener.onDataUpdate(returnCode, response);
 	}
 }

@@ -127,7 +127,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		return data.getString(url, null);
 	}
 	
-	public void addGetArg(String key, String value) throws URISyntaxException{
+	public void addGetArg(String key, String value){
 		getArgs.add(new BasicNameValuePair(key, value));
 	}
 	

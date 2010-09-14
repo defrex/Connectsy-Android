@@ -33,7 +33,9 @@
 			<ImageView style="@style/EventViewAvatar"
 	    		android:src="@drawable/avatar_default"
 				android:id="@+id/event_view_avatar" />
-	        <LinearLayout style="@style/Toggle">
+	        <LinearLayout style="@style/Toggle"
+	           android:visibility="gone"
+	           android:id="@+id/event_view_att_toggle">
                 <Button style="@style/ToggleLeft"
                     android:id="@+id/event_view_attend_out"
                     android:text="Out" />
@@ -45,6 +47,7 @@
 		
         <LinearLayout style="@style/WrapAll"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical">
             <TextView style="@style/EventViewText"
                 android:id="@+id/event_view_where" />

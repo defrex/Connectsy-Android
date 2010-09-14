@@ -1,11 +1,10 @@
 package com.connectsy.events;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import android.widget.TextView;
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
+import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.AttendantManager.Attendant;
 import com.connectsy.events.AttendantManager.Status;
@@ -35,18 +35,17 @@ public class EventView extends Activity implements DataUpdateListener,
     private Event event;
     private String eventRev;
     private EventManager eventManager;
-    private ArrayList<Attendant> attendants;
     private AttendantManager attManager;
     private AttendantsAdapter attAdapter;
     private String tabSelected;
-    // This needs to change once invitations are in place.
-    private int curUserStatus = Status.NOT_ATTENDING;
+    private Integer curUserStatus;
+    private boolean pendingStatusChange = false;
     
     private int pendingOperations = 0;
     
-    private static int REFRESH_EVENT = 0;
-    private static int REFRESH_ATTENDANTS = 1;
-    private static int ATT_SET = 2;
+    private final int REFRESH_EVENT = 0;
+    private final int ATT_SET = 1;
+    private final int REFRESH_ATTS = 2;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,28 +67,36 @@ public class EventView extends Activity implements DataUpdateListener,
         Intent i = getIntent();
         eventRev = i.getExtras().getString("com.connectsy.events.revision");
 
-        eventManager = new EventManager(this, this, null, null);
+        event = getEventManager(false).getEvent(eventRev);
         
         refresh();
-        updateDisplay();
+        update();
         setTabSelected("comments");
     }
 	
-    private void updateDisplay(){
-    	Button out = (Button)findViewById(R.id.event_view_attend_out);
-    	out.setOnClickListener(this);
-        Button in = (Button)findViewById(R.id.event_view_attend_in);
-    	in.setOnClickListener(this);
-        if (curUserStatus == Status.ATTENDING){
-        	in.setSelected(true);
-        	out.setSelected(false);
-        }else{
-        	out.setSelected(true);
-        	in.setSelected(false);
-        }
-        
-        event = eventManager.getEvent(eventRev);
+    private void update(){
+		setUserStatus(null);
+		setTabSelected(null);
+        event = getEventManager(false).getEvent(eventRev);
         if (event != null){
+        	setTabSelected(null);
+        	
+        	if (!event.creator.equals(DataManager.getCache(this).getString("username", null))){
+        		findViewById(R.id.event_view_att_toggle).setVisibility(View.VISIBLE);
+        		
+            	Button out = (Button)findViewById(R.id.event_view_attend_out);
+            	out.setOnClickListener(this);
+                Button in = (Button)findViewById(R.id.event_view_attend_in);
+            	in.setOnClickListener(this);
+                if (curUserStatus != null && curUserStatus == Status.ATTENDING){
+                	in.setSelected(true);
+                	out.setSelected(false);
+                }else{
+                	out.setSelected(true);
+                	in.setSelected(false);
+                }
+        	}
+        	
 	        TextView where = (TextView)findViewById(R.id.event_view_where);
 	        where.setText(Html.fromHtml("<b>Where:</b> "+event.where));
 	        TextView what = (TextView)findViewById(R.id.event_view_what);
@@ -122,16 +129,35 @@ public class EventView extends Activity implements DataUpdateListener,
     		attsList.setVisibility(ListView.VISIBLE);
     		commentsList.setVisibility(ListView.GONE);
             if (event != null){
-    	        if (attManager == null)
-    	        	attManager = new AttendantManager(this, this, event.ID);
-    	        attendants = attManager.getAttendants();
-    	        curUserStatus = attManager.getCurrentUserStatus();
-    	        if (attAdapter == null)
+	        	Log.d(TAG, "using atts: "+getAttManager(false).getAttendants());
+    	        if (attAdapter == null){
     		        attAdapter = new AttendantsAdapter(this, R.layout.attendant_list_item, 
-    		        		attendants);
+    		        		getAttManager(false).getAttendants());
+    	        }else{
+    	        	attAdapter.clear();
+    	        	for (Attendant a: getAttManager(false).getAttendants())
+    	        		attAdapter.add(a);
+    	        	attAdapter.notifyDataSetChanged();
+    	        }
     	        attsList.setAdapter(attAdapter);
             }
     	}
+    }
+    
+    private void setUserStatus(Integer status){
+		if (status != null){
+			curUserStatus = status;
+			if (event == null){
+				pendingStatusChange = true;
+				return;
+			}
+		}else if (!pendingStatusChange){
+			return;
+		}
+		pendingStatusChange = false;
+		getAttManager(false).setStatus(curUserStatus, ATT_SET);
+		pendingOperations++;
+		setRefreshing(true);
     }
     
 	public void onClick(View v) {
@@ -140,15 +166,11 @@ public class EventView extends Activity implements DataUpdateListener,
     	}else if (v.getId() == R.id.event_view_attend_in){
     		findViewById(R.id.event_view_attend_in).setSelected(true);
     		findViewById(R.id.event_view_attend_out).setSelected(false);
-        	attManager.setStatus(Status.ATTENDING, ATT_SET);
-    		pendingOperations++;
-    		setRefreshing(true);
+    		setUserStatus(Status.ATTENDING);
     	}else if (v.getId() == R.id.event_view_attend_out){
     		findViewById(R.id.event_view_attend_out).setSelected(true);
     		findViewById(R.id.event_view_attend_in).setSelected(false);
-        	attManager.setStatus(Status.NOT_ATTENDING, ATT_SET);
-    		pendingOperations++;
-    		setRefreshing(true);
+    		setUserStatus(Status.NOT_ATTENDING);
     	}else if (v.getId() == R.id.event_view_comments){
     		setTabSelected("comments");
     	}else if (v.getId() == R.id.event_view_atts){
@@ -157,23 +179,19 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	private void refresh(){
-		if (eventManager != null && eventManager.getEvent(eventRev) == null){
-			eventManager.refreshEvent(eventRev, REFRESH_EVENT);
+		if (getEventManager(false).getEvent(eventRev) == null){
+			getEventManager(false).refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
-		if (attManager != null){
-			attManager.refreshAttendants(REFRESH_ATTENDANTS);
-			pendingOperations++;
-		}
-		if (pendingOperations > 0)
-			setRefreshing(true);
+		getAttManager(false).refreshAttendants(REFRESH_ATTS);
+		pendingOperations++;
+		setRefreshing(true);
 	}
 
 	public void onDataUpdate(int code, String response) {
-		updateDisplay();
+		update();
 		pendingOperations--;
-		if (pendingOperations <= 0)
-			setRefreshing(false);
+		if (pendingOperations == 0) setRefreshing(false);
 	}
 
 	public void onRemoteError(int httpStatus, int code) {
@@ -202,5 +220,17 @@ public class EventView extends Activity implements DataUpdateListener,
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private AttendantManager getAttManager(boolean forceNew){
+		if (attManager == null || forceNew)
+			attManager = new AttendantManager(this, this, event.ID, event.attendants);
+		return attManager;
+	}
+	
+	private EventManager getEventManager(boolean forceNew){
+		if (eventManager == null || forceNew)
+			eventManager = new EventManager(this, this, null, null);
+		return eventManager;
 	}
 }
