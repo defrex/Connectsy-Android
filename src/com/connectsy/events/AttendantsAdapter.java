@@ -33,7 +33,7 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.attendant_list_item, parent, false);
 		
-        TextView username = (TextView)view.findViewById(R.id.attendant_list_item_username);
+        TextView username = (TextView)view.findViewById(R.id.user_list_item_username);
         username.setText(att.username);
         username.setOnClickListener(new TextView.OnClickListener(){
 			public void onClick(View v) {
@@ -51,7 +51,7 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         TextView status = (TextView)view.findViewById(R.id.attendant_list_item_status);
         status.setText(status_text);
         
-        ImageView avatar = (ImageView)view.findViewById(R.id.attendant_list_item_avatar);
+        ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
         new AvatarFetcher(context, att.username, avatar);
 		return view;
 	}
