@@ -49,4 +49,11 @@ public class DateUtils{
     	String dateString = formatDate(date);
 		return dateString+" "+timeString;
 	}
+	
+
+	public static boolean isCacheExpired(Date cached, int hours){
+		Date now = new Date();
+		now.setHours(now.getHours()+hours);
+		return (cached.compareTo(now) <= 0);
+	}
 }

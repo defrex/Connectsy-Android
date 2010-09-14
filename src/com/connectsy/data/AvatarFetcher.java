@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.connectsy.settings.Settings;
+import com.connectsy.utils.DateUtils;
 
 public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
 	private final String TAG = "AvatarFetcher";
@@ -31,7 +32,7 @@ public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
 		cache = DataManager.getCache(context);
 		long expNum = cache.getLong(getCacheName(), 0);
 		if (expNum != 0){
-			if (isStillGood(new Date(expNum))){
+			if (DateUtils.isCacheExpired(new Date(expNum), 2)){
 				renderCached();
 				return;
 			}else{
@@ -39,13 +40,6 @@ public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
 			}
 		}
 		execute();
-	}
-
-	private boolean isStillGood(Date expiry){
-		Date now = new Date();
-		now.setHours(now.getHours()+2);
-		return (expiry.compareTo(now) <= 0);
-		
 	}
 
 	private String getFilename(){

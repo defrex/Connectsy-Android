@@ -2,6 +2,8 @@ package com.connectsy.events;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -14,11 +16,14 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
+import com.connectsy.categories.CategoryManager;
+import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.EventManager.Filter;
@@ -32,7 +37,8 @@ public class EventList extends Activity implements DataUpdateListener,
     private ArrayList<Event> events;
     private Filter filter;
     private String category;
-    private static int GET_EVENTS = 0;
+    private final int GET_EVENTS = 0;
+    private final int SELECT_CATEGORY = 1;
 	
     public static enum Init {CATEGORY, FRIENDS}
     
@@ -47,6 +53,15 @@ public class EventList extends Activity implements DataUpdateListener,
         ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
         abRefresh.setOnClickListener(this);
         
+        Bundle b = getIntent().getExtras();
+        if (b != null && b.containsKey("filter")){
+    		filter = (Filter) b.get("filter");
+	        if (b.containsKey("category"))
+	        	category = b.getString("category");
+        }else{
+        	filter = Filter.ALL;
+        }
+        
         updateData();
         
         TextView heading = (TextView)findViewById(R.id.event_list_heading_text);
@@ -54,13 +69,20 @@ public class EventList extends Activity implements DataUpdateListener,
         	heading.setText("Nearby Events");
         if (filter == Filter.FRIENDS)
         	heading.setText("Friends Events");
-        if (filter == Filter.CATEGORY)
-        	heading.setText(category+" Events");
+        if (filter == Filter.CATEGORY){
+        	heading.setText("Category: "+category);
+        	findViewById(R.id.event_list_heading_arrow).setVisibility(View.VISIBLE);
+        	LinearLayout cat = (LinearLayout)findViewById(R.id.event_list_heading);
+        	cat.setClickable(true);
+        	cat.setOnClickListener(this);
+        }
         
         ListView lv = (ListView)findViewById(R.id.events_list);
         lv.setOnItemClickListener(this);
         lv.setAdapter(adapter);
         refresh();
+        
+        CategoryManager.precacheCategories(this);
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,18 +104,27 @@ public class EventList extends Activity implements DataUpdateListener,
 
 	public void onClick(View v) {
     	if (v.getId() == R.id.ab_refresh) refresh();
+    	else if (v.getId() == R.id.event_list_heading){
+    		Intent i = new Intent(Intent.ACTION_CHOOSER);
+    		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
+    		startActivityForResult(i, SELECT_CATEGORY);
+    	}
+	}
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		if (resultCode == RESULT_OK && requestCode == SELECT_CATEGORY){
+			try {
+				category = new Category(data.getExtras().getString("com.connectsy.category")).name;
+				((TextView)findViewById(R.id.event_list_heading_text)).setText("Category: "+category);
+				updateData();
+				refresh();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void updateData(){
-        Intent i = getIntent();
-        Bundle b = i.getExtras();
-        if (b != null && b.containsKey("filter")){
-    		filter = (Filter) b.get("filter");
-	        if (b.containsKey("category"))
-	        	category = b.getString("category");
-        }else{
-        	filter = Filter.ALL;
-        }
         eventManager = new EventManager(this, this, filter, category);
         events = eventManager.getEvents();
         if (adapter != null){

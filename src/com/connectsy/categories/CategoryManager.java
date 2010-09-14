@@ -1,6 +1,7 @@
 package com.connectsy.categories;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,6 +12,7 @@ import android.content.Context;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.utils.DateUtils;
 
 public class CategoryManager extends DataManager {
 
@@ -79,6 +81,10 @@ public class CategoryManager extends DataManager {
 
 	public static void precacheCategories(Context c){
 		ApiRequest r = new ApiRequest(null, c, Method.GET, "/categories/", false, 0);
-		if (r.getCached() == null) r.execute();
+		long cached = DataManager.getCache(c).getLong("categories_cached", 0);
+		if (DateUtils.isCacheExpired(new Date(cached), 48) || r.getCached() == null){
+			r.execute();
+			DataManager.getCache(c).edit().putLong("categories_cached", new Date().getTime());
+		}
 	}
 }

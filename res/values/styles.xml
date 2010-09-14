@@ -150,7 +150,7 @@
                 <item name="android:layout_weight">1</item>
                 <item name="android:layout_margin">2dp</item>
 		        <item name="android:gravity">center_horizontal</item>
-		        <item name="android:textSize">14sp</item>
+		        <item name="android:textSize">16sp</item>
                 <item name="android:textStyle">normal</item>
                 <item name="android:textColor">@color/text_grey</item>
 		        <item name="android:background">@null</item>
@@ -170,25 +170,33 @@
     
     <style name="EventListHeadingWrapper" parent="FullWidth">
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_height">31dp</item>
+        <item name="android:layout_height">41dp</item>
     </style>
 	    <style name="EventListHeading" parent="FullWidth">
 	        <item name="android:orientation">horizontal</item>
-	        <item name="android:layout_height">30dp</item>
+            <item name="android:layout_height">40dp</item>
+            <item name="android:gravity">center_vertical</item>
+            <item name="android:layout_marginLeft">10dp</item>
 	    </style>
-	        <style name="EventListHeadingArrow">
-	            <item name="android:layout_width">30dp</item>
-	            <item name="android:layout_height">30dp</item>
-	            <item name="android:layout_marginRight">5dp</item>
-	            <item name="android:paddingTop">7dp</item>
-	            <item name="android:paddingBottom">10dp</item>
-	            <item name="android:paddingLeft">6dp</item>
-	            <item name="android:paddingRight">5dp</item>
-	            <item name="android:gravity">center</item>
-	        </style>
+            <style name="EventListHeadingChange">
+                <item name="android:layout_width">30dp</item>
+                <item name="android:layout_height">30dp</item>
+                <item name="android:layout_marginRight">5dp</item>
+            </style>
+            <style name="EventListHeadingArrow">
+                <item name="android:layout_width">30dp</item>
+                <item name="android:layout_height">30dp</item>
+                <item name="android:layout_marginRight">5dp</item>
+                <item name="android:paddingTop">7dp</item>
+                <item name="android:paddingBottom">10dp</item>
+                <item name="android:paddingLeft">6dp</item>
+                <item name="android:paddingRight">5dp</item>
+                <item name="android:gravity">center</item>
+            </style>
 	        <style name="EventListHeadingText" parent="WrapAll">
 	            <item name="android:textSize">18sp</item>
 	            <item name="android:textStyle">bold</item>
+	            <item name="android:gravity">center_vertical</item>
 	        </style>
         <style name="EventListHeadingBorder">
             <item name="android:layout_height">1dp</item>

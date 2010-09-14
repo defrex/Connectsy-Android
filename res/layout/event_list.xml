@@ -28,14 +28,15 @@
     </FrameLayout>
 	
     <LinearLayout style="@style/EventListHeadingWrapper">
-	    <LinearLayout style="@style/EventListHeading">
-		       
-	        <ImageView style="@style/EventListHeadingArrow"
-	            android:src="@drawable/icons_down_arrow" />
-	            
+	    <LinearLayout style="@style/EventListHeading"
+	       android:id="@+id/event_list_heading">
 	        <TextView style="@style/EventListHeadingText"
 	            android:id="@+id/event_list_heading_text" />
-	            
+	        <View style="@style/Spring" />
+	        <ImageView style="@style/EventListHeadingChange"
+                android:id="@+id/event_list_heading_arrow"
+	            android:src="@drawable/right_arrow"
+	            android:visibility="gone"/>
 	    </LinearLayout>
         <ImageView style="@style/EventListHeadingBorder" />
     </LinearLayout>
