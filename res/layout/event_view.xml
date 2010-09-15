@@ -20,8 +20,9 @@
             
             <ImageView style="@style/ActionBarSeparator" />
             <ImageView style="@style/ActionBarAction"
-                android:id="@+id/ab_new_event"
-                android:src="@drawable/icons_plus" />
+                android:id="@+id/event_view_ab_in"
+                android:src="@drawable/icons_plus"
+                android:background="@drawable/ab_selectable" />
         </LinearLayout>
     </FrameLayout>
 	
@@ -33,6 +34,7 @@
 			<ImageView style="@style/EventViewAvatar"
 	    		android:src="@drawable/avatar_default"
 				android:id="@+id/event_view_avatar" />
+				<!-- 
 	        <LinearLayout style="@style/Toggle"
 	           android:visibility="gone"
 	           android:id="@+id/event_view_att_toggle">
@@ -43,6 +45,7 @@
                     android:id="@+id/event_view_attend_in"
                     android:text="In" />
             </LinearLayout>
+             -->
         </LinearLayout>
 		
         <LinearLayout style="@style/WrapAll"
@@ -59,10 +62,10 @@
 	</LinearLayout>
 	
 	<LinearLayout style="@style/TabBar">
-        <Button style="@style/TabBarButton"
+        <Button style="@style/TabBarButtonLeft"
             android:id="@+id/event_view_comments"
             android:text="Comments"/>
-        <Button style="@style/TabBarButton"
+        <Button style="@style/TabBarButtonRight"
             android:id="@+id/event_view_atts"
             android:text="Attendants"/>
 	</LinearLayout>

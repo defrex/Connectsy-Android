@@ -49,6 +49,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_margin">5dp</item>
+        <item name="android:padding">10dp</item>
     </style>
     
     <style name="Toggle" parent="WrapAll">
@@ -60,6 +61,9 @@
         </style>
             <style name="ToggleLeft" parent="ToggleButton">
                 <item name="android:background">@drawable/toggle_button_left</item>
+            </style>
+            <style name="ToggleMiddle" parent="ToggleButton">
+                <item name="android:background">@drawable/toggle_button_middle</item>
             </style>
             <style name="ToggleRight" parent="ToggleButton">
                 <item name="android:background">@drawable/toggle_button_right</item>
@@ -73,6 +77,12 @@
             <item name="android:layout_width">fill_parent</item>
             <item name="android:layout_weight">1</item>
             <item name="android:background">@drawable/tabbar_button</item>
+        </style>
+        <style name="TabBarButtonLeft" parent="TabBarButton">
+            <item name="android:background">@drawable/tabbar_button_left</item>
+        </style>
+        <style name="TabBarButtonRight" parent="TabBarButton">
+            <item name="android:background">@drawable/tabbar_button_right</item>
         </style>
     
     <style name="BorderWrapperVert" parent="FullWidth">
@@ -266,15 +276,21 @@
             <item name="android:layout_marginRight">5dp</item>
             <item name="android:layout_marginLeft">5dp</item>
 	    </style>
-		    <style name="EventNewWho" parent="EventNewField">
-        		<item name="android:orientation">horizontal</item>
+		    <style name="EventNewWho" parent="Toggle">
+                <item name="android:layout_width">fill_parent</item>
 		    </style>
-                <style name="EventNewWhoEveryone" parent="Button">
+                <style name="EventNewWhoFriends" parent="ToggleLeft">
+                   <item name="android:state_selected">true</item>
+                   <item name="android:layout_width">fill_parent</item>
                    <item name="android:layout_weight">1</item>
                 </style>
-                <style name="EventNewWhoFriends" parent="Button">
+                <style name="EventNewWhoEveryone" parent="ToggleMiddle">
+                   <item name="android:layout_width">fill_parent</item>
                    <item name="android:layout_weight">1</item>
-                   <item name="android:state_selected">true</item>
+                </style>
+                <style name="EventNewWhoChoose" parent="ToggleRight">
+                   <item name="android:layout_width">fill_parent</item>
+                   <item name="android:layout_weight">1</item>
                 </style>
             <style name="EventNewCategory" parent="FullWidth">
                 <item name="android:orientation">vertical</item>

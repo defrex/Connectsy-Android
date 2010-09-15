@@ -52,9 +52,9 @@ public class EventView extends Activity implements DataUpdateListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_view);
 
-        ActionBarHandler abHandler = new ActionBarHandler(this);
-        ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
-        abNewEvent.setOnClickListener(abHandler);
+//        ActionBarHandler abHandler = new ActionBarHandler(this);
+//        ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
+//        abNewEvent.setOnClickListener(abHandler);
         
         ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
         abRefresh.setOnClickListener(this);
@@ -80,19 +80,14 @@ public class EventView extends Activity implements DataUpdateListener,
         event = getEventManager(false).getEvent(eventRev);
         if (event != null){
         	setTabSelected(null);
-        	
-        	if (!event.creator.equals(DataManager.getCache(this).getString("username", null))){
-        		findViewById(R.id.event_view_att_toggle).setVisibility(View.VISIBLE);
+        	String curUser = DataManager.getCache(this).getString("username", null);
+        	if (!event.creator.equals(curUser)){
         		
-            	Button out = (Button)findViewById(R.id.event_view_attend_out);
-            	out.setOnClickListener(this);
-                Button in = (Button)findViewById(R.id.event_view_attend_in);
+            	ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
             	in.setOnClickListener(this);
-                if (curUserStatus != null && curUserStatus == Status.ATTENDING){
+                if (getAttManager(false).isUserAttending(curUser)){
                 	in.setSelected(true);
-                	out.setSelected(false);
                 }else{
-                	out.setSelected(true);
                 	in.setSelected(false);
                 }
         	}
@@ -129,13 +124,12 @@ public class EventView extends Activity implements DataUpdateListener,
     		attsList.setVisibility(ListView.VISIBLE);
     		commentsList.setVisibility(ListView.GONE);
             if (event != null){
-	        	Log.d(TAG, "using atts: "+getAttManager(false).getAttendants());
     	        if (attAdapter == null){
     		        attAdapter = new AttendantsAdapter(this, R.layout.attendant_list_item, 
-    		        		getAttManager(false).getAttendants());
+    		        		getAttManager(false).getAttendants(false));
     	        }else{
     	        	attAdapter.clear();
-    	        	for (Attendant a: getAttManager(false).getAttendants())
+    	        	for (Attendant a: getAttManager(false).getAttendants(false))
     	        		attAdapter.add(a);
     	        	attAdapter.notifyDataSetChanged();
     	        }
@@ -163,14 +157,15 @@ public class EventView extends Activity implements DataUpdateListener,
 	public void onClick(View v) {
     	if (v.getId() == R.id.ab_refresh){ 
     		refresh();
-    	}else if (v.getId() == R.id.event_view_attend_in){
-    		findViewById(R.id.event_view_attend_in).setSelected(true);
-    		findViewById(R.id.event_view_attend_out).setSelected(false);
-    		setUserStatus(Status.ATTENDING);
-    	}else if (v.getId() == R.id.event_view_attend_out){
-    		findViewById(R.id.event_view_attend_out).setSelected(true);
-    		findViewById(R.id.event_view_attend_in).setSelected(false);
-    		setUserStatus(Status.NOT_ATTENDING);
+    	}else if (v.getId() == R.id.event_view_ab_in){
+    		ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
+    		if (in.isSelected()){
+        		in.setSelected(false);
+        		setUserStatus(Status.NOT_ATTENDING);
+    		}else{
+        		in.setSelected(true);
+        		setUserStatus(Status.ATTENDING);
+    		}
     	}else if (v.getId() == R.id.event_view_comments){
     		setTabSelected("comments");
     	}else if (v.getId() == R.id.event_view_atts){
@@ -189,6 +184,8 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 
 	public void onDataUpdate(int code, String response) {
+		if (code == REFRESH_ATTS)
+			getAttManager(false).getAttendants(true);
 		update();
 		pendingOperations--;
 		if (pendingOperations == 0) setRefreshing(false);

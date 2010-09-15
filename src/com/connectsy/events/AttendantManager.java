@@ -79,7 +79,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	}
 	
 	public Attendant getAttendant(String username){
-		if (attendants == null) getAttendants();
+		if (attendants == null) getAttendants(true);
 		for (Attendant a: attendants)
 			if (a.username == username) return a;
 		return null;
@@ -92,11 +92,21 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		else return null;
 	}
 	
-	public ArrayList<Attendant> getAttendants(){
-		if (attendants != null) return attendants;
-		attendants = new ArrayList<Attendant>();
+	public boolean isUserAttending(String username){
+		Attendant a = getAttendant(username);
+		if (a == null) return false;
+		return (a.status == Status.ATTENDING);
+	}
+	
+	public ArrayList<Attendant> getAttendants(boolean force){
+		if (attendants != null && !force) return attendants;
 		String attsString = getRequest().getCached();
-		if (attsString == null) return attendants;
+		if (attsString == null) 
+			if (attendants == null)
+				return new ArrayList<Attendant>();
+			else
+				return attendants;
+		attendants = new ArrayList<Attendant>();
 		try {
 			JSONObject json = new JSONObject(attsString);
 			DataManager.getCache(context).edit().putInt("attendants.timestamp", 
@@ -163,7 +173,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		attendants = null; getAttendants();
+		getAttendants(true);
 		listener.onDataUpdate(returnCode, response);
 	}
 }
