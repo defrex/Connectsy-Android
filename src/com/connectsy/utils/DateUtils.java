@@ -21,7 +21,7 @@ public class DateUtils{
     		else if (formatting.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)+1)
     			dateString = "Tomorrow";
     		else{
-    			dateString = new SimpleDateFormat("E the d").format(date);
+    			dateString = new SimpleDateFormat("EEEE 'the' d").format(date);
     			// This is here because apparently Java is a shitty programming
     			// language...
     			String[] thArray = new String[] {
@@ -31,6 +31,8 @@ public class DateUtils{
     					"st" };
     			dateString = dateString+thArray[formatting.get(Calendar.DAY_OF_MONTH)];
     		}
+    	}else if (formatting.get(Calendar.YEAR) == today.get(Calendar.YEAR)){
+    		dateString = new SimpleDateFormat("MMM d").format(date);
     	}else{
     		dateString = new SimpleDateFormat("MMM d, yyyy").format(date);
     	}
@@ -38,19 +40,17 @@ public class DateUtils{
 	}
 	
 	public static String formatTime(Date date){
-    	SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+    	SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
     	return timeFormat.format(date);
 	}
 	
-	public static String formatTimestamp(int timestamp){
-		Log.d("DateUtils", Integer.toString(timestamp));
+	public static String formatTimestamp(long timestamp){
 		Date date = (Date)new Timestamp(timestamp);
     	String timeString = formatTime(date);
     	String dateString = formatDate(date);
-		return dateString+" "+timeString;
+		return dateString+" at "+timeString;
 	}
 	
-
 	public static boolean isCacheExpired(Date cached, int hours){
 		Date now = new Date();
 		now.setHours(now.getHours()+hours);

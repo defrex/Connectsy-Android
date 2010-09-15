@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
@@ -38,7 +39,7 @@ public class EventManager extends DataManager {
 		public String creator;
 		public String description;
 		public String where;
-		public int when;
+		public long when;
 		public String category;
 		public String location;
 		public boolean broadcast;
@@ -57,7 +58,7 @@ public class EventManager extends DataManager {
 			creator = event.getString("creator");
 			description = event.getString("desc");
 			where = event.getString("where");
-			when = event.getInt("when");
+			when = event.getLong("when");
 			category = event.getString("category");
 			broadcast = event.getBoolean("broadcast");
 			if (event.has("location"))

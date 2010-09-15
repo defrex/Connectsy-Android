@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
@@ -29,7 +27,6 @@ import com.connectsy.utils.DateUtils;
 
 public class EventView extends Activity implements DataUpdateListener, 
 		OnClickListener, OnItemClickListener {
-    @SuppressWarnings("unused")
 	private static final String TAG = "EventView";
     
     private Event event;
@@ -52,10 +49,6 @@ public class EventView extends Activity implements DataUpdateListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_view);
 
-//        ActionBarHandler abHandler = new ActionBarHandler(this);
-//        ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
-//        abNewEvent.setOnClickListener(abHandler);
-        
         ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
         abRefresh.setOnClickListener(this);
     	Button comments = (Button)findViewById(R.id.event_view_comments);
@@ -82,7 +75,6 @@ public class EventView extends Activity implements DataUpdateListener,
         	setTabSelected(null);
         	String curUser = DataManager.getCache(this).getString("username", null);
         	if (!event.creator.equals(curUser)){
-        		
             	ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
             	in.setOnClickListener(this);
                 if (getAttManager(false).isUserAttending(curUser)){
@@ -178,7 +170,7 @@ public class EventView extends Activity implements DataUpdateListener,
 			getEventManager(false).refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
-		getAttManager(false).refreshAttendants(REFRESH_ATTS);
+		if (event != null) getAttManager(false).refreshAttendants(REFRESH_ATTS);
 		pendingOperations++;
 		setRefreshing(true);
 	}
@@ -220,7 +212,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	private AttendantManager getAttManager(boolean forceNew){
-		if (attManager == null || forceNew)
+		if ((attManager == null || forceNew) && event != null)
 			attManager = new AttendantManager(this, this, event.ID, event.attendants);
 		return attManager;
 	}

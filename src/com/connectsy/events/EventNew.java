@@ -252,7 +252,7 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         SharedPreferences data = getSharedPreferences("consy", 0);
         String username = data.getString("username", "username_fail");
 
-        int when = (int) new Timestamp(mYear, mMonth, mDay, mHour, mMinute, 0, 0).getTime();
+        long when = getCal().getTime().getTime();
         
         eventManager = new EventManager(this, this, null, null);
         Event event = eventManager.new Event();
