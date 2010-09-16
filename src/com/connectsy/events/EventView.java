@@ -1,10 +1,13 @@
 package com.connectsy.events;
 
+import java.util.Collection;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +39,7 @@ public class EventView extends Activity implements DataUpdateListener,
     private Event event;
     private String eventRev;
     private EventManager eventManager;
+    private CommentManager commentManager;
     private AttendantManager attManager;
     private AttendantsAdapter attAdapter;
     private String tabSelected;
@@ -43,9 +48,10 @@ public class EventView extends Activity implements DataUpdateListener,
     
     private int pendingOperations = 0;
     
-    private final int REFRESH_EVENT = 0;
-    private final int ATT_SET = 1;
-    private final int REFRESH_ATTS = 2;
+    private static final int REFRESH_EVENT = 0;
+    private static final int REFRESH_ATTENDANTS = 1;
+    private static final int ATT_SET = 2;
+    private static final int REFRESH_COMMENTS = 3;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,10 +60,10 @@ public class EventView extends Activity implements DataUpdateListener,
 
         ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
         abRefresh.setOnClickListener(this);
-    	Button comments = (Button)findViewById(R.id.event_view_comments);
+    	Button comments = (Button)findViewById(R.id.event_view_tab_comments);
     	comments.setOnClickListener(this);
     	comments.setSelected(true);
-    	Button atts = (Button)findViewById(R.id.event_view_atts);
+    	Button atts = (Button)findViewById(R.id.event_view_tab_atts);
     	atts.setOnClickListener(this);
         
         Intent i = getIntent();
@@ -96,23 +102,39 @@ public class EventView extends Activity implements DataUpdateListener,
 
     private void setTabSelected(String tab){
     	if (tab != null) tabSelected = tab;
-		ListView commentsList = (ListView)findViewById(R.id.comments_list);
 		ListView attsList = (ListView)findViewById(R.id.attendants_list);
+        LinearLayout comments = (LinearLayout)findViewById(R.id.event_view_comments);
     	if (tabSelected == "comments"){
-    		findViewById(R.id.event_view_comments).setSelected(true);
-    		findViewById(R.id.event_view_atts).setSelected(false);
+    		findViewById(R.id.event_view_tab_comments).setSelected(true);
+    		findViewById(R.id.event_view_tab_atts).setSelected(false);
     		attsList.setVisibility(ListView.GONE);
-    		commentsList.setVisibility(ListView.VISIBLE);
+    		comments.setVisibility(ListView.VISIBLE);
 
             if (event != null){
-            	//TODO: implement comments
+            	//reload comments
+    	        Collection<CommentManager.Comment> commentList = getCommentManager(false).getComments();
+    	        LayoutInflater inflater = LayoutInflater.from(this);
+    	        //only add after the last comment
+    	        View lastComment = comments.getChildCount() > 0 ? comments.getChildAt(comments.getChildCount()) : null;
+    	        boolean canAdd = false;
+    	        for (CommentManager.Comment comment: commentList) {
+    	        	//skip to the end of the list
+    	        	if (!canAdd && lastComment == null || lastComment.getTag().equals(comment.getId())) {
+    	        		canAdd = true;
+    	        		if (lastComment != null)
+    	        			continue;
+    	        	}
+    	        	
+    	        	View view = inflater.inflate(R.layout.event_comment, comments);
+    	        	((TextView)view.findViewById(R.id.comment_text)).setText(comment.getComment());
+    	        }
             }
     		
     	}else if(tabSelected == "atts"){
-    		findViewById(R.id.event_view_comments).setSelected(false);
-    		findViewById(R.id.event_view_atts).setSelected(true);
+    		findViewById(R.id.event_view_tab_comments).setSelected(false);
+    		findViewById(R.id.event_view_tab_atts).setSelected(true);
     		attsList.setVisibility(ListView.VISIBLE);
-    		commentsList.setVisibility(ListView.GONE);
+    		comments.setVisibility(ListView.GONE);
             if (event != null){
     	        if (attAdapter == null){
     		        attAdapter = new AttendantsAdapter(this, R.layout.attendant_list_item, 
@@ -156,9 +178,9 @@ public class EventView extends Activity implements DataUpdateListener,
         		in.setSelected(true);
         		setUserStatus(Status.ATTENDING);
     		}
-    	}else if (v.getId() == R.id.event_view_comments){
+    	}else if (v.getId() == R.id.event_view_tab_comments){
     		setTabSelected("comments");
-    	}else if (v.getId() == R.id.event_view_atts){
+    	}else if (v.getId() == R.id.event_view_tab_atts){
     		setTabSelected("atts");
     	}
 	}
@@ -168,13 +190,16 @@ public class EventView extends Activity implements DataUpdateListener,
 			getEventManager(false).refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
-		if (event != null) getAttManager(false).refreshAttendants(REFRESH_ATTS);
-		pendingOperations++;
+		if (event != null){ 
+			getAttManager(false).refreshAttendants(REFRESH_ATTENDANTS);
+			getCommentManager(false).refreshComments(REFRESH_COMMENTS);
+			pendingOperations+=2;
+		}
 		setRefreshing(true);
 	}
 
 	public void onDataUpdate(int code, String response) {
-		if (code == REFRESH_ATTS)
+		if (code == REFRESH_ATTENDANTS)
 			getAttManager(false).getAttendants(true);
 		update();
 		pendingOperations--;
@@ -212,6 +237,12 @@ public class EventView extends Activity implements DataUpdateListener,
 		if ((attManager == null || forceNew) && event != null)
 			attManager = new AttendantManager(this, this, event.ID, event.attendants);
 		return attManager;
+	}
+	
+	private CommentManager getCommentManager(boolean forceNew){
+		if ((commentManager == null || forceNew) && event != null)
+			commentManager = new CommentManager(this, this, event);
+		return commentManager;
 	}
 	
 	private EventManager getEventManager(boolean forceNew){
