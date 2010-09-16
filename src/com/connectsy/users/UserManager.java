@@ -99,6 +99,7 @@ public class UserManager extends DataManager {
 	
 	public void refreshUser(int sentReturnCode){
 		returnCode = sentReturnCode;
+		Log.d(TAG, "refreshUser");
 		new ApiRequest(this, context, Method.GET, 
 				"/users/"+username+"/", true, GET_USER).execute();
 	}
@@ -162,7 +163,6 @@ public class UserManager extends DataManager {
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		Log.d(TAG, response);
 		listener.onDataUpdate(returnCode, response);
 	}
 }

@@ -16,6 +16,7 @@ import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.events.AttendantManager.Attendant;
 import com.connectsy.users.UserManager.User;
 
 public class EventManager extends DataManager {
@@ -38,12 +39,13 @@ public class EventManager extends DataManager {
 		public String creator;
 		public String description;
 		public String where;
-		public int when;
+		public long when;
 		public String category;
 		public String location;
 		public boolean broadcast;
 		public boolean friends;
 		public ArrayList<User> someFriends;
+		public ArrayList<Attendant> attendants;
 		public int created;
 
 		public Event(){}
@@ -56,14 +58,13 @@ public class EventManager extends DataManager {
 			creator = event.getString("creator");
 			description = event.getString("desc");
 			where = event.getString("where");
-			when = event.getInt("when");
+			when = event.getLong("when");
 			category = event.getString("category");
-			// TODO: broadcast isn't optional, I just don't want to pitch my data 
-			// right now.
-			if (event.has("broadcast"))
-				broadcast = event.getBoolean("broadcast");
+			broadcast = event.getBoolean("broadcast");
 			if (event.has("location"))
 				location = event.getString("location");
+			if (response.has("attendants"))
+				attendants = Attendant.deserializeList(response.getString("attendants"));
 		}
 	}
 	
@@ -128,8 +129,10 @@ public class EventManager extends DataManager {
 	}
 	
 	private ApiRequest getEventRequest(String revision){
-		return new ApiRequest(this, context, Method.GET, 
+		ApiRequest r = new ApiRequest(this, context, Method.GET, 
 				"/events/"+revision+"/", true, GET_EVENT);
+		r.addGetArg("attendants", "true");
+		return r;
 	}
 	
 	public Event getEvent(String revision){

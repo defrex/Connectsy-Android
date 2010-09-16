@@ -82,7 +82,7 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
     		i.putExtra("filter", EventManager.Filter.FRIENDS);
     	}else if (v.getId() == R.id.dashboard_events_category){
     		i.putExtra("filter", EventManager.Filter.CATEGORY);
-    		i.putExtra("category", "all");
+    		//i.putExtra("category", "all");
     	}
 		startActivity(i);
 	}
@@ -120,6 +120,8 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
 			JSONArray points = new JSONArray(pointsStr);
 			for (int i=0;i<points.length();i++){
 				JSONObject point = points.getJSONObject(i);
+//				double lat = point.getJSONObject("loc").getDouble("lat");
+//				double lng = point.getJSONObject("loc").getDouble("lng");
 				double lat = point.getJSONArray("loc").getDouble(0);
 				double lng = point.getJSONArray("loc").getDouble(1);
 				overlay.addOverlay(lat, lng, point.getString("rev"));
@@ -132,7 +134,8 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
     }
     
     private class EventMapOverlay extends ItemizedOverlay{
-    	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+    	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
+    	private ArrayList<String> revs = new ArrayList<String>();
     	
 		public EventMapOverlay(Drawable defaultMarker) {
 			super(boundCenterBottom(defaultMarker));
@@ -140,26 +143,29 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
 		
 		@Override
 		protected boolean onTap(int index) {
-		  //OverlayItem item = mOverlays.get(index);
-		  
-		  return true;
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+			i.putExtra("com.connectsy.events.revision", revs.get(index));
+			startActivity(i);
+			return true;
 		}
 		
 		public void addOverlay(double lat, double lng, String rev) {
 			GeoPoint point = new GeoPoint((int)(lat * 1E6), (int)(lng * 1E6));
 			OverlayItem overlay = new OverlayItem(point, rev, rev);
-		    mOverlays.add(overlay);
+		    overlays.add(overlay);
+		    revs.add(rev);
 		    populate();
 		}
 		
 		@Override
 		protected OverlayItem createItem(int i) {
-			return mOverlays.get(i);
+			return overlays.get(i);
 		}
 
 		@Override
 		public int size() {
-			return mOverlays.size();
+			return overlays.size();
 		}
     	
     }

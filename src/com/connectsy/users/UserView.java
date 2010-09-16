@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,16 +20,14 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
+import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.settings.MainMenu;
-import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
-import com.wilson.android.library.DrawableManager;
 
 public class UserView extends Activity implements OnClickListener, 
 		DataUpdateListener {
-    @SuppressWarnings("unused")
 	private static final String TAG = "UserView";
     private String curUsername;
     private UserManager userManager;
@@ -68,18 +67,22 @@ public class UserView extends Activity implements OnClickListener,
     }
 	
     private void updateUserDisplay(){
+    	Log.d(TAG, "updateUserDisplay");
     	user = userManager.getUser();
     	
         TextView uname = (TextView)findViewById(R.id.user_view_username);
         uname.setText(username);
 		
-        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-        String avyUrl = Settings.API_DOMAIN+"/users/"+username+"/avatar/";
-        new DrawableManager().fetchDrawableOnThread(avyUrl, avatar);
-        if (username.equals(DataManager.getCache(this).getString("username", null))){
-        	avatar.setClickable(true);
-        	avatar.setOnClickListener(this);
-        }
+        if (user != null){
+        	Log.d(TAG, "user is not null");
+	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
+	        new AvatarFetcher(this, user.username, avatar);
+	        if (username.equals(DataManager.getCache(this).getString("username", null))){
+	        	avatar.setClickable(true);
+	        	avatar.setOnClickListener(this);
+	        }
+        }else
+        	Log.d(TAG, "user is null");
     }
     
     private void updateFriendsDisplay(){
@@ -116,8 +119,9 @@ public class UserView extends Activity implements OnClickListener,
 		if (user != null && user.username.equals(curUsername)){
 			ArrayList<User> pendingFriends = userManager.getFriends(true);
 			if (pendingFriends.size() > 0){
-				TextView title = (TextView)findViewById(R.id.pending_friends_list_title);
-				title.setVisibility(TextView.VISIBLE);
+				findViewById(R.id.pending_friends_list_title).setVisibility(TextView.VISIBLE);
+			}else{
+				findViewById(R.id.pending_friends_list_title).setVisibility(TextView.GONE);
 			}
 	        if (pendingAdapter != null){
 	        	pendingAdapter.clear();
@@ -200,13 +204,13 @@ public class UserView extends Activity implements OnClickListener,
 		else if (code == REFRESH_PENDING_FRIENDS)
 			updatePendingFriendsDisplay();
 		operationsPending--;
-		if (operationsPending < 1){
+		if (operationsPending == 0)
 			setRefreshing(false);
-			operationsPending = 0;
-		}
 	}
 
 	public void onRemoteError(int httpStatus, int code) {
-		setRefreshing(false);
+		operationsPending--;
+		if (operationsPending == 0)
+			setRefreshing(false);
 	}
 }

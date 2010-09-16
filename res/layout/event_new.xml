@@ -85,13 +85,13 @@
 		</LinearLayout>
         
         <LinearLayout style="@style/EventNewWho">
-            <Button style="@style/EventNewWhoEveryone"
-                android:text="Everyone"
-                android:id="@+id/events_new_who_everyone" />
             <Button style="@style/EventNewWhoFriends"
                 android:text="Friends"
                 android:id="@+id/events_new_who_friends" />
-            <Button style="@style/EventNewWhoFriends"
+            <Button style="@style/EventNewWhoEveryone"
+                android:text="Everyone"
+                android:id="@+id/events_new_who_everyone" />
+            <Button style="@style/EventNewWhoChoose"
                 android:text="Choose"
                 android:id="@+id/events_new_who_choose" />
         </LinearLayout>

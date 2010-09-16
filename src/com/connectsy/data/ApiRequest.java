@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		try {
 			url = Settings.API_DOMAIN+path+"?";
 			for (NameValuePair arg : getArgs)
-				url += arg.getName()+"="+arg.getValue()+"&";
+				url += URLEncoder.encode(arg.getName())+"="+URLEncoder.encode(arg.getValue())+"&";
 			
 			if (method == Method.GET){
 				request = new HttpGet(url);
@@ -149,9 +150,8 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		return data.getString(url, null);
 	}
 	
-	public void addGetArg(String key, String value) throws URISyntaxException{
-		url += key+"="+value+"&";
-		request.setURI(new URI(url));
+	public void addGetArg(String key, String value){
+		getArgs.add(new BasicNameValuePair(key, value));
 	}
 	
 	@Override

@@ -17,10 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.connectsy.R;
+import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
-import com.wilson.android.library.DrawableManager;
 
 public class UserAdapter extends ArrayAdapter<User> {
 	private boolean multi;
@@ -72,9 +71,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         });
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
-        DrawableManager dm = new DrawableManager();
-        String avyUrl = Settings.API_DOMAIN+"/users/"+user.username+"/avatar/";
-        dm.fetchDrawableOnThread(avyUrl, avatar);
+        new AvatarFetcher(context, user.username, avatar);
         
         if (user.friendStatusPending){
         	Button confirm = (Button)view.findViewById(R.id.user_list_item_confirm);
