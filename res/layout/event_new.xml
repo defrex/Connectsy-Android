@@ -8,13 +8,7 @@
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
             <ImageView style="@style/ActionBarLogo" />
-            
             <View style="@style/Spring" />
-            
-            <ImageView style="@style/ActionBarSeparator" />
-            <ImageView style="@style/ActionBarAction"
-                android:id="@+id/ab_profile"
-                android:src="@drawable/icons_profile" />
         </LinearLayout>
     </FrameLayout>
     
@@ -24,25 +18,43 @@
         
         <LinearLayout style="@style/EventNewTitle" >
             <View style="@style/EventNewTitleBorderTop" />
-            <TextView style="@style/EventNewTitleText"
-                android:text="@string/events_new_title_what" />
+            <LinearLayout style="@style/FullWidth"
+                android:orientation="horizontal" >
+                <TextView style="@style/EventNewTitleText"
+                    android:text="@string/events_new_title_what" />
+                <View style="@style/Spring" />
+                <TextView style="@style/Text"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/events_new_chars_what" />
+                
+            </LinearLayout>
             <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
         <EditText style="@style/EventNewField"
             android:hint="@string/events_new_desc"
             android:autoText="true"
-            android:id="@+id/events_new_desc" />
+            android:maxLength="150"
+            android:id="@+id/events_new_what" />
 	    
 		<LinearLayout style="@style/EventNewTitle"
 			android:paddingTop="0dp" >
             <View style="@style/EventNewTitleBorderTop" />
-			<TextView style="@style/EventNewTitleText"
-				android:text="@string/events_new_title_where" />
+            <LinearLayout style="@style/FullWidth"
+                android:orientation="horizontal" >
+                <TextView style="@style/EventNewTitleText"
+                    android:text="@string/events_new_title_where" />
+                <View style="@style/Spring" />
+                <TextView style="@style/Text"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/events_new_chars_where" />
+                
+            </LinearLayout>
 			<View style="@style/EventNewTitleBorder" />
 		</LinearLayout>
 		<EditText style="@style/EventNewField"
 		    android:hint="@string/events_new_where"
 		    android:autoText="true"
+            android:maxLength="25"
 		    android:id="@+id/events_new_where" />
 		
 		<LinearLayout style="@style/EventNewTitle" >

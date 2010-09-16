@@ -31,6 +31,40 @@ public class LocManager implements LocationListener {
 		setUpdater();
 		loc = lm.getLastKnownLocation(provider);
 	}
+
+	public String distanceFrom(double lat, double lng){
+		float[] result = new float[2];
+		Location.distanceBetween(loc.getLatitude(), loc.getLongitude(), 
+				lat, lng, result);
+		String distance;
+		if (result[0] > 1000)
+			distance = Integer.toString(((int)result[0])/1000)+" kilometres";
+		else
+			distance = Integer.toString(((int)result[0]))+" metres";
+		String direction;
+		if (result[1] < 0)
+			result[1] = 360+result[1];
+		int region = (int) (result[1]/22.5);
+		if (region == 16 || region == 0 || region == 1)
+			direction = "north";
+		else if (region == 2 || region == 3)
+			direction = "northeast";
+		else if (region == 4 || region == 5)
+			direction = "east";
+		else if (region == 6 || region == 7)
+			direction = "southeast";
+		else if (region == 8 || region == 9)
+			direction = "south";
+		else if (region == 10 || region == 11)
+			direction = "southwest";
+		else if (region == 12 || region == 13)
+			direction = "west";
+		else if (region == 14 || region == 15)
+			direction = "northwest";
+		else
+			direction = Integer.toString(region)+" "+Float.toString(result[1]);
+		return distance+" "+direction;
+	}
 	
 	private void setUpdater(){
         provider = lm.getBestProvider(criteria, true);

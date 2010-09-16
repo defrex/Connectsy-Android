@@ -1,6 +1,5 @@
 package com.connectsy.events;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,10 +16,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,7 +39,8 @@ import com.connectsy.users.UserManager;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
 
-public class EventNew extends Activity implements OnClickListener, DataUpdateListener {
+public class EventNew extends Activity implements OnClickListener, 
+		DataUpdateListener, OnKeyListener {
 	private final String TAG = "NewEvent";
 	private ProgressDialog loadingDialog;
     private EventManager eventManager;
@@ -68,6 +70,11 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_new);
 
+        EditText what = (EditText) findViewById(R.id.events_new_what);
+        what.setOnKeyListener(this);
+        EditText where = (EditText) findViewById(R.id.events_new_where);
+        where.setOnKeyListener(this);
+        
         mDateDisplay = (TextView) findViewById(R.id.events_new_date);
         mTimeDisplay = (TextView) findViewById(R.id.events_new_time);
         
@@ -137,8 +144,6 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 	private void getCategory(){
 		Intent i = new Intent(Intent.ACTION_CHOOSER);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
-		//ArrayList<Category> categories = new CategoryManager(this, this).getCategories();
-		//i.putExtra("com.connectsy.categories", Category.serializeList(categories));
 		startActivityForResult(i, SELECT_CATEGORY);
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -243,7 +248,7 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
     private void submitData() {
     	Log.d(TAG, "creating event");
     	
-        EditText desc = (EditText) findViewById(R.id.events_new_desc);
+        EditText desc = (EditText) findViewById(R.id.events_new_what);
         EditText where = (EditText) findViewById(R.id.events_new_where);
         String strDesc = desc.getText().toString();
         String strWhere = where.getText().toString();
@@ -263,12 +268,10 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
         event.broadcast = bcast.isSelected();
         if (event.broadcast && category != null)
         	event.category = category.name;
-        //event.friends = friends.isSelected();
-        //event.someFriends = chosenUsers;
         eventManager.createEvent(event, CREATE_EVENT);
         loadingDialog = ProgressDialog.show(this, "", "Posting event...", true);
     }
-    
+    	
     public boolean onCreateOptionsMenu(Menu menu) {
         return MainMenu.onCreateOptionsMenu(menu);
 	}
@@ -298,12 +301,28 @@ public class EventNew extends Activity implements OnClickListener, DataUpdateLis
 				this.finish();
 			}
 		} catch (JSONException e) {
-			Log.d(TAG, response);
 			e.printStackTrace();
 		}
 	}
 
 	public void onRemoteError(int httpStatus, int code) {
 		loadingDialog.dismiss();
+	}
+
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		TextView chars;
+		int max;
+        if (v.getId() == R.id.events_new_what){
+        	chars = (TextView)findViewById(R.id.events_new_chars_what);
+        	max = 150;
+        }else if (v.getId() == R.id.events_new_where){
+        	chars = (TextView)findViewById(R.id.events_new_chars_where);
+        	max = 25;
+        }else{
+        	return false;
+        }
+    	int curChars = ((EditText)v).getText().length();
+        chars.setText(Integer.toString(max-curChars));
+		return false;
 	}
 }

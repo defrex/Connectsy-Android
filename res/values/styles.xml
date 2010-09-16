@@ -253,6 +253,7 @@
 	            <item name="android:textSize">14sp</item>
 	        </style>
 		    <style name="EventDeEm" parent="EventText">
+                <item name="android:layout_marginTop">-1dp</item>
 		        <item name="android:textSize">12sp</item>
 		        <item name="android:textColor">@color/text_light_grey</item>
 		    </style>
@@ -276,6 +277,7 @@
 	    	<item name="android:paddingBottom">5dp</item>
 	    </style>
 		    <style name="EventNewTitleText" parent="ListTitleText">
+		        <item name="android:layout_width">wrap_content</item>
 		    </style>
             <style name="EventNewTitleBorder" parent="ListTitleBorder">
             </style>

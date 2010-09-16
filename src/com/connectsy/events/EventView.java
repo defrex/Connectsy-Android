@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.connectsy.LocManager;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
@@ -220,19 +221,22 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	static View renderView(final Context context, View view, final Event event, boolean truncate){
-        ImageView avatar = (ImageView)view.findViewById(R.id.event_avatar);
-        new AvatarFetcher(context, event.creator, avatar);
-		
-        TextView username = (TextView)view.findViewById(R.id.event_username);
-        username.setText(event.creator);
-        username.setOnClickListener(new TextView.OnClickListener(){
+		OnClickListener userClick = new View.OnClickListener(){
 			public void onClick(View v) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
 				i.putExtra("com.connectsy.user.username", event.creator);
 	    		context.startActivity(i);
 			}
-        });
+        };
+        
+        ImageView avatar = (ImageView)view.findViewById(R.id.event_avatar);
+        avatar.setOnClickListener(userClick);
+        new AvatarFetcher(context, event.creator, avatar);
+		
+        TextView username = (TextView)view.findViewById(R.id.event_username);
+        username.setText(event.creator);
+        username.setOnClickListener(userClick);
         
         if (event.category != null && !event.category.equals("")){
         	view.findViewById(R.id.event_pipe).setVisibility(View.VISIBLE);
@@ -251,18 +255,19 @@ public class EventView extends Activity implements DataUpdateListener,
         }
         
         TextView where = (TextView)view.findViewById(R.id.event_where);
-        where.setText(Html.fromHtml("<b>Where:</b> "+
+        where.setText(Html.fromHtml("<b>where:</b> "+
         		Utils.maybeTruncate(event.where, 25, truncate)));
         TextView what = (TextView)view.findViewById(R.id.event_what);
-        what.setText(Html.fromHtml("<b>What:</b> "+
+        what.setText(Html.fromHtml("<b>what:</b> "+
         		Utils.maybeTruncate(event.description, 25, truncate)));
         TextView when = (TextView)view.findViewById(R.id.event_when);
-        when.setText(Html.fromHtml("<b>When:</b> "+DateUtils.formatTimestamp(event.when)));
+        when.setText(Html.fromHtml("<b>when:</b> "+DateUtils.formatTimestamp(event.when)));
 
         TextView distance = (TextView)view.findViewById(R.id.event_distance);
-        distance.setText(Utils.distanceFrom(0, 0));
+        LocManager locManager = new LocManager(context);
+        distance.setText(locManager.distanceFrom(event.posted_from[0], event.posted_from[1]));
         TextView created = (TextView)view.findViewById(R.id.event_created);
-        created.setText("Created "+DateUtils.formatTimestamp(event.created));
+        created.setText("created "+DateUtils.formatTimestamp(event.created));
         
         return view;
 	}

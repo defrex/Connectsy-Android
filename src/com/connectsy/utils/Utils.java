@@ -7,8 +7,4 @@ public class Utils {
 			return t.substring(0, num)+"...";
 		return t;
 	}
-	
-	public static String distanceFrom(double lat, double lng){
-		return "1.2 km North";
-	}
 }

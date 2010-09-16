@@ -62,12 +62,12 @@
 	    
 	        <TextView style="@style/EventWh"
 	            android:id="@+id/event_when" />
+                
+            <TextView style="@style/EventDeEm"
+                android:id="@+id/event_created" />
 	    
 	        <TextView style="@style/EventDeEm"
 	            android:id="@+id/event_distance" />
-	            
-	        <TextView style="@style/EventDeEm"
-	            android:id="@+id/event_created" />
 	        
 	    </LinearLayout>
     </LinearLayout>

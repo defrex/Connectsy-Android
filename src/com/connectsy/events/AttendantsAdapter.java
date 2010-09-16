@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,16 +34,18 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.attendant_list_item, parent, false);
 		
-        TextView username = (TextView)view.findViewById(R.id.user_list_item_username);
-        username.setText(att.username);
-        username.setOnClickListener(new TextView.OnClickListener(){
+		OnClickListener userClick = new View.OnClickListener(){
 			public void onClick(View v) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
 				i.putExtra("com.connectsy.user.username", att.username);
 	    		context.startActivity(i);
 			}
-        });
+        };
+		
+        TextView username = (TextView)view.findViewById(R.id.user_list_item_username);
+        username.setText(att.username);
+        username.setOnClickListener(userClick);
         
         Resources r = context.getResources();
         String status_text = r.getString(r.getIdentifier(
@@ -52,8 +55,8 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         status.setText(status_text);
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
+        avatar.setOnClickListener(userClick);
         new AvatarFetcher(context, att.username, avatar);
 		return view;
 	}
-
 }

@@ -47,11 +47,11 @@ public class EventManager extends DataManager {
 		public ArrayList<User> someFriends;
 		public ArrayList<Attendant> attendants;
 		public int created;
+		public float[] posted_from = new float[2];
 
 		public Event(){}
 		
 		public Event(JSONObject response) throws JSONException{
-			Log.d(TAG, "deserializing event: "+response.toString());
 			JSONObject event = response.getJSONObject("event");
 			ID = event.getString("id");
 			revision = event.getString("revision");
@@ -62,6 +62,8 @@ public class EventManager extends DataManager {
 			when = event.getLong("when");
 			category = event.getString("category");
 			broadcast = event.getBoolean("broadcast");
+			posted_from[0] = (float) event.getJSONArray("posted_from").getDouble(0);
+			posted_from[1] = (float) event.getJSONArray("posted_from").getDouble(1);
 			if (event.has("location"))
 				location = event.getString("location");
 			if (response.has("attendants"))
