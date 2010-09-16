@@ -1,6 +1,7 @@
 package com.connectsy.events;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -75,6 +76,9 @@ public class EventView extends Activity implements DataUpdateListener,
         	setTabSelected(null);
         	String curUser = DataManager.getCache(this).getString("username", null);
         	if (!event.creator.equals(curUser)){
+        		findViewById(R.id.event_view_ab_in).setVisibility(View.VISIBLE);
+        		findViewById(R.id.event_view_ab_in_seperator).setVisibility(View.VISIBLE);
+        		
             	ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
             	in.setOnClickListener(this);
                 if (getAttManager(false).isUserAttending(curUser)){
@@ -84,15 +88,7 @@ public class EventView extends Activity implements DataUpdateListener,
                 }
         	}
         	
-	        TextView where = (TextView)findViewById(R.id.event_view_where);
-	        where.setText(Html.fromHtml("<b>Where:</b> "+event.where));
-	        TextView what = (TextView)findViewById(R.id.event_view_what);
-	        what.setText(Html.fromHtml("<b>What:</b> "+event.description));
-	        TextView when = (TextView)findViewById(R.id.event_view_when);
-	        when.setText(Html.fromHtml("<b>When:</b> "+DateUtils.formatTimestamp(event.when)));
-	        
-	        ImageView avatar = (ImageView)findViewById(R.id.event_view_avatar);
-	        new AvatarFetcher(this, event.creator, avatar);
+	        EventView.renderView(this, findViewById(R.id.event), event, false);
         }
     }
 
@@ -221,5 +217,63 @@ public class EventView extends Activity implements DataUpdateListener,
 		if (eventManager == null || forceNew)
 			eventManager = new EventManager(this, this, null, null);
 		return eventManager;
+	}
+	
+	static View renderView(final Context context, View view, final Event event, boolean truncate){
+		// this is function... or at least I wish it was.
+		class Util{
+			public String maybeTruncate(String t, int num, boolean doIt){
+				if (doIt && t.length() > num)
+					return t.substring(0, num)+"...";
+				return t;
+			}
+		}
+		Util util = new Util();
+		
+        ImageView avatar = (ImageView)view.findViewById(R.id.event_avatar);
+        new AvatarFetcher(context, event.creator, avatar);
+		
+        TextView username = (TextView)view.findViewById(R.id.event_username);
+        username.setText(event.creator);
+        username.setOnClickListener(new TextView.OnClickListener(){
+			public void onClick(View v) {
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+				i.putExtra("com.connectsy.user.username", event.creator);
+	    		context.startActivity(i);
+			}
+        });
+        
+        if (event.category != null && !event.category.equals("")){
+        	view.findViewById(R.id.event_pipe).setVisibility(View.VISIBLE);
+	        TextView category = (TextView)view.findViewById(R.id.event_category);
+	        category.setVisibility(View.VISIBLE);
+	        category.setText(event.category);
+	        category.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setType("vnd.android.cursor.dir/vnd.connectsy.event");
+		    		i.putExtra("filter", EventManager.Filter.CATEGORY);
+		    		i.putExtra("category", event.category);
+		    		context.startActivity(i);
+				}
+	        });
+        }
+        
+        TextView where = (TextView)view.findViewById(R.id.event_where);
+        where.setText(Html.fromHtml("<b>Where:</b> "+
+        		util.maybeTruncate(event.where, 25, truncate)));
+        TextView what = (TextView)view.findViewById(R.id.event_what);
+        what.setText(Html.fromHtml("<b>What:</b> "+
+        		util.maybeTruncate(event.description, 25, truncate)));
+        TextView when = (TextView)view.findViewById(R.id.event_when);
+        when.setText(Html.fromHtml("<b>When:</b> "+DateUtils.formatTimestamp(event.when)));
+
+        TextView distance = (TextView)view.findViewById(R.id.event_distance);
+        distance.setText("1.2km North, TODO");
+        TextView created = (TextView)view.findViewById(R.id.event_created);
+        created.setText("Created "+DateUtils.formatTimestamp(event.created));
+        
+        return view;
 	}
 }

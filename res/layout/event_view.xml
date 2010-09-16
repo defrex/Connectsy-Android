@@ -18,48 +18,59 @@
                 android:src="@drawable/icons_refresh"
                 android:visibility="gone" />
             
-            <ImageView style="@style/ActionBarSeparator" />
+            <ImageView style="@style/ActionBarSeparator"
+                android:id="@+id/event_view_ab_in_seperator"
+                android:visibility="gone" />
             <ImageView style="@style/ActionBarAction"
                 android:id="@+id/event_view_ab_in"
+                android:visibility="gone"
                 android:src="@drawable/icons_plus"
                 android:background="@drawable/ab_selectable" />
         </LinearLayout>
     </FrameLayout>
 	
-    <LinearLayout style="@style/FullWidth"
-        android:orientation="horizontal">
-	    <LinearLayout style="@style/WrapAll"
-	        android:orientation="vertical"
-	        android:gravity="center_horizontal">
-			<ImageView style="@style/EventViewAvatar"
-	    		android:src="@drawable/avatar_default"
-				android:id="@+id/event_view_avatar" />
-				<!-- 
-	        <LinearLayout style="@style/Toggle"
-	           android:visibility="gone"
-	           android:id="@+id/event_view_att_toggle">
-                <Button style="@style/ToggleLeft"
-                    android:id="@+id/event_view_attend_out"
-                    android:text="Out" />
-                <Button style="@style/ToggleRight"
-                    android:id="@+id/event_view_attend_in"
-                    android:text="In" />
-            </LinearLayout>
-             -->
-        </LinearLayout>
-		
-        <LinearLayout style="@style/WrapAll"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="vertical">
-            <TextView style="@style/EventViewText"
-                android:id="@+id/event_view_where" />
-            <TextView style="@style/EventViewText"
-                android:id="@+id/event_view_what" />
-            <TextView style="@style/EventViewText"
-                android:id="@+id/event_view_when" />
-        </LinearLayout>
-	</LinearLayout>
+	<LinearLayout style="@style/Event"
+	    android:id="@+id/event">
+	
+	    <ImageView style="@style/EventViewAvatar"
+	        android:src="@drawable/avatar_default"
+	        android:id="@+id/event_avatar" />
+	        
+	    <LinearLayout style="@style/EventTextSection" >
+	        <LinearLayout style="@style/FullWidth"
+	            android:orientation="horizontal">
+	            <TextView style="@style/Link"
+	                android:id="@+id/event_username"
+	                android:clickable="true" />
+	            
+	            <TextView style="@style/Text"
+	                android:visibility="gone"
+	                android:id="@+id/event_pipe"
+	                android:text=" | " />
+	        
+	            <TextView style="@style/Link"
+	                android:visibility="gone"
+	                android:id="@+id/event_category"
+	                android:clickable="true" />
+	        </LinearLayout>
+	                
+	        <TextView style="@style/EventWh"
+	            android:id="@+id/event_what" />
+	    
+	        <TextView style="@style/EventWh"
+	            android:id="@+id/event_where" />
+	    
+	        <TextView style="@style/EventWh"
+	            android:id="@+id/event_when" />
+	    
+	        <TextView style="@style/EventDeEm"
+	            android:id="@+id/event_distance" />
+	            
+	        <TextView style="@style/EventDeEm"
+	            android:id="@+id/event_created" />
+	        
+	    </LinearLayout>
+    </LinearLayout>
 	
 	<LinearLayout style="@style/TabBar">
         <Button style="@style/TabBarButtonLeft"

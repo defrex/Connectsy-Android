@@ -1,35 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/EventListItem" >
+    style="@style/Event" >
     
-	<ImageView style="@style/EventListItemAvatar"
+	<ImageView style="@style/Avatar"
 	    android:src="@drawable/avatar_default"
-	    android:id="@+id/event_list_item_avatar" />
+	    android:id="@+id/event_avatar" />
 	    
-	<LinearLayout style="@style/EventListItemTextSection" >
-		<LinearLayout style="@style/EventListItemTextSectionTop" >
-		
-			<TextView style="@style/EventListItemTextTop"
-				android:text="by " />
-		
-			<TextView style="@style/EventListItemUsername"
-			    android:id="@+id/event_list_item_username"
+	<LinearLayout style="@style/EventTextSection" >
+		<LinearLayout style="@style/FullWidth"
+		    android:orientation="horizontal">
+			<TextView style="@style/Link"
+			    android:id="@+id/event_username"
 			    android:clickable="true" />
 			
-			<TextView style="@style/EventListItemTextTop"
-				android:text=" at " />
+			<TextView style="@style/Text"
+			    android:visibility="gone"
+                android:id="@+id/event_pipe"
+				android:text=" | " />
 		
-			<TextView style="@style/EventListItemTextTop"
-			    android:id="@+id/event_list_item_where" />
+            <TextView style="@style/Link"
+                android:visibility="gone"
+                android:id="@+id/event_category"
+                android:clickable="true" />
 		</LinearLayout>
-		
-		<LinearLayout style="@style/EventListItemTextSectionBottom" >
+                
+            <TextView style="@style/EventWh"
+                android:id="@+id/event_what" />
+        
+            <TextView style="@style/EventWh"
+                android:id="@+id/event_where" />
+        
+            <TextView style="@style/EventWh"
+                android:id="@+id/event_when" />
+        
+            <TextView style="@style/EventDeEm"
+                android:id="@+id/event_distance" />
+                
+            <TextView style="@style/EventDeEm"
+                android:id="@+id/event_created" />
 		    
-			<TextView style="@style/EventListItemDesc"
-			    android:id="@+id/event_list_item_desc" />
-		    
-		</LinearLayout>
-	
 	</LinearLayout>
 	
 </LinearLayout>

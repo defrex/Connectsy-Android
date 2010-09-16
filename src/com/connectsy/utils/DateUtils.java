@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import android.util.Log;
-
 public class DateUtils{
 	public static String formatDate(Date date){
 		Calendar formatting = Calendar.getInstance();
