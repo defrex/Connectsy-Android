@@ -51,6 +51,7 @@ public class EventManager extends DataManager {
 		public Event(){}
 		
 		public Event(JSONObject response) throws JSONException{
+			Log.d(TAG, "deserializing event: "+response.toString());
 			JSONObject event = response.getJSONObject("event");
 			ID = event.getString("id");
 			revision = event.getString("revision");

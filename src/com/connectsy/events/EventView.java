@@ -25,6 +25,7 @@ import com.connectsy.events.AttendantManager.Status;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.utils.DateUtils;
+import com.connectsy.utils.Utils;
 
 public class EventView extends Activity implements DataUpdateListener, 
 		OnClickListener, OnItemClickListener {
@@ -204,7 +205,6 @@ public class EventView extends Activity implements DataUpdateListener,
     
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	private AttendantManager getAttManager(boolean forceNew){
@@ -220,16 +220,6 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	static View renderView(final Context context, View view, final Event event, boolean truncate){
-		// this is function... or at least I wish it was.
-		class Util{
-			public String maybeTruncate(String t, int num, boolean doIt){
-				if (doIt && t.length() > num)
-					return t.substring(0, num)+"...";
-				return t;
-			}
-		}
-		Util util = new Util();
-		
         ImageView avatar = (ImageView)view.findViewById(R.id.event_avatar);
         new AvatarFetcher(context, event.creator, avatar);
 		
@@ -262,15 +252,15 @@ public class EventView extends Activity implements DataUpdateListener,
         
         TextView where = (TextView)view.findViewById(R.id.event_where);
         where.setText(Html.fromHtml("<b>Where:</b> "+
-        		util.maybeTruncate(event.where, 25, truncate)));
+        		Utils.maybeTruncate(event.where, 25, truncate)));
         TextView what = (TextView)view.findViewById(R.id.event_what);
         what.setText(Html.fromHtml("<b>What:</b> "+
-        		util.maybeTruncate(event.description, 25, truncate)));
+        		Utils.maybeTruncate(event.description, 25, truncate)));
         TextView when = (TextView)view.findViewById(R.id.event_when);
         when.setText(Html.fromHtml("<b>When:</b> "+DateUtils.formatTimestamp(event.when)));
 
         TextView distance = (TextView)view.findViewById(R.id.event_distance);
-        distance.setText("1.2km North, TODO");
+        distance.setText(Utils.distanceFrom(0, 0));
         TextView created = (TextView)view.findViewById(R.id.event_created);
         created.setText("Created "+DateUtils.formatTimestamp(event.created));
         
