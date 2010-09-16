@@ -34,7 +34,20 @@ import com.connectsy.settings.Settings;
 public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	
 	public interface ApiRequestListener{
+		/**
+		 * Called when an ApiRequest completes successfully.
+		 * 
+		 * @param status HTTP status code
+		 * @param response Response body
+		 * @param code retCode passed in the ApiRequest constructor
+		 */
 		public void onApiRequestFinish(int status, String response, int code);
+		/**
+		 * Called when an ApiRequest completes unsuccessfully.
+		 * 
+		 * @param httpStatus HTTP status code
+		 * @param retCode retCode passed in the ApiRequest constructor
+		 */
 		public void onApiRequestError(int httpStatus, int retCode);
 	}
 
@@ -57,6 +70,16 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	
 	public static enum Method { GET, PUT, POST, DELETE }
 	
+	/**
+	 * Initializes a new API request
+	 * 
+	 * @param listener Listener object
+	 * @param c Context
+	 * @param pMethod HTTP method
+	 * @param pPath Request path, including any query parameters
+	 * @param pAuthorized If true, requests will be made with an auth header
+	 * @param returnCode Integer passed to the callback function, used to identify the request type
+	 */
 	public ApiRequest(ApiRequestListener listener, Context c, Method pMethod, 
 			String pPath, boolean pAuthorized, int returnCode){
 		apiListener = listener;

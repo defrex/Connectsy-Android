@@ -159,8 +159,8 @@ public class EventManager extends DataManager {
 		}
 	}
 
-	public void createEvent(Event event, int passedReturnCode) {
-		returnCode = passedReturnCode;
+	public void createEvent(Event event, int returnCode) {
+		this.returnCode = returnCode;
 		
 		JSONObject json = new JSONObject();
 		try {

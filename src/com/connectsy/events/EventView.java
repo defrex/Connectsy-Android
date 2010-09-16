@@ -1,9 +1,13 @@
 package com.connectsy.events;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.util.Log;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +40,8 @@ public class EventView extends Activity implements DataUpdateListener,
     private Event event;
     private String eventRev;
     private EventManager eventManager;
+    private ArrayList<Attendant> attendants;
+    private CommentManager commentManager;
     private AttendantManager attManager;
     private AttendantsAdapter attAdapter;
     private String tabSelected;
@@ -43,9 +50,10 @@ public class EventView extends Activity implements DataUpdateListener,
     
     private int pendingOperations = 0;
     
-    private final int REFRESH_EVENT = 0;
-    private final int ATT_SET = 1;
-    private final int REFRESH_ATTS = 2;
+    private static final int REFRESH_EVENT = 0;
+    private static final int REFRESH_ATTENDANTS = 1;
+    private static final int ATT_SET = 2;
+    private static final int REFRESH_COMMENTS = 3;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +74,28 @@ public class EventView extends Activity implements DataUpdateListener,
         event = getEventManager(false).getEvent(eventRev);
         
         refresh();
-        update();
+        update()
         setTabSelected("comments");
+    }
+    
+    private void updateData(){
+        if (eventManager == null) {
+        	eventManager = new EventManager(this, this, null, null);
+        	event = eventManager.getEvent(eventRev);
+        }
+        if (commentManager == null && event != null) {
+        	commentManager = new CommentManager(this, this, event);
+        }
+        if (event != null){
+	        if (attManager == null)
+	        	attManager = new AttendantManager(this, this, event.ID);
+	        attendants = attManager.getAttendants();
+	        curUserStatus = attManager.getCurrentUserStatus();
+	        if (attAdapter == null){
+		        attAdapter = new AttendantsAdapter(this, R.layout.attendant_list_item, 
+		        		attendants);
+	        }
+        }
     }
 	
     private void update(){
@@ -75,6 +103,36 @@ public class EventView extends Activity implements DataUpdateListener,
 		setTabSelected(null);
         event = getEventManager(false).getEvent(eventRev);
         if (event != null){
+	        TextView where = (TextView)findViewById(R.id.event_view_where);
+	        where.setText(event.where);
+	        TextView when = (TextView)findViewById(R.id.event_view_when);
+	        when.setText(DateUtils.formatTimestamp(event.when));
+	        TextView what = (TextView)findViewById(R.id.event_view_what);
+	        what.setText(event.description);
+	        
+	        ImageView avatar = (ImageView)findViewById(R.id.event_view_avatar);
+	        String avyUrl = Settings.API_DOMAIN+"/users/"+event.creator+"/avatar/";
+	        new DrawableManager().fetchDrawableOnThread(avyUrl, avatar);
+        
+	        //reload comments
+	        LinearLayout comments = (LinearLayout)findViewById(R.id.event_view_comments);
+	        Collection<CommentManager.Comment> commentList = commentManager.getComments();
+	        LayoutInflater inflater = LayoutInflater.from(this);
+	        //only add after the last comment
+	        View lastComment = comments.getChildCount() > 0 ? comments.getChildAt(comments.getChildCount()) : null;
+	        boolean canAdd = false;
+	        for (CommentManager.Comment comment: commentList) {
+	        	//skip to the end of the list
+	        	if (!canAdd && lastComment == null || lastComment.getTag().equals(comment.getId())) {
+	        		canAdd = true;
+	        		if (lastComment != null)
+	        			continue;
+	        	}
+	        	
+	        	View view = inflater.inflate(R.layout.event_comment, comments);
+	        	((TextView)view.findViewById(R.id.comment_text)).setText(comment.getComment());
+	        }
+
         	setTabSelected(null);
         	String curUser = DataManager.getCache(this).getString("username", null);
         	if (!event.creator.equals(curUser)){
@@ -168,9 +226,15 @@ public class EventView extends Activity implements DataUpdateListener,
 			getEventManager(false).refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
-		if (event != null) getAttManager(false).refreshAttendants(REFRESH_ATTS);
-		pendingOperations++;
-		setRefreshing(true);
+		if (attManager != null){
+			attManager.refreshAttendants(REFRESH_ATTENDANTS);
+			pendingOperations++;
+		}
+		if (commentManager != null) {
+			commentManager.refreshComments(REFRESH_COMMENTS);
+		}
+		if (pendingOperations > 0)
+			setRefreshing(true);
 	}
 
 	public void onDataUpdate(int code, String response) {
