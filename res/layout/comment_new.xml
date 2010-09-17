@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/comment_new" >
+    
+    <FrameLayout style="@style/ActionBarFrame"
+        android:id="@+id/comment_new_ab"
+        android:layout_alignParentTop="true">
+        <ImageView style="@style/ActionBarBackground" />
+        <LinearLayout style="@style/ActionBar" >
+            <ImageView style="@style/ActionBarLogo" />
+            <View style="@style/Spring" />
+        </LinearLayout>
+    </FrameLayout>
+    
+    <EditText style="@style/FullWidth"
+        android:hint="Comment"
+        android:autoText="true"
+        android:maxLength="150"
+        android:layout_below="@id/comment_new_ab"
+        android:id="@+id/comment_new_body" />
+    
+	<LinearLayout style="@style/FullWidth"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true">
+	    <View style="@style/Spring" />
+	    <Button style="@style/Button"
+	        android:text="Post Comment"
+	        android:id="@+id/comment_new_submit" />
+	</LinearLayout>
+</RelativeLayout>

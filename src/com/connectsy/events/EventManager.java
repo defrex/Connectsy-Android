@@ -16,7 +16,7 @@ import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
-import com.connectsy.events.AttendantManager.Attendant;
+import com.connectsy.events.attendants.AttendantManager.Attendant;
 import com.connectsy.users.UserManager.User;
 
 public class EventManager extends DataManager {

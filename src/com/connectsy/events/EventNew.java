@@ -34,6 +34,7 @@ import com.connectsy.categories.CategoryManager;
 import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
+import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager;
 import com.connectsy.users.UserManager.User;

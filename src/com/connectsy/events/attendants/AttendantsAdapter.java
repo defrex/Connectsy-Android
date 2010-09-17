@@ -1,4 +1,4 @@
-package com.connectsy.events;
+package com.connectsy.events.attendants;
 
 import java.util.ArrayList;
 
@@ -7,15 +7,15 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
-import com.connectsy.events.AttendantManager.Attendant;
+import com.connectsy.events.attendants.AttendantManager.Attendant;
 
 public class AttendantsAdapter extends ArrayAdapter<Attendant> {
 	@SuppressWarnings("unused")

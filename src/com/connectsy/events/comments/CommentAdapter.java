@@ -1,4 +1,4 @@
-package com.connectsy.events;
+package com.connectsy.events.comments;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
-import com.connectsy.events.CommentManager.Comment;
+import com.connectsy.events.comments.CommentManager.Comment;
 
 public class CommentAdapter extends ArrayAdapter<Comment> {
 	@SuppressWarnings("unused")

@@ -1,4 +1,4 @@
-package com.connectsy.events;
+package com.connectsy.events.attendants;
 
 import java.util.ArrayList;
 import java.util.Iterator;
