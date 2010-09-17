@@ -19,6 +19,7 @@ import com.connectsy.settings.Settings;
 import com.connectsy.utils.DateUtils;
 
 public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
+	@SuppressWarnings("unused")
 	private final String TAG = "AvatarFetcher";
 	private String username;
 	private ImageView view;

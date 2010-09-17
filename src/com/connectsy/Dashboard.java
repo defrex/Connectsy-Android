@@ -133,7 +133,7 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
 		mapView.getOverlays().add(overlay);
     }
     
-    private class EventMapOverlay extends ItemizedOverlay{
+    private class EventMapOverlay extends ItemizedOverlay<OverlayItem>{
     	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
     	private ArrayList<String> revs = new ArrayList<String>();
     	

@@ -11,7 +11,6 @@ import android.content.Context;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.DataManager;
 import com.connectsy.events.EventManager;
-import com.connectsy.events.EventManager.Event;
 
 public class CommentManager extends DataManager {
 	@SuppressWarnings("unused")

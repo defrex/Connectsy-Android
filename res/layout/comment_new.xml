@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/comment_new" >
+    android:orientation="vertical">
     
-    <FrameLayout style="@style/ActionBarFrame"
-        android:id="@+id/comment_new_ab"
-        android:layout_alignParentTop="true">
+    <FrameLayout style="@style/ActionBarFrame">
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
             <ImageView style="@style/ActionBarLogo" />
@@ -18,15 +16,18 @@
         android:hint="Comment"
         android:autoText="true"
         android:maxLength="150"
-        android:layout_below="@id/comment_new_ab"
         android:id="@+id/comment_new_body" />
     
+    <View
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"/>
+    
 	<LinearLayout style="@style/FullWidth"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true">
+	    android:layout_height="wrap_content">
 	    <View style="@style/Spring" />
 	    <Button style="@style/Button"
 	        android:text="Post Comment"
 	        android:id="@+id/comment_new_submit" />
 	</LinearLayout>
-</RelativeLayout>
+</LinearLayout>

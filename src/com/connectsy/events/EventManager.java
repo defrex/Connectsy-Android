@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
@@ -20,6 +19,7 @@ import com.connectsy.events.attendants.AttendantManager.Attendant;
 import com.connectsy.users.UserManager.User;
 
 public class EventManager extends DataManager {
+	@SuppressWarnings("unused")
 	private static final String TAG = "EventManager";
 	
 	private static final int CREATE_EVENT = 0;

@@ -32,6 +32,7 @@ import com.connectsy.settings.MainMenu;
 
 public class EventList extends Activity implements DataUpdateListener, 
 		OnClickListener, OnItemClickListener, LocationListener {
+	@SuppressWarnings("unused")
 	private static final String TAG = "EventList";
 	private EventsAdapter adapter;
     private EventManager eventManager = null;

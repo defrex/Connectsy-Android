@@ -10,6 +10,7 @@ import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.settings.Settings;
 
 public abstract class DataManager implements ApiRequestListener {
+	@SuppressWarnings("unused")
 	private static final String TAG = "DataManager";
 	public int returnCode;
 	public int pendingUpdates = 0;

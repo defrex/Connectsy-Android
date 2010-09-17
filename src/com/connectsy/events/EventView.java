@@ -56,6 +56,7 @@ public class EventView extends Activity implements DataUpdateListener,
     private static final int REFRESH_ATTENDANTS = 1;
     private static final int ATT_SET = 2;
     private static final int REFRESH_COMMENTS = 3;
+    private static final int NEW_COMMENT = 4;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,14 +115,22 @@ public class EventView extends Activity implements DataUpdateListener,
     		attsList.setVisibility(ListView.GONE);
     		comments.setVisibility(ListView.VISIBLE);
     		
-    		if (findViewById(R.id.comment_list_item_new) == null){
-    			LayoutInflater inflater = LayoutInflater.from(this);
-    			View add_comment = inflater.inflate(R.layout.comment_list_item_new, 
-    					comments, false);
-    			comments.addHeaderView(add_comment);
-    		}
-    		
             if (event != null){
+        		if (findViewById(R.id.comment_list_item_new) == null){
+        			LayoutInflater inflater = LayoutInflater.from(this);
+        			View add_comment = inflater.inflate(R.layout.comment_list_item_new, 
+        					comments, false);
+        			comments.addHeaderView(add_comment);
+        			add_comment.setOnClickListener(new View.OnClickListener() {
+    					public void onClick(View v) {
+    						Intent i = new Intent(Intent.ACTION_INSERT);
+    						i.setType("vnd.android.cursor.item/vnd.connectsy.event.comment");
+    						i.putExtra("com.connectsy.event.id", event.ID);
+    			    		startActivityForResult(i, NEW_COMMENT);
+    					}
+    				});
+        		}
+            	
     	        if (commentAdapter == null){
     	        	commentAdapter = new CommentAdapter(this, R.layout.comment_list_item, 
     		        		getCommentManager(false).getComments());
