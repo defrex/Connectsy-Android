@@ -113,9 +113,17 @@
             android:visibility="gone"
             android:id="@+id/events_new_cat">
             <View style="@style/EventNewTitleBorder" />
-            <TextView style="@style/EventNewCategoryTitle"
-                 android:id="@+id/events_new_category_title"
-                 android:text="Select a Category" />
+            <LinearLayout style="@style/FullWidth"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:orientation="horizontal">
+	            <TextView style="@style/FormElementTitle"
+	                 android:id="@+id/events_new_category_title"
+	                 android:text="Select a Category" />
+                <View style="@style/Spring" />
+                <ImageView style="@style/EventListHeadingChange"
+                    android:src="@drawable/icon_right_arrow"/>
+            </LinearLayout>
             <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
         
@@ -124,9 +132,17 @@
             android:visibility="gone"
             android:id="@+id/events_new_friends_selected">
             <View style="@style/EventNewTitleBorder" />
-            <TextView style="@style/EventNewCategoryTitle"
-                 android:id="@+id/events_new_friends_selected_text"
-                 android:text="Select Friends" />
+            <LinearLayout style="@style/FullWidth"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:orientation="horizontal">
+	            <TextView style="@style/FormElementTitle"
+	                 android:id="@+id/events_new_friends_selected_text"
+	                 android:text="Select Friends" />
+	            <View style="@style/Spring" />
+	            <ImageView style="@style/EventListHeadingChange"
+	                android:src="@drawable/icon_right_arrow"/>
+            </LinearLayout>
             <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
 		

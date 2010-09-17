@@ -12,10 +12,10 @@
             <ImageView style="@style/ActionBarSeparator" />
             <ImageView style="@style/ActionBarAction"
                 android:id="@+id/ab_refresh"
-                android:src="@drawable/icons_refresh" />
+                android:src="@drawable/icon_refresh" />
             <ProgressBar style="@style/ActionBarAction"
                 android:id="@+id/ab_refresh_spinner"
-                android:src="@drawable/icons_refresh"
+                android:src="@drawable/icon_refresh"
                 android:visibility="gone" />
             
             <ImageView style="@style/ActionBarSeparator"
@@ -89,6 +89,20 @@
     <LinearLayout
         style="@style/CommentList"
         android:id="@+id/event_view_comments" >
+	    <LinearLayout style="@style/BorderWrapperVert">
+	        <LinearLayout style="@style/FullWidth"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+	            android:orientation="horizontal">
+	            <TextView style="@style/Text"
+	                android:textSize="16sp"
+	                android:text="New Comment" />
+	            <View style="@style/Spring" />
+	            <ImageView style="@style/WrapAll"
+	                android:src="@drawable/icon_right_arrow"/>
+	        </LinearLayout>
+	        <View style="@style/BorderVert" />
+	    </LinearLayout>
         <!-- Filled out in code -->
     </LinearLayout>
 </LinearLayout>

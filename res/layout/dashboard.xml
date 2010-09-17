@@ -12,7 +12,7 @@
 	        <ImageView style="@style/ActionBarSeparator" />
 	        <ImageView style="@style/ActionBarAction"
 	            android:id="@+id/ab_new_event"
-	            android:src="@drawable/icons_plus" />
+	            android:src="@drawable/icon_plus" />
 	    </LinearLayout>
     </FrameLayout>
     

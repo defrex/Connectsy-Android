@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -111,6 +112,7 @@ public class EventView extends Activity implements DataUpdateListener,
     		comments.setVisibility(ListView.VISIBLE);
 
             if (event != null){
+            	Log.d(TAG, "loading comments");
             	//reload comments
     	        Collection<CommentManager.Comment> commentList = getCommentManager(false).getComments();
     	        LayoutInflater inflater = LayoutInflater.from(this);

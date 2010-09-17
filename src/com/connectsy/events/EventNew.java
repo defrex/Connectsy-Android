@@ -306,7 +306,7 @@ public class EventNew extends Activity implements OnClickListener,
 	}
 
 	public void onRemoteError(int httpStatus, int code) {
-		loadingDialog.dismiss();
+		if (loadingDialog != null) loadingDialog.dismiss();
 	}
 
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
