@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Comment" >
+    
+    <ImageView style="@style/Avatar"
+        android:src="@drawable/avatar_default"
+        android:id="@+id/comment_avatar" />
+    
+    <LinearLayout style="@style/FullWidth"
+        android:orientation="vertical">
+	    
+	    <TextView style="@style/Link" 
+	        android:id="@+id/comment_username" />
+	        
+	    <TextView style="@style/CommentText" 
+	        android:id="@+id/comment_text" />
+	    
+    </LinearLayout>
+</LinearLayout>

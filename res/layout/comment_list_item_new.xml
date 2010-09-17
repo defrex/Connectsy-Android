@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BorderWrapperVert"
+    android:id="@+id/comment_list_item_new">
+    <LinearLayout style="@style/FullWidth"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:orientation="horizontal">
+        <TextView style="@style/Text"
+            android:textSize="16sp"
+            android:text="New Comment" />
+        <View style="@style/Spring" />
+        <ImageView style="@style/WrapAll"
+            android:src="@drawable/icon_right_arrow"/>
+    </LinearLayout>
+    <View style="@style/BorderVert" />
+</LinearLayout>

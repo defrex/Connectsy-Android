@@ -1,13 +1,10 @@
 package com.connectsy.events;
 
-import java.util.Collection;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +24,7 @@ import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.AttendantManager.Attendant;
 import com.connectsy.events.AttendantManager.Status;
+import com.connectsy.events.CommentManager.Comment;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.utils.DateUtils;
@@ -35,12 +32,14 @@ import com.connectsy.utils.Utils;
 
 public class EventView extends Activity implements DataUpdateListener, 
 		OnClickListener, OnItemClickListener {
+	@SuppressWarnings("unused")
 	private static final String TAG = "EventView";
     
     private Event event;
     private String eventRev;
     private EventManager eventManager;
     private CommentManager commentManager;
+    private CommentAdapter commentAdapter;
     private AttendantManager attManager;
     private AttendantsAdapter attAdapter;
     private String tabSelected;
@@ -104,32 +103,31 @@ public class EventView extends Activity implements DataUpdateListener,
     private void setTabSelected(String tab){
     	if (tab != null) tabSelected = tab;
 		ListView attsList = (ListView)findViewById(R.id.attendants_list);
-        LinearLayout comments = (LinearLayout)findViewById(R.id.event_view_comments);
+        ListView comments = (ListView)findViewById(R.id.comments_list);
     	if (tabSelected == "comments"){
     		findViewById(R.id.event_view_tab_comments).setSelected(true);
     		findViewById(R.id.event_view_tab_atts).setSelected(false);
     		attsList.setVisibility(ListView.GONE);
     		comments.setVisibility(ListView.VISIBLE);
-
+    		
+    		if (findViewById(R.id.comment_list_item_new) == null){
+    			LayoutInflater inflater = LayoutInflater.from(this);
+    			View add_comment = inflater.inflate(R.layout.comment_list_item_new, 
+    					comments, false);
+    			comments.addHeaderView(add_comment);
+    		}
+    		
             if (event != null){
-            	Log.d(TAG, "loading comments");
-            	//reload comments
-    	        Collection<CommentManager.Comment> commentList = getCommentManager(false).getComments();
-    	        LayoutInflater inflater = LayoutInflater.from(this);
-    	        //only add after the last comment
-    	        View lastComment = comments.getChildCount() > 0 ? comments.getChildAt(comments.getChildCount()) : null;
-    	        boolean canAdd = false;
-    	        for (CommentManager.Comment comment: commentList) {
-    	        	//skip to the end of the list
-    	        	if (!canAdd && lastComment == null || lastComment.getTag().equals(comment.getId())) {
-    	        		canAdd = true;
-    	        		if (lastComment != null)
-    	        			continue;
-    	        	}
-    	        	
-    	        	View view = inflater.inflate(R.layout.event_comment, comments);
-    	        	((TextView)view.findViewById(R.id.comment_text)).setText(comment.getComment());
+    	        if (commentAdapter == null){
+    	        	commentAdapter = new CommentAdapter(this, R.layout.comment_list_item, 
+    		        		getCommentManager(false).getComments());
+    	        }else{
+    	        	commentAdapter.clear();
+    	        	for (Comment c: getCommentManager(false).getComments())
+    	        		commentAdapter.add(c);
+    	        	commentAdapter.notifyDataSetChanged();
     	        }
+    	        comments.setAdapter(commentAdapter);
             }
     		
     	}else if(tabSelected == "atts"){
@@ -153,12 +151,21 @@ public class EventView extends Activity implements DataUpdateListener,
     }
     
     private void setUserStatus(Integer status){
-		if (status != null){
-			curUserStatus = status;
-			if (event == null){
-				pendingStatusChange = true;
-				return;
-			}
+		if (status != null) curUserStatus = status;
+		else if (curUserStatus == null) return;
+		
+		ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
+		if (curUserStatus == Status.ATTENDING){
+    		in.setSelected(true);
+    		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_black));
+		}else{
+    		in.setSelected(false);
+    		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_white));
+		}
+		
+		if (status != null && event == null){
+			pendingStatusChange = true;
+			return;
 		}else if (!pendingStatusChange){
 			return;
 		}
@@ -173,15 +180,10 @@ public class EventView extends Activity implements DataUpdateListener,
     		refresh();
     	}else if (v.getId() == R.id.event_view_ab_in){
     		ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
-    		if (in.isSelected()){
-        		in.setSelected(false);
-        		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_white));
+    		if (in.isSelected())
         		setUserStatus(Status.NOT_ATTENDING);
-    		}else{
-        		in.setSelected(true);
-        		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_black));
+    		else
         		setUserStatus(Status.ATTENDING);
-    		}
     	}else if (v.getId() == R.id.event_view_tab_comments){
     		setTabSelected("comments");
     	}else if (v.getId() == R.id.event_view_tab_atts){

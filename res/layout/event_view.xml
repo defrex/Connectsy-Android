@@ -85,24 +85,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
         
-    <!-- Comment List -->
-    <LinearLayout
-        style="@style/CommentList"
-        android:id="@+id/event_view_comments" >
-	    <LinearLayout style="@style/BorderWrapperVert">
-	        <LinearLayout style="@style/FullWidth"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-	            android:orientation="horizontal">
-	            <TextView style="@style/Text"
-	                android:textSize="16sp"
-	                android:text="New Comment" />
-	            <View style="@style/Spring" />
-	            <ImageView style="@style/WrapAll"
-	                android:src="@drawable/icon_right_arrow"/>
-	        </LinearLayout>
-	        <View style="@style/BorderVert" />
-	    </LinearLayout>
-        <!-- Filled out in code -->
-    </LinearLayout>
+    <ListView android:id="@+id/comments_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+        
 </LinearLayout>
