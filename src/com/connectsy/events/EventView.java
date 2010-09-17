@@ -173,9 +173,11 @@ public class EventView extends Activity implements DataUpdateListener,
     		ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
     		if (in.isSelected()){
         		in.setSelected(false);
+        		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_white));
         		setUserStatus(Status.NOT_ATTENDING);
     		}else{
         		in.setSelected(true);
+        		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_black));
         		setUserStatus(Status.ATTENDING);
     		}
     	}else if (v.getId() == R.id.event_view_tab_comments){
@@ -295,8 +297,12 @@ public class EventView extends Activity implements DataUpdateListener,
         when.setText(Html.fromHtml("<b>when:</b> "+DateUtils.formatTimestamp(event.when)));
 
         TextView distance = (TextView)view.findViewById(R.id.event_distance);
-        LocManager locManager = new LocManager(context);
-        distance.setText(locManager.distanceFrom(event.posted_from[0], event.posted_from[1]));
+        String distanceText = new LocManager(context).distanceFrom(event.posted_from[0], 
+        		event.posted_from[1]);
+        if (distanceText != null)
+        	distance.setText(distanceText);
+        else
+        	distance.setVisibility(View.VISIBLE);
         TextView created = (TextView)view.findViewById(R.id.event_created);
         created.setText("created "+DateUtils.formatTimestamp(event.created));
         

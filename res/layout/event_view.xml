@@ -24,7 +24,7 @@
             <ImageView style="@style/ActionBarAction"
                 android:id="@+id/event_view_ab_in"
                 android:visibility="gone"
-                android:src="@drawable/icons_plus"
+                android:src="@drawable/icon_check_white"
                 android:background="@drawable/ab_selectable" />
         </LinearLayout>
     </FrameLayout>

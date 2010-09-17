@@ -33,6 +33,7 @@ public class LocManager implements LocationListener {
 	}
 
 	public String distanceFrom(double lat, double lng){
+		if (loc == null) return null;
 		float[] result = new float[2];
 		Location.distanceBetween(loc.getLatitude(), loc.getLongitude(), 
 				lat, lng, result);
