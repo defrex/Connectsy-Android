@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.content.Context;
 
 import com.connectsy.data.ApiRequest;
+import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
 import com.connectsy.events.EventManager;
 
@@ -29,7 +30,7 @@ public class CommentManager extends DataManager {
 		
 		public Comment(String json) throws JSONException {
 			JSONObject obj = new JSONObject(json);
-			id = obj.getString("id");
+			//id = obj.getString("id");
 			event = obj.getString("event");
 			username = obj.getString("user");
 			nonce = obj.getString("nonce");
@@ -70,6 +71,7 @@ public class CommentManager extends DataManager {
 	
 	//ApiRequest identifiers
 	final static int GET_COMMENTS = 0;
+	private static final int NEW_COMMENT = 1;
 	
 	EventManager.Event event;
 	int lastTimestamp = 0;
@@ -95,12 +97,8 @@ public class CommentManager extends DataManager {
 	 * @return array of comments
 	 */
 	public ArrayList<Comment> getComments() {
-		ApiRequest request = new ApiRequest(this,
-				this.context,
-				ApiRequest.Method.GET,
-				String.format("/events/%s/comments/", event.ID),
-				true,
-				0);
+		ApiRequest request = new ApiRequest(this, context, Method.GET,
+				String.format("/events/%s/comments/", event.ID), true, 0);
 		try {
 			String jsonComments = request.getCached();
 			if (jsonComments != null){
@@ -111,6 +109,20 @@ public class CommentManager extends DataManager {
 			e.printStackTrace();
 		}
 		return new ArrayList<Comment>();
+	}
+
+	public void createComment(String comment, int returnCode) {
+		this.returnCode = returnCode;
+		ApiRequest request = new ApiRequest(this, context, Method.POST, 
+				String.format("/events/%s/comments/", event.ID), true, NEW_COMMENT);
+		JSONObject body = new JSONObject();
+		try {
+			body.put("comment", comment);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		request.setBodyString(body.toString());
+		request.execute();
 	}
 	
 	@Override

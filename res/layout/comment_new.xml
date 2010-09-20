@@ -12,22 +12,34 @@
         </LinearLayout>
     </FrameLayout>
     
-    <EditText style="@style/FullWidth"
+    <EditText
         android:hint="Comment"
         android:autoText="true"
-        android:maxLength="150"
+        android:maxLength="300"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:gravity="top"
+        android:isScrollContainer="true"
         android:id="@+id/comment_new_body" />
-    
+    <!--  
     <View
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="0dp"/>
-    
+    -->
 	<LinearLayout style="@style/FullWidth"
 	    android:layout_height="wrap_content">
 	    <View style="@style/Spring" />
-	    <Button style="@style/Button"
-	        android:text="Post Comment"
-	        android:id="@+id/comment_new_submit" />
+        <Button style="@style/Button"
+            android:text="Cancel"
+            android:id="@+id/comment_new_cancel" />
+        <Button style="@style/Button"
+            android:text="Post Comment"
+            android:id="@+id/comment_new_submit" />
 	</LinearLayout>
 </LinearLayout>

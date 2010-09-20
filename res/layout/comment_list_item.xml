@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Comment" >
+    style="@style/FullWidth"
+    android:orientation="horizontal"
+    android:padding="5dp">
     
     <ImageView style="@style/Avatar"
         android:src="@drawable/avatar_default"
@@ -12,7 +14,7 @@
 	    <TextView style="@style/Link" 
 	        android:id="@+id/comment_username" />
 	        
-	    <TextView style="@style/CommentText" 
+	    <TextView style="@style/Text" 
 	        android:id="@+id/comment_text" />
 	    
     </LinearLayout>

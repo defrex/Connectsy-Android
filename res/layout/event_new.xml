@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:id="@+id/events_new">
     
-    <FrameLayout style="@style/ActionBarFrame">
+    <FrameLayout style="@style/ActionBarFrame"
+        android:layout_alignParentTop="true">
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
             <ImageView style="@style/ActionBarLogo" />
@@ -12,7 +13,21 @@
         </LinearLayout>
     </FrameLayout>
     
-	<ScrollView style="@style/FullWidth">
+    <LinearLayout style="@style/FullWidth"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/events_new_submit_wrapper"
+        android:orientation="horizontal">
+        <View style="@style/Spring" />
+        <Button style="@style/Button"
+            android:text="@string/events_new_button_submit"
+            android:id="@+id/events_new_submit" />
+    </LinearLayout>
+    
+	<ScrollView style="@style/FullWidth"
+        android:layout_below="@id/events_new"
+        android:layout_marginTop="@dimen/actionbar_height"
+        android:layout_above="@id/events_new_submit_wrapper"
+        android:id="@+id/events_new_scroller">
 	<LinearLayout style="@style/EventNew"
 		android:orientation="vertical" >
         
@@ -111,7 +126,8 @@
         <LinearLayout style="@style/EventNewCategory"
             android:clickable="true" 
             android:visibility="gone"
-            android:id="@+id/events_new_cat">
+            android:id="@+id/events_new_cat"
+            android:focusable="true">
             <View style="@style/EventNewTitleBorder" />
             <LinearLayout style="@style/FullWidth"
                 android:gravity="center_vertical"
@@ -130,7 +146,8 @@
         <LinearLayout style="@style/EventNewCategory"
             android:clickable="true" 
             android:visibility="gone"
-            android:id="@+id/events_new_friends_selected">
+            android:id="@+id/events_new_friends_selected"
+            android:focusable="true">
             <View style="@style/EventNewTitleBorder" />
             <LinearLayout style="@style/FullWidth"
                 android:gravity="center_vertical"
@@ -145,14 +162,6 @@
             </LinearLayout>
             <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
-		
-		<LinearLayout style="@style/FullWidth"
-		    android:layout_height="wrap_content" >
-			<View style="@style/Spring" />
-			<Button style="@style/Button"
-				android:text="@string/events_new_button_submit"
-				android:id="@+id/events_new_submit" />
-		</LinearLayout>
-	</LinearLayout>
-	</ScrollView>
-</LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

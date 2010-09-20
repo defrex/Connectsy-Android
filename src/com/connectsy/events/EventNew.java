@@ -3,6 +3,8 @@ package com.connectsy.events;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -244,6 +247,12 @@ public class EventNew extends Activity implements OnClickListener,
 	        findViewById(R.id.events_new_cat).setVisibility(View.GONE);
 	        setEnabled(fr, ev, ch);
     	}
+    	// I'd like to scroll down to show the new fields when they are shown.
+    	// However, there would have to be a delay between this and the above code for
+    	// some reason. And using a Timer doesn't work since the view can only be altered 
+    	// from it's home thread.
+    	//ScrollView scroll = (ScrollView)findViewById(R.id.events_new_scroller);
+    	//scroll.fullScroll(ScrollView.FOCUS_DOWN);
     }
 
     private void submitData() {

@@ -121,14 +121,7 @@ public class EventView extends Activity implements DataUpdateListener,
         			View add_comment = inflater.inflate(R.layout.comment_list_item_new, 
         					comments, false);
         			comments.addHeaderView(add_comment);
-        			add_comment.setOnClickListener(new View.OnClickListener() {
-    					public void onClick(View v) {
-    						Intent i = new Intent(Intent.ACTION_INSERT);
-    						i.setType("vnd.android.cursor.item/vnd.connectsy.event.comment");
-    						i.putExtra("com.connectsy.event.id", event.ID);
-    			    		startActivityForResult(i, NEW_COMMENT);
-    					}
-    				});
+        			add_comment.setOnClickListener(this);
         		}
             	
     	        if (commentAdapter == null){
@@ -201,6 +194,10 @@ public class EventView extends Activity implements DataUpdateListener,
     		setTabSelected("comments");
     	}else if (v.getId() == R.id.event_view_tab_atts){
     		setTabSelected("atts");
+    	}else if (v.getId() == R.id.comment_list_item_new){
+			Intent i = new Intent(Intent.ACTION_INSERT);
+			i.setType("vnd.android.cursor.item/vnd.connectsy.event.comment");
+    		startActivityForResult(i, NEW_COMMENT);
     	}
 	}
 	
@@ -218,16 +215,29 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 
 	public void onDataUpdate(int code, String response) {
-		if (code == REFRESH_ATTENDANTS)
-			getAttManager(false).getAttendants(true);
-		update();
-		pendingOperations--;
-		if (pendingOperations == 0) setRefreshing(false);
+		if (code == NEW_COMMENT){
+			refresh();
+		}else{
+			if (code == REFRESH_ATTENDANTS)
+				getAttManager(false).getAttendants(true);
+			update();
+			pendingOperations--;
+			if (pendingOperations == 0) setRefreshing(false);
+		}
 	}
 
 	public void onRemoteError(int httpStatus, int code) {
 		pendingOperations--;
 		if (pendingOperations == 0) setRefreshing(false);
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		if (resultCode == RESULT_OK){
+			getCommentManager(false).createComment(
+					data.getStringExtra("com.connectsy.event.comment"), NEW_COMMENT);
+			pendingOperations++;
+			setRefreshing(true);
+		}
 	}
 	
     private void setRefreshing(boolean on) {
