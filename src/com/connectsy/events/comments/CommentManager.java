@@ -102,12 +102,15 @@ public class CommentManager extends DataManager {
 				true,
 				0);
 		try {
-			String comments = new JSONObject(request.getCached()).getString("comments");
-			return Comment.deserializeList(comments);
+			String jsonComments = request.getCached();
+			if (jsonComments != null){
+				String comments = new JSONObject(jsonComments).getString("comments");
+				return Comment.deserializeList(comments);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			return new ArrayList<Comment>();
 		}
+		return new ArrayList<Comment>();
 	}
 	
 	@Override
