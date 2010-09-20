@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
@@ -79,15 +80,21 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	}
 	
 	public Attendant getAttendant(String username){
-		if (attendants == null) getAttendants(true);
-		for (Attendant a: attendants)
-			if (a.username == username) return a;
+		return getAttendant(username, false);}
+	public Attendant getAttendant(String username, boolean force){
+		getAttendants(force);
+		for (Attendant a: attendants){
+			Log.d(TAG, "testing "+username+" == +"+a.username);
+			if (a.username.equals(username)) return a;
+		}
 		return null;
 	}
 	
 	public Integer getCurrentUserStatus(){
+		return getCurrentUserStatus(false);}
+	public Integer getCurrentUserStatus(boolean force){
 		String username = DataManager.getCache(context).getString("username", null);
-		Attendant att = getAttendant(username);
+		Attendant att = getAttendant(username, force);
 		if (att != null) return att.status;
 		else return null;
 	}
@@ -98,6 +105,9 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		return (a.status == Status.ATTENDING);
 	}
 	
+	public ArrayList<Attendant> getAttendants(){
+		return getAttendants(false);
+	}
 	public ArrayList<Attendant> getAttendants(boolean force){
 		if (attendants != null && !force) return attendants;
 		String attsString = getRequest().getCached();
@@ -130,9 +140,6 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	public void refreshAttendants(int sentReturnCode){
 		returnCode = sentReturnCode;
 		ApiRequest apiRequest = getRequest();
-//		int timestamp = DataManager.getCache(context).getInt("attendants.timestamp", 0);
-//		if (timestamp != 0)
-//			apiRequest.addGetArg("timestamp", Integer.toString(timestamp));
 		apiRequest.execute();
 	}
 	

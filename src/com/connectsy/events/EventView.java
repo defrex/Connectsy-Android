@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.connectsy.LocManager;
 import com.connectsy.R;
@@ -74,7 +75,7 @@ public class EventView extends Activity implements DataUpdateListener,
         Intent i = getIntent();
         eventRev = i.getExtras().getString("com.connectsy.events.revision");
 
-        event = getEventManager(false).getEvent(eventRev);
+        event = getEventManager().getEvent(eventRev);
         
         refresh();
         update();
@@ -82,9 +83,9 @@ public class EventView extends Activity implements DataUpdateListener,
     }
 	
     private void update(){
-		setUserStatus(null);
+		setUserStatus(null, false);
 		setTabSelected(null);
-        event = getEventManager(false).getEvent(eventRev);
+        event = getEventManager().getEvent(eventRev);
         if (event != null){
         	setTabSelected(null);
         	String curUser = DataManager.getCache(this).getString("username", null);
@@ -94,7 +95,7 @@ public class EventView extends Activity implements DataUpdateListener,
         		
             	ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
             	in.setOnClickListener(this);
-                if (getAttManager(false).isUserAttending(curUser)){
+                if (getAttManager().isUserAttending(curUser)){
                 	in.setSelected(true);
                 }else{
                 	in.setSelected(false);
@@ -126,10 +127,10 @@ public class EventView extends Activity implements DataUpdateListener,
             	
     	        if (commentAdapter == null){
     	        	commentAdapter = new CommentAdapter(this, R.layout.comment_list_item, 
-    		        		getCommentManager(false).getComments());
+    		        		getCommentManager().getComments());
     	        }else{
     	        	commentAdapter.clear();
-    	        	for (Comment c: getCommentManager(false).getComments())
+    	        	for (Comment c: getCommentManager().getComments())
     	        		commentAdapter.add(c);
     	        	commentAdapter.notifyDataSetChanged();
     	        }
@@ -144,10 +145,10 @@ public class EventView extends Activity implements DataUpdateListener,
             if (event != null){
     	        if (attAdapter == null){
     		        attAdapter = new AttendantsAdapter(this, R.layout.attendant_list_item, 
-    		        		getAttManager(false).getAttendants(false));
+    		        		getAttManager().getAttendants());
     	        }else{
     	        	attAdapter.clear();
-    	        	for (Attendant a: getAttManager(false).getAttendants(false))
+    	        	for (Attendant a: getAttManager().getAttendants())
     	        		attAdapter.add(a);
     	        	attAdapter.notifyDataSetChanged();
     	        }
@@ -157,6 +158,8 @@ public class EventView extends Activity implements DataUpdateListener,
     }
     
     private void setUserStatus(Integer status){
+    	setUserStatus(status, true);}
+    private void setUserStatus(Integer status, boolean doRequest){
 		if (status != null) curUserStatus = status;
 		else if (curUserStatus == null) return;
 		
@@ -168,17 +171,11 @@ public class EventView extends Activity implements DataUpdateListener,
     		in.setSelected(false);
     		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_white));
 		}
-		
-		if (status != null && event == null){
-			pendingStatusChange = true;
-			return;
-		}else if (!pendingStatusChange){
-			return;
+		if (doRequest){
+			getAttManager().setStatus(curUserStatus, ATT_SET);
+			pendingOperations++;
+			setRefreshing(true);
 		}
-		pendingStatusChange = false;
-		getAttManager(false).setStatus(curUserStatus, ATT_SET);
-		pendingOperations++;
-		setRefreshing(true);
     }
     
 	public void onClick(View v) {
@@ -202,38 +199,42 @@ public class EventView extends Activity implements DataUpdateListener,
 	}
 	
 	private void refresh(){
-		if (getEventManager(false).getEvent(eventRev) == null){
-			getEventManager(false).refreshEvent(eventRev, REFRESH_EVENT);
+		if (getEventManager().getEvent(eventRev) == null){
+			getEventManager().refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
 		if (event != null){ 
-			getAttManager(false).refreshAttendants(REFRESH_ATTENDANTS);
-			getCommentManager(false).refreshComments(REFRESH_COMMENTS);
+			getAttManager().refreshAttendants(REFRESH_ATTENDANTS);
+			getCommentManager().refreshComments(REFRESH_COMMENTS);
 			pendingOperations+=2;
 		}
 		setRefreshing(true);
 	}
 
 	public void onDataUpdate(int code, String response) {
-		if (code == NEW_COMMENT){
+		if (code == NEW_COMMENT || code == ATT_SET){
 			refresh();
 		}else{
 			if (code == REFRESH_ATTENDANTS)
-				getAttManager(false).getAttendants(true);
+				curUserStatus = getAttManager().getCurrentUserStatus(true);
 			update();
-			pendingOperations--;
-			if (pendingOperations == 0) setRefreshing(false);
 		}
+		pendingOperations--;
+		if (pendingOperations == 0) setRefreshing(false);
 	}
 
-	public void onRemoteError(int httpStatus, int code) {
+	public void onRemoteError(int httpStatus, int returnCode) {
+		if (httpStatus == 403 && returnCode == ATT_SET){
+			Toast.makeText(this, "You are not invited.", 500).show();
+			setUserStatus(Status.NOT_ATTENDING, false);
+		}
 		pendingOperations--;
 		if (pendingOperations == 0) setRefreshing(false);
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		if (resultCode == RESULT_OK){
-			getCommentManager(false).createComment(
+		if (resultCode == RESULT_OK && requestCode == NEW_COMMENT){
+			getCommentManager().createComment(
 					data.getStringExtra("com.connectsy.event.comment"), NEW_COMMENT);
 			pendingOperations++;
 			setRefreshing(true);
@@ -262,18 +263,24 @@ public class EventView extends Activity implements DataUpdateListener,
 		// TODO Auto-generated method stub
 	}
 	
+	private AttendantManager getAttManager(){
+		return getAttManager(false); }
 	private AttendantManager getAttManager(boolean forceNew){
 		if ((attManager == null || forceNew) && event != null)
 			attManager = new AttendantManager(this, this, event.ID, event.attendants);
 		return attManager;
 	}
-	
+
+	private CommentManager getCommentManager(){
+		return getCommentManager(false); }
 	private CommentManager getCommentManager(boolean forceNew){
 		if ((commentManager == null || forceNew) && event != null)
 			commentManager = new CommentManager(this, this, event);
 		return commentManager;
 	}
 	
+	private EventManager getEventManager(){
+		return getEventManager(false); }
 	private EventManager getEventManager(boolean forceNew){
 		if (eventManager == null || forceNew)
 			eventManager = new EventManager(this, this, null, null);
