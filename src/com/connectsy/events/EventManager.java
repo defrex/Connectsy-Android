@@ -81,9 +81,9 @@ public class EventManager extends DataManager {
 	private ApiRequest getEventsRequest(){
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(); 
 		if (filter == Filter.FRIENDS)
-			args.add(new BasicNameValuePair("friends", "true"));
+			args.add(new BasicNameValuePair("filter", "friends"));
 		else if (filter == Filter.CATEGORY)
-			args.add(new BasicNameValuePair("category", category));
+			args.add(new BasicNameValuePair("filter", category));
 		
 		Location loc = locManager.getLocation();
 		if (loc != null){
