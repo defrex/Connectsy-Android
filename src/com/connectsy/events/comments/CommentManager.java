@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
@@ -15,7 +16,7 @@ import com.connectsy.events.EventManager;
 
 public class CommentManager extends DataManager {
 	@SuppressWarnings("unused")
-	private final String TAG = "CommentManager";
+	private final static String TAG = "CommentManager";
 	
 	/**
 	 * Holds comment data
@@ -29,9 +30,10 @@ public class CommentManager extends DataManager {
 		int timestamp;
 		
 		public Comment(String json) throws JSONException {
+			//Log.d(TAG, "event json: "+json);
 			JSONObject obj = new JSONObject(json);
 			//id = obj.getString("id");
-			event = obj.getString("event");
+			//event = obj.getString("event");
 			username = obj.getString("user");
 			nonce = obj.getString("nonce");
 			timestamp = (int)obj.getLong("timestamp");

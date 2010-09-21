@@ -46,6 +46,10 @@ public class UserManager extends DataManager {
 				created = user.getInt("created");
 		}
 		
+		public String toString(){
+			return username;
+		}
+		
 		public String serialize(){
 			JSONObject ret = new JSONObject();
 			try {
@@ -142,6 +146,7 @@ public class UserManager extends DataManager {
 	
 	public void refreshFriends(boolean pending, int sentReturnCode){
 		returnCode = sentReturnCode;
+		Log.d(TAG, "refreshFriends");
 		getFriendsRequest(pending).execute();
 	}
 	

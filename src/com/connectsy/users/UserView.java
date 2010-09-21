@@ -28,6 +28,7 @@ import com.connectsy.users.UserManager.User;
 
 public class UserView extends Activity implements OnClickListener, 
 		DataUpdateListener {
+	@SuppressWarnings("unused")
 	private static final String TAG = "UserView";
     private String curUsername;
     private UserManager userManager;
@@ -56,8 +57,6 @@ public class UserView extends Activity implements OnClickListener,
         
         username = getIntent().getExtras().getString("com.connectsy.user.username");
         curUsername = UserManager.getCache(this).getString("username", "");
-
-    	userManager = new UserManager(this, this, username);
     	
 		updateUserDisplay();
 		updateFriendsDisplay();
@@ -67,26 +66,24 @@ public class UserView extends Activity implements OnClickListener,
     }
 	
     private void updateUserDisplay(){
-    	Log.d(TAG, "updateUserDisplay");
-    	user = userManager.getUser();
+    	user = getUserManager().getUser();
     	
         TextView uname = (TextView)findViewById(R.id.user_view_username);
         uname.setText(username);
 		
         if (user != null){
-        	Log.d(TAG, "user is not null");
 	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
 	        new AvatarFetcher(this, user.username, avatar);
 	        if (username.equals(DataManager.getCache(this).getString("username", null))){
 	        	avatar.setClickable(true);
 	        	avatar.setOnClickListener(this);
 	        }
-        }else
-        	Log.d(TAG, "user is null");
+        }
     }
     
     private void updateFriendsDisplay(){
-		ArrayList<User> friends = userManager.getFriends(false);
+		ArrayList<User> friends = getUserManager().getFriends(false);
+		Log.d(TAG, "updating freinds to: "+friends);
         if (adapter != null){
         	adapter.clear();
         	for (int n = 0;n < friends.size();n++)
@@ -117,7 +114,7 @@ public class UserView extends Activity implements OnClickListener,
     
     private void updatePendingFriendsDisplay(){
 		if (user != null && user.username.equals(curUsername)){
-			ArrayList<User> pendingFriends = userManager.getFriends(true);
+			ArrayList<User> pendingFriends = getUserManager().getFriends(true);
 			if (pendingFriends.size() > 0){
 				findViewById(R.id.pending_friends_list_title).setVisibility(TextView.VISIBLE);
 			}else{
@@ -144,7 +141,7 @@ public class UserView extends Activity implements OnClickListener,
 	}
 	
 	private void befriend(){
-		userManager.befriend(BEFRIEND);
+		getUserManager(true).befriend(BEFRIEND);
 		operationsPending++;
 		setRefreshing(true);
 	}
@@ -155,7 +152,7 @@ public class UserView extends Activity implements OnClickListener,
 	    if (requestCode == SELECT_AVATAR && resultCode == Activity.RESULT_OK) {
 			Uri selectedImage = data.getData();
 			try {
-				userManager.uploadAvatar(selectedImage);
+				getUserManager(true).uploadAvatar(selectedImage);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -176,9 +173,9 @@ public class UserView extends Activity implements OnClickListener,
     	if (v.getId() == R.id.user_view_befriend) befriend();
 	}
 	private void refresh(){
-		userManager.refreshUser(REFRESH_USER);
-		userManager.refreshFriends(false, REFRESH_FRIENDS);
-		userManager.refreshFriends(true, REFRESH_PENDING_FRIENDS);
+		getUserManager(true).refreshUser(REFRESH_USER);
+		getUserManager(true).refreshFriends(false, REFRESH_FRIENDS);
+		getUserManager(true).refreshFriends(true, REFRESH_PENDING_FRIENDS);
 		operationsPending += 3;
 		setRefreshing(true);
 	}
@@ -197,12 +194,12 @@ public class UserView extends Activity implements OnClickListener,
 		if (code == BEFRIEND){
     		Button f = (Button)findViewById(R.id.user_view_befriend);
     		f.setVisibility(Button.VISIBLE);
-		}else if (code == REFRESH_USER)
+		}else if (code == REFRESH_USER){
 			updateUserDisplay();
-		else if (code == REFRESH_FRIENDS)
+		}else {
 			updateFriendsDisplay();
-		else if (code == REFRESH_PENDING_FRIENDS)
 			updatePendingFriendsDisplay();
+		}
 		operationsPending--;
 		if (operationsPending == 0)
 			setRefreshing(false);
@@ -212,5 +209,13 @@ public class UserView extends Activity implements OnClickListener,
 		operationsPending--;
 		if (operationsPending == 0)
 			setRefreshing(false);
+	}
+
+	private UserManager getUserManager(){
+		return getUserManager(false); }
+	private UserManager getUserManager(boolean forceNew){
+		if (userManager == null || forceNew)
+			userManager = new UserManager(this, this, username);
+		return userManager;
 	}
 }
