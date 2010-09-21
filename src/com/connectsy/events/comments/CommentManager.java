@@ -22,7 +22,6 @@ public class CommentManager extends DataManager {
 	 */
 	public static class Comment {
 		String id;
-		String event;
 		String username;
 		String nonce;
 		String comment;
@@ -30,8 +29,7 @@ public class CommentManager extends DataManager {
 		
 		public Comment(String json) throws JSONException {
 			JSONObject obj = new JSONObject(json);
-			//id = obj.getString("id");
-			event = obj.getString("event");
+			id = obj.getString("id");
 			username = obj.getString("user");
 			nonce = obj.getString("nonce");
 			timestamp = (int)obj.getLong("timestamp");
@@ -40,9 +38,6 @@ public class CommentManager extends DataManager {
 		
 		public String getId() {
 			return id;
-		}
-		public String getEvent() {
-			return event;
 		}
 		public String getUsername() {
 			return username;
