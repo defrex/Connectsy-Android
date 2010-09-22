@@ -23,8 +23,8 @@
                 
             <ImageView style="@style/ActionBarSeparator" />
             <ImageView style="@style/ActionBarAction"
-                android:id="@+id/ab_new_event"
-                android:src="@drawable/icon_plus" />
+                android:id="@+id/ab_user_search"
+                android:src="@drawable/icon_search" />
         </LinearLayout>
     </FrameLayout>
 	

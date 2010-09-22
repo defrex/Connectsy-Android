@@ -70,6 +70,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".users.UserSearch"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
         
         <activity android:name=".settings.Preferences"
             android:theme="@android:style/Theme.Black.NoTitleBar" />

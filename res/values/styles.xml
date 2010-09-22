@@ -142,11 +142,16 @@
             <item name="android:orientation">horizontal</item>
             <item name="android:gravity">center_vertical</item>
         </style>
-		    <style name="ActionBarLogo">
-		        <item name="android:layout_width">wrap_content</item>
-		        <item name="android:layout_height">wrap_content</item>
-		        <item name="android:src">@drawable/logo</item>
-		    </style>
+            <style name="ActionBarLogo" parent="@style/WrapAll">
+                <item name="android:src">@drawable/logo</item>
+            </style>
+            <style name="ActionBarSearch" parent="@style/FullWidth">
+                <item name="android:layout_marginTop">5dp</item>
+                <item name="android:layout_marginBottom">3dp</item>
+                <item name="android:layout_marginRight">5dp</item>
+                <item name="android:layout_marginLeft">5dp</item>
+                <item name="android:layout_weight">1</item>
+            </style>
 		    <style name="ActionBarAction">
 		        <item name="android:layout_width">@dimen/actionbar_height</item>
 		        <item name="android:layout_height">fill_parent</item>

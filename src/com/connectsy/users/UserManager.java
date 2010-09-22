@@ -85,7 +85,7 @@ public class UserManager extends DataManager {
 		if (pUsername != null){
 			username = pUsername;
 		}else{
-			username = UserManager.getCache(c).getString("username", "");
+			username = UserManager.currentUsername(c);
 		}
 	}
 	
@@ -164,6 +164,10 @@ public class UserManager extends DataManager {
 		r.setBodyFile(file);
 		r.setHeader("Content-Type", context.getContentResolver().getType(avatar));
 		r.execute();
+	}
+	
+	public static String currentUsername(Context context){
+		return UserManager.getCache(context).getString("username", "");
 	}
 	
 	@Override

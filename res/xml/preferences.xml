@@ -3,6 +3,7 @@
     <PreferenceCategory android:title="@string/preferences_user">
     
 		<PreferenceScreen android:title="@string/preference_avatar"
+		    android:key="avatar"
 			android:id="@+id/preferances_avatar_button">
         </PreferenceScreen>
         

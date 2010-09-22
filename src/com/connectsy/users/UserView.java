@@ -48,12 +48,10 @@ public class UserView extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_view);
 
-        ActionBarHandler abHandler = new ActionBarHandler(this);
-        ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
-        abNewEvent.setOnClickListener(abHandler);
-        
         ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
         abRefresh.setOnClickListener(this);
+        ImageView abSearch = (ImageView)findViewById(R.id.ab_user_search);
+        abSearch.setOnClickListener(this);
         
         username = getIntent().getExtras().getString("com.connectsy.user.username");
         curUsername = UserManager.getCache(this).getString("username", "");
@@ -169,8 +167,10 @@ public class UserView extends Activity implements OnClickListener,
 
 	public void onClick(View v) {
     	if (v.getId() == R.id.ab_refresh) refresh();
-    	if (v.getId() == R.id.user_view_avatar) changeAvatar();
-    	if (v.getId() == R.id.user_view_befriend) befriend();
+    	else if (v.getId() == R.id.ab_user_search) startActivity(
+    			new Intent(this, UserSearch.class));
+    	else if (v.getId() == R.id.user_view_avatar) changeAvatar();
+    	else if (v.getId() == R.id.user_view_befriend) befriend();
 	}
 	private void refresh(){
 		getUserManager(true).refreshUser(REFRESH_USER);

@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.connectsy.R;
 import com.connectsy.data.ApiRequest;
@@ -43,8 +44,9 @@ public class NotificationListener implements ApiRequestListener,
 	/**
 	 * How long to wait in between polls
 	 */
-	static final int PERIOD = 10000; // 10s
+	static final int PERIOD = 20000; // 20s
 
+	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;
 	static final int POLL = 1;
 	static final int GET_EVENT = 2;
@@ -122,7 +124,7 @@ public class NotificationListener implements ApiRequestListener,
 			if (status == 200) {
 				notifyCallback();
 			} else {
-				System.err.println("Failed notification register!");
+				Log.e(TAG, "Failed notification register!");
 			}
 		} else if (code == POLL) {
 
@@ -132,12 +134,9 @@ public class NotificationListener implements ApiRequestListener,
 					notifications = new JSONObject(response)
 							.getJSONArray("notifications");
 					sendNotification();
-				} catch (JSONException e) {
-				} // silent fail
-				System.out.println("Poll success");
-				System.out.println(response);
+				} catch (JSONException e) {}
 			} else {
-				System.err.println("Failed notification poll");
+				Log.e(TAG, "Failed notification poll");
 			}
 
 			notifyCallback();
