@@ -11,10 +11,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.connectsy.LocManager;
 import com.connectsy.R;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
@@ -44,7 +46,7 @@ public class NotificationListener implements ApiRequestListener,
 	/**
 	 * How long to wait in between polls
 	 */
-	static final int PERIOD = 20000; // 20s
+	static final int PERIOD = 1000 * 10; // 10s
 
 	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;
@@ -56,19 +58,13 @@ public class NotificationListener implements ApiRequestListener,
 	boolean running;
 	Context context;
 	String clientId;
+	LocManager location;
 	Notification notification;
 	JSONArray notifications;
 
 	private NotificationListener() {
 		// prep handler
 		handler = new Handler();
-
-		// grab the clientid
-		clientId = Settings.Secure.ANDROID_ID;
-		// apparently ANDROID_ID may not be set in
-		// an emulator, so this is the backup plan
-		if (clientId == null)
-			clientId = "EMULATOR";
 	}
 
 	public boolean isRunning() {
@@ -84,6 +80,14 @@ public class NotificationListener implements ApiRequestListener,
 
 		// update context
 		context = c;
+		
+		//get clientid
+		clientId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+		if (clientId == null)
+			clientId = "EMULATOR";
+		
+		//prep location listener
+		location = new LocManager(context);
 
 		// set the status
 		running = true;
@@ -113,6 +117,13 @@ public class NotificationListener implements ApiRequestListener,
 					ApiRequest request = new ApiRequest(nl, context,
 							Method.GET, "/notifications/poll/", true, POLL);
 					request.addGetArg("client_id", clientId);
+					//add geolocation data
+					Location loc = location.getLocation();
+					if (loc != null) {
+						request.addGetArg("lat", String.valueOf(loc.getLatitude()));
+						request.addGetArg("lng", String.valueOf(loc.getLongitude()));
+					}
+					//fire it off
 					request.execute();
 				}
 			}, PERIOD);
@@ -129,7 +140,6 @@ public class NotificationListener implements ApiRequestListener,
 		} else if (code == POLL) {
 
 			if (status == 200) {
-				// TODO - handle the body
 				try {
 					notifications = new JSONObject(response)
 							.getJSONArray("notifications");
