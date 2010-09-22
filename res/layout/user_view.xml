@@ -4,7 +4,9 @@
     android:orientation="vertical" >
     
     <FrameLayout style="@style/ActionBarFrame">
-        <ImageView style="@style/ActionBarBackground" />
+        <ImageView style="@style/ActionBarBackground"
+            android:clickable="true"
+            android:id="@+id/ab_logo"/>
         <LinearLayout style="@style/ActionBar" >
             <ImageView style="@style/ActionBarLogo" />
             

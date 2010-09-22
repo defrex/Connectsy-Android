@@ -70,9 +70,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-		
+        
         <activity android:name=".settings.Preferences"
-        	android:theme="@android:style/Theme.Black.NoTitleBar" />
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        
+        <service android:name=".notifications.NotificationService">
+            <intent-filter>
+                <action android:name="com.connectsy.START_NOTIFICATIONS" />
+            </intent-filter>
+        </service>
+        <receiver android:name=".notifications.StartupCatcher">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<category android:name="android.intent.category.HOME" />
+			</intent-filter>
+		</receiver>
         
     </application>
     <uses-sdk android:minSdkVersion="3" />

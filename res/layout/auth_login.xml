@@ -2,6 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/text_light_grey"/>
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
     android:padding="10px" >
@@ -28,10 +36,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:gravity="right" >
-		<Button
-			android:layout_width="wrap_content" 
-		    android:layout_height="wrap_content"
-		    android:gravity="center"
+		<Button style="@style/Button"
 		    android:text="@string/auth_login_login"
 		    android:id="@+id/auth_login_button" />
 	</LinearLayout> 
@@ -54,3 +59,4 @@
 	</LinearLayout> 
 
 </LinearLayout> 
+</LinearLayout>

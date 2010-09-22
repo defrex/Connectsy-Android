@@ -34,10 +34,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:gravity="right" >
-		<Button
-			android:layout_width="wrap_content" 
-		    android:layout_height="wrap_content"
-		    android:gravity="center"
+		<Button style="@style/Button"
 		    android:text="@string/auth_register_register"
 		    android:id="@+id/auth_register_button" />
 	</LinearLayout> 

@@ -35,310 +35,334 @@ import com.connectsy.settings.MainMenu;
 import com.connectsy.utils.DateUtils;
 import com.connectsy.utils.Utils;
 
-public class EventView extends Activity implements DataUpdateListener, 
+public class EventView extends Activity implements DataUpdateListener,
 		OnClickListener, OnItemClickListener {
 	@SuppressWarnings("unused")
 	private static final String TAG = "EventView";
-    
-    private Event event;
-    private String eventRev;
-    private EventManager eventManager;
-    private CommentManager commentManager;
-    private CommentAdapter commentAdapter;
-    private AttendantManager attManager;
-    private AttendantsAdapter attAdapter;
-    private String tabSelected;
-    private Integer curUserStatus;
-    
-    private int pendingOperations = 0;
-    
-    private static final int REFRESH_EVENT = 0;
-    private static final int REFRESH_ATTENDANTS = 1;
-    private static final int ATT_SET = 2;
-    private static final int REFRESH_COMMENTS = 3;
-    private static final int NEW_COMMENT = 4;
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.event_view);
 
-        ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
-        abRefresh.setOnClickListener(this);
-    	Button comments = (Button)findViewById(R.id.event_view_tab_comments);
-    	comments.setOnClickListener(this);
-    	comments.setSelected(true);
-    	Button atts = (Button)findViewById(R.id.event_view_tab_atts);
-    	atts.setOnClickListener(this);
-        
-        Intent i = getIntent();
-        eventRev = i.getExtras().getString("com.connectsy.events.revision");
+	private Event event;
+	private String eventRev;
+	private EventManager eventManager;
+	private CommentManager commentManager;
+	private CommentAdapter commentAdapter;
+	private AttendantManager attManager;
+	private AttendantsAdapter attAdapter;
+	private String tabSelected;
+	private Integer curUserStatus;
 
-        event = getEventManager().getEvent(eventRev);
-        
-        refresh();
-        update();
-        setTabSelected("comments");
-    }
-	
-    private void update(){
+	private int pendingOperations = 0;
+
+	private static final int REFRESH_EVENT = 0;
+	private static final int REFRESH_ATTENDANTS = 1;
+	private static final int ATT_SET = 2;
+	private static final int REFRESH_COMMENTS = 3;
+	private static final int NEW_COMMENT = 4;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.event_view);
+
+		ImageView abRefresh = (ImageView) findViewById(R.id.ab_refresh);
+		abRefresh.setOnClickListener(this);
+		Button comments = (Button) findViewById(R.id.event_view_tab_comments);
+		comments.setOnClickListener(this);
+		comments.setSelected(true);
+		Button atts = (Button) findViewById(R.id.event_view_tab_atts);
+		atts.setOnClickListener(this);
+
+		Intent i = getIntent();
+		eventRev = i.getExtras().getString("com.connectsy.events.revision");
+
+		event = getEventManager().getEvent(eventRev);
+
+		refresh();
+		update();
+		setTabSelected("comments");
+	}
+
+	private void update() {
 		setUserStatus(null, false);
 		setTabSelected(null);
-        event = getEventManager().getEvent(eventRev);
-        if (event != null){
-        	setTabSelected(null);
-        	String curUser = DataManager.getCache(this).getString("username", null);
-        	if (!event.creator.equals(curUser)){
-        		findViewById(R.id.event_view_ab_in).setVisibility(View.VISIBLE);
-        		findViewById(R.id.event_view_ab_in_seperator).setVisibility(View.VISIBLE);
-        		
-            	ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
-            	in.setOnClickListener(this);
-                if (getAttManager().isUserAttending(curUser)){
-                	in.setSelected(true);
-                }else{
-                	in.setSelected(false);
-                }
-        	}
-        	
-	        EventView.renderView(this, findViewById(R.id.event), event, false);
-        }
-    }
+		event = getEventManager().getEvent(eventRev);
+		if (event != null) {
+			setTabSelected(null);
+			String curUser = DataManager.getCache(this).getString("username",
+					null);
+			if (!event.creator.equals(curUser)) {
+				findViewById(R.id.event_view_ab_in).setVisibility(View.VISIBLE);
+				findViewById(R.id.event_view_ab_in_seperator).setVisibility(
+						View.VISIBLE);
 
-    private void setTabSelected(String tab){
-    	if (tab != null) tabSelected = tab;
-		ListView attsList = (ListView)findViewById(R.id.attendants_list);
-        ListView comments = (ListView)findViewById(R.id.comments_list);
-    	if (tabSelected == "comments"){
-    		findViewById(R.id.event_view_tab_comments).setSelected(true);
-    		findViewById(R.id.event_view_tab_atts).setSelected(false);
-    		attsList.setVisibility(ListView.GONE);
-    		comments.setVisibility(ListView.VISIBLE);
-    		
-            if (event != null){
-        		if (findViewById(R.id.comment_list_item_new) == null){
-        			LayoutInflater inflater = LayoutInflater.from(this);
-        			View add_comment = inflater.inflate(R.layout.comment_list_item_new, 
-        					comments, false);
-        			comments.addHeaderView(add_comment);
-        			add_comment.setOnClickListener(this);
-        		}
-            	
-    	        if (commentAdapter == null){
-    	        	commentAdapter = new CommentAdapter(this, R.layout.comment_list_item, 
-    		        		getCommentManager().getComments());
-    	        }else{
-    	        	commentAdapter.clear();
-    	        	for (Comment c: getCommentManager().getComments())
-    	        		commentAdapter.add(c);
-    	        	commentAdapter.notifyDataSetChanged();
-    	        }
-    	        comments.setAdapter(commentAdapter);
-            }
-    		
-    	}else if(tabSelected == "atts"){
-    		findViewById(R.id.event_view_tab_comments).setSelected(false);
-    		findViewById(R.id.event_view_tab_atts).setSelected(true);
-    		attsList.setVisibility(ListView.VISIBLE);
-    		comments.setVisibility(ListView.GONE);
-            if (event != null){
-    	        if (attAdapter == null){
-    		        attAdapter = new AttendantsAdapter(this, R.layout.attendant_list_item, 
-    		        		getAttManager().getAttendants());
-    	        }else{
-    	        	attAdapter.clear();
-    	        	for (Attendant a: getAttManager().getAttendants())
-    	        		attAdapter.add(a);
-    	        	attAdapter.notifyDataSetChanged();
-    	        }
-    	        attsList.setAdapter(attAdapter);
-            }
-    	}
-    }
-    
-    private void setUserStatus(Integer status){
-    	setUserStatus(status, true);}
-    private void setUserStatus(Integer status, boolean doRequest){
-		if (status != null) curUserStatus = status;
-		else if (curUserStatus == null) return;
-		
-		ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
-		if (curUserStatus == Status.ATTENDING){
-    		in.setSelected(true);
-    		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_black));
-		}else{
-    		in.setSelected(false);
-    		in.setImageDrawable(getResources().getDrawable(R.drawable.icon_check_white));
+				ImageView in = (ImageView) findViewById(R.id.event_view_ab_in);
+				in.setOnClickListener(this);
+				if (getAttManager().isUserAttending(curUser)) {
+					in.setSelected(true);
+				} else {
+					in.setSelected(false);
+				}
+			}
+
+			EventView.renderView(this, findViewById(R.id.event), event, false);
 		}
-		if (doRequest){
+	}
+
+	private void setTabSelected(String tab) {
+		if (tab != null)
+			tabSelected = tab;
+		ListView attsList = (ListView) findViewById(R.id.attendants_list);
+		ListView comments = (ListView) findViewById(R.id.comments_list);
+		if (tabSelected == "comments") {
+			findViewById(R.id.event_view_tab_comments).setSelected(true);
+			findViewById(R.id.event_view_tab_atts).setSelected(false);
+			attsList.setVisibility(ListView.GONE);
+			comments.setVisibility(ListView.VISIBLE);
+
+			if (event != null) {
+				if (findViewById(R.id.comment_list_item_new) == null) {
+					LayoutInflater inflater = LayoutInflater.from(this);
+					View add_comment = inflater.inflate(
+							R.layout.comment_list_item_new, comments, false);
+					comments.addHeaderView(add_comment);
+					add_comment.setOnClickListener(this);
+				}
+
+				if (commentAdapter == null) {
+					commentAdapter = new CommentAdapter(this,
+							R.layout.comment_list_item, getCommentManager()
+									.getComments());
+				} else {
+					commentAdapter.clear();
+					for (Comment c : getCommentManager().getComments())
+						commentAdapter.add(c);
+					commentAdapter.notifyDataSetChanged();
+				}
+				comments.setAdapter(commentAdapter);
+			}
+
+		} else if (tabSelected == "atts") {
+			findViewById(R.id.event_view_tab_comments).setSelected(false);
+			findViewById(R.id.event_view_tab_atts).setSelected(true);
+			attsList.setVisibility(ListView.VISIBLE);
+			comments.setVisibility(ListView.GONE);
+			if (event != null) {
+				if (attAdapter == null) {
+					attAdapter = new AttendantsAdapter(this,
+							R.layout.attendant_list_item, getAttManager()
+									.getAttendants());
+				} else {
+					attAdapter.clear();
+					for (Attendant a : getAttManager().getAttendants())
+						attAdapter.add(a);
+					attAdapter.notifyDataSetChanged();
+				}
+				attsList.setAdapter(attAdapter);
+			}
+		}
+	}
+
+	private void setUserStatus(Integer status) {
+		setUserStatus(status, true);
+	}
+
+	private void setUserStatus(Integer status, boolean doRequest) {
+		if (status != null)
+			curUserStatus = status;
+		else if (curUserStatus == null)
+			return;
+
+		ImageView in = (ImageView) findViewById(R.id.event_view_ab_in);
+		if (curUserStatus == Status.ATTENDING) {
+			in.setSelected(true);
+			in.setImageDrawable(getResources().getDrawable(
+					R.drawable.icon_check_black));
+		} else {
+			in.setSelected(false);
+			in.setImageDrawable(getResources().getDrawable(
+					R.drawable.icon_check_white));
+		}
+		if (doRequest) {
 			getAttManager().setStatus(curUserStatus, ATT_SET);
 			pendingOperations++;
 			setRefreshing(true);
 		}
-    }
-    
+	}
+
 	public void onClick(View v) {
-    	if (v.getId() == R.id.ab_refresh){ 
-    		refresh();
-    	}else if (v.getId() == R.id.event_view_ab_in){
-    		ImageView in = (ImageView)findViewById(R.id.event_view_ab_in);
-    		if (in.isSelected())
-        		setUserStatus(Status.NOT_ATTENDING);
-    		else
-        		setUserStatus(Status.ATTENDING);
-    	}else if (v.getId() == R.id.event_view_tab_comments){
-    		setTabSelected("comments");
-    	}else if (v.getId() == R.id.event_view_tab_atts){
-    		setTabSelected("atts");
-    	}else if (v.getId() == R.id.comment_list_item_new){
+		if (v.getId() == R.id.ab_refresh) {
+			refresh();
+		} else if (v.getId() == R.id.event_view_ab_in) {
+			ImageView in = (ImageView) findViewById(R.id.event_view_ab_in);
+			if (in.isSelected())
+				setUserStatus(Status.NOT_ATTENDING);
+			else
+				setUserStatus(Status.ATTENDING);
+		} else if (v.getId() == R.id.event_view_tab_comments) {
+			setTabSelected("comments");
+		} else if (v.getId() == R.id.event_view_tab_atts) {
+			setTabSelected("atts");
+		} else if (v.getId() == R.id.comment_list_item_new) {
 			Intent i = new Intent(Intent.ACTION_INSERT);
 			i.setType("vnd.android.cursor.item/vnd.connectsy.event.comment");
-    		startActivityForResult(i, NEW_COMMENT);
-    	}
+			startActivityForResult(i, NEW_COMMENT);
+		}
 	}
-	
-	private void refresh(){
-		if (getEventManager().getEvent(eventRev) == null){
+
+	private void refresh() {
+		if (getEventManager().getEvent(eventRev) == null) {
 			getEventManager().refreshEvent(eventRev, REFRESH_EVENT);
 			pendingOperations++;
 		}
-		if (event != null){ 
+		if (event != null) {
 			getAttManager().refreshAttendants(REFRESH_ATTENDANTS);
 			getCommentManager().refreshComments(REFRESH_COMMENTS);
-			pendingOperations+=2;
+			pendingOperations += 2;
 		}
 		setRefreshing(true);
 	}
 
 	public void onDataUpdate(int code, String response) {
-		if (code == NEW_COMMENT || code == ATT_SET){
+		if (code == NEW_COMMENT || code == ATT_SET) {
 			refresh();
-		}else{
+		} else {
 			if (code == REFRESH_ATTENDANTS)
 				curUserStatus = getAttManager().getCurrentUserStatus(true);
 			update();
 		}
 		pendingOperations--;
-		if (pendingOperations == 0) setRefreshing(false);
+		if (pendingOperations == 0)
+			setRefreshing(false);
 	}
 
 	public void onRemoteError(int httpStatus, int returnCode) {
-		if (httpStatus == 403 && returnCode == ATT_SET){
+		if (httpStatus == 403 && returnCode == ATT_SET) {
 			Toast.makeText(this, "You are not invited.", 500).show();
 			setUserStatus(Status.NOT_ATTENDING, false);
 		}
 		pendingOperations--;
-		if (pendingOperations == 0) setRefreshing(false);
+		if (pendingOperations == 0)
+			setRefreshing(false);
 	}
-	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		if (resultCode == RESULT_OK && requestCode == NEW_COMMENT){
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK && requestCode == NEW_COMMENT) {
 			getCommentManager().createComment(
-					data.getStringExtra("com.connectsy.event.comment"), NEW_COMMENT);
+					data.getStringExtra("com.connectsy.event.comment"),
+					NEW_COMMENT);
 			pendingOperations++;
 			setRefreshing(true);
 		}
 	}
-	
-    private void setRefreshing(boolean on) {
-    	if (on){
-	        findViewById(R.id.ab_refresh).setVisibility(View.GONE);
-	        findViewById(R.id.ab_refresh_spinner).setVisibility(View.VISIBLE);
-    	}else{
-	        findViewById(R.id.ab_refresh).setVisibility(View.VISIBLE);
-	        findViewById(R.id.ab_refresh_spinner).setVisibility(View.GONE);
-    	}
-    }
-    
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return MainMenu.onCreateOptionsMenu(menu);
+
+	private void setRefreshing(boolean on) {
+		if (on) {
+			findViewById(R.id.ab_refresh).setVisibility(View.GONE);
+			findViewById(R.id.ab_refresh_spinner).setVisibility(View.VISIBLE);
+		} else {
+			findViewById(R.id.ab_refresh).setVisibility(View.VISIBLE);
+			findViewById(R.id.ab_refresh_spinner).setVisibility(View.GONE);
+		}
 	}
-    
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return MainMenu.onOptionsItemSelected(this, item);
-    }
-    
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return MainMenu.onCreateOptionsMenu(menu);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return MainMenu.onOptionsItemSelected(this, item);
+	}
+
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 	}
-	
-	private AttendantManager getAttManager(){
-		return getAttManager(false); }
-	private AttendantManager getAttManager(boolean forceNew){
+
+	private AttendantManager getAttManager() {
+		return getAttManager(false);
+	}
+
+	private AttendantManager getAttManager(boolean forceNew) {
 		if ((attManager == null || forceNew) && event != null)
-			attManager = new AttendantManager(this, this, event.ID, event.attendants);
+			attManager = new AttendantManager(this, this, event.ID,
+					event.attendants);
 		return attManager;
 	}
 
-	private CommentManager getCommentManager(){
-		return getCommentManager(false); }
-	private CommentManager getCommentManager(boolean forceNew){
+	private CommentManager getCommentManager() {
+		return getCommentManager(false);
+	}
+
+	private CommentManager getCommentManager(boolean forceNew) {
 		if ((commentManager == null || forceNew) && event != null)
 			commentManager = new CommentManager(this, this, event);
 		return commentManager;
 	}
-	
-	private EventManager getEventManager(){
-		return getEventManager(false); }
-	private EventManager getEventManager(boolean forceNew){
+
+	private EventManager getEventManager() {
+		return getEventManager(false);
+	}
+
+	private EventManager getEventManager(boolean forceNew) {
 		if (eventManager == null || forceNew)
 			eventManager = new EventManager(this, this, null, null);
 		return eventManager;
 	}
-	
-	static View renderView(final Context context, View view, final Event event, boolean truncate){
-		OnClickListener userClick = new View.OnClickListener(){
+
+	static View renderView(final Context context, View view, final Event event,
+			boolean truncate) {
+		OnClickListener userClick = new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
 				i.putExtra("com.connectsy.user.username", event.creator);
-	    		context.startActivity(i);
+				context.startActivity(i);
 			}
-        };
-        
-        ImageView avatar = (ImageView)view.findViewById(R.id.event_avatar);
-        avatar.setOnClickListener(userClick);
-        new AvatarFetcher(context, event.creator, avatar);
-		
-        TextView username = (TextView)view.findViewById(R.id.event_username);
-        username.setText(event.creator);
-        username.setOnClickListener(userClick);
-        
-        if (event.category != null && !event.category.equals("")){
-        	view.findViewById(R.id.event_pipe).setVisibility(View.VISIBLE);
-	        TextView category = (TextView)view.findViewById(R.id.event_category);
-	        category.setVisibility(View.VISIBLE);
-	        category.setText(event.category);
-	        category.setOnClickListener(new TextView.OnClickListener(){
+		};
+
+		ImageView avatar = (ImageView) view.findViewById(R.id.event_avatar);
+		avatar.setOnClickListener(userClick);
+		new AvatarFetcher(context, event.creator, avatar);
+
+		TextView username = (TextView) view.findViewById(R.id.event_username);
+		username.setText(event.creator);
+		username.setOnClickListener(userClick);
+
+		if (event.category != null && !event.category.equals("")) {
+			view.findViewById(R.id.event_pipe).setVisibility(View.VISIBLE);
+			TextView category = (TextView) view
+					.findViewById(R.id.event_category);
+			category.setVisibility(View.VISIBLE);
+			category.setText(event.category);
+			category.setOnClickListener(new TextView.OnClickListener() {
 				public void onClick(View v) {
 					Intent i = new Intent(Intent.ACTION_VIEW);
 					i.setType("vnd.android.cursor.dir/vnd.connectsy.event");
-		    		i.putExtra("filter", EventManager.Filter.CATEGORY);
-		    		i.putExtra("category", event.category);
-		    		context.startActivity(i);
+					i.putExtra("filter", EventManager.Filter.CATEGORY);
+					i.putExtra("category", event.category);
+					context.startActivity(i);
 				}
-	        });
-        }
-        
-        TextView where = (TextView)view.findViewById(R.id.event_where);
-        where.setText(Html.fromHtml("<b>where:</b> "+
-        		Utils.maybeTruncate(event.where, 25, truncate)));
-        TextView what = (TextView)view.findViewById(R.id.event_what);
-        what.setText(Html.fromHtml("<b>what:</b> "+
-        		Utils.maybeTruncate(event.description, 25, truncate)));
-        TextView when = (TextView)view.findViewById(R.id.event_when);
-        when.setText(Html.fromHtml("<b>when:</b> "+DateUtils.formatTimestamp(event.when)));
+			});
+		}
 
-        TextView distance = (TextView)view.findViewById(R.id.event_distance);
-        String distanceText = new LocManager(context).distanceFrom(event.posted_from[0], 
-        		event.posted_from[1]);
-        if (distanceText != null)
-        	distance.setText(distanceText);
-        else
-        	distance.setVisibility(View.VISIBLE);
-        TextView created = (TextView)view.findViewById(R.id.event_created);
-        created.setText("created "+DateUtils.formatTimestamp(event.created));
-        
-        return view;
+		TextView where = (TextView) view.findViewById(R.id.event_where);
+		where.setText(Html.fromHtml("<b>where:</b> "
+				+ Utils.maybeTruncate(event.where, 25, truncate)));
+		TextView what = (TextView) view.findViewById(R.id.event_what);
+		what.setText(Html.fromHtml("<b>what:</b> "
+				+ Utils.maybeTruncate(event.description, 25, truncate)));
+		TextView when = (TextView) view.findViewById(R.id.event_when);
+		when.setText(Html.fromHtml("<b>when:</b> "
+				+ DateUtils.formatTimestamp(event.when)));
+
+		TextView distance = (TextView) view.findViewById(R.id.event_distance);
+		String distanceText = new LocManager(context).distanceFrom(
+				event.posted_from[0], event.posted_from[1]);
+		if (distanceText != null)
+			distance.setText(distanceText);
+		else
+			distance.setVisibility(View.VISIBLE);
+		TextView created = (TextView) view.findViewById(R.id.event_created);
+		created.setText("created " + DateUtils.formatTimestamp(event.created));
+
+		return view;
 	}
 }

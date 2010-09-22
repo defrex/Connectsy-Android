@@ -15,7 +15,7 @@ public class ActionBarHandler implements OnClickListener{
 	}
 	
 	public void onClick(View abAction) {
-    	if (abAction.getId() == R.id.ab_new_event){
+		if (abAction.getId() == R.id.ab_new_event){
     		activity.startActivity(new Intent(activity, EventNew.class));
     	}
 	}

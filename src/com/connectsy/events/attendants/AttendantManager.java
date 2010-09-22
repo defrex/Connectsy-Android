@@ -1,7 +1,6 @@
 package com.connectsy.events.attendants;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -167,6 +166,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
+		Log.d(TAG, response);
 		getAttendants(true);
 		listener.onDataUpdate(returnCode, response);
 	}
