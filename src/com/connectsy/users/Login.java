@@ -27,6 +27,7 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.notifications.NotificationListener;
 
 public class Login extends Activity implements OnClickListener, ApiRequestListener {
 	private ProgressDialog loadingDialog;
@@ -88,6 +89,10 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
         dataEditor.putString("username", username);
         dataEditor.commit();
         setResult(RESULT_OK);
+        
+        //start the notifications
+        NotificationListener.getInstance().start(this);
+        
         this.finish();
 	}
 

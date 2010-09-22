@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.connectsy.data.DataManager;
+import com.connectsy.notifications.NotificationListener;
 import com.connectsy.users.Login;
 
 public class Launcher extends Activity {
@@ -20,6 +21,8 @@ public class Launcher extends Activity {
         if (!authed){
         	startActivityForResult(new Intent(this, Login.class), AUTHENTICATE_USER);
         }else{
+        	//start the poller
+        	NotificationListener.getInstance().start(this);
         	startActivity(new Intent(this, Dashboard.class));
         	this.finish();
         }
