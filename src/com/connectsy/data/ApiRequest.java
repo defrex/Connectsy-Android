@@ -26,6 +26,8 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.connectsy.settings.Settings;
 
@@ -53,6 +55,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 
 	private String url;
 	private HttpRequestBase request;
+	private Context context;
 	private DefaultHttpClient client = new DefaultHttpClient();
 	private ApiRequestListener apiListener;
 	private SharedPreferences data;
@@ -81,6 +84,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	public ApiRequest(ApiRequestListener listener, Context c, Method pMethod, 
 			String pPath, boolean pAuthorized, int returnCode){
 		apiListener = listener;
+		context = c;
 		data = DataManager.getCache(c);
 		method = pMethod;
 		path = pPath;
@@ -175,6 +179,10 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 
 	protected void onPostExecute(HttpResponse response) {
 		if (response == null){
+			Toast t = Toast.makeText(context, "Please confirm"
+					+" you're connected to the internet.", 5000);
+			t.setGravity(Gravity.TOP, 0, 20);
+			t.show();
 			if (apiListener != null) apiListener.onApiRequestError(0, retCode);
 			return;
 		}else if(response.getStatusLine().getStatusCode()-200 > 100){

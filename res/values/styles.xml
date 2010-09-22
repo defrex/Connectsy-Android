@@ -288,6 +288,10 @@
             <item name="android:layout_marginRight">5dp</item>
             <item name="android:layout_marginLeft">5dp</item>
 	    </style>
+            <style name="EventNewEditText" parent="EventNewField">
+                <item name="android:autoText">true</item>
+                <item name="android:capitalize">sentences</item>
+            </style>
 		    <style name="EventNewWho" parent="Toggle">
                 <item name="android:layout_width">fill_parent</item>
 		    </style>

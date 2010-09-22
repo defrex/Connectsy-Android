@@ -49,7 +49,6 @@ public class EventView extends Activity implements DataUpdateListener,
     private AttendantsAdapter attAdapter;
     private String tabSelected;
     private Integer curUserStatus;
-    private boolean pendingStatusChange = false;
     
     private int pendingOperations = 0;
     

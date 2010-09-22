@@ -41,9 +41,9 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		public Attendant(){}
 		
 		public Attendant(JSONObject jsonAttendant) throws JSONException{
-			username = jsonAttendant.getString("user");
-			eventID = jsonAttendant.getString("event");
+			username = jsonAttendant.getString("username");
 			status = jsonAttendant.getInt("status");
+			//eventID = jsonAttendant.getString("event");
 		}
 		
 		public static ArrayList<Attendant> deserializeList(String attsString) throws JSONException{
@@ -83,10 +83,8 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		return getAttendant(username, false);}
 	public Attendant getAttendant(String username, boolean force){
 		getAttendants(force);
-		for (Attendant a: attendants){
-			Log.d(TAG, "testing "+username+" == +"+a.username);
+		for (Attendant a: attendants)
 			if (a.username.equals(username)) return a;
-		}
 		return null;
 	}
 	
@@ -106,35 +104,24 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	}
 	
 	public ArrayList<Attendant> getAttendants(){
-		return getAttendants(false);
-	}
+		return getAttendants(false);}
 	public ArrayList<Attendant> getAttendants(boolean force){
-		if (attendants != null && !force) return attendants;
 		String attsString = getRequest().getCached();
 		if (attsString == null) 
 			if (attendants == null)
 				return new ArrayList<Attendant>();
 			else
 				return attendants;
-		attendants = new ArrayList<Attendant>();
 		try {
-			JSONObject json = new JSONObject(attsString);
-			DataManager.getCache(context).edit().putInt("attendants.timestamp", 
-					json.getInt("timestamp")).commit();
-			JSONObject attsJSON = json.getJSONObject("attendants");
-			@SuppressWarnings("unchecked")
-			Iterator<String> keys = attsJSON.keys();
-			while (keys.hasNext()){
-				Attendant att = new Attendant();
-				att.username = keys.next();
-				att.status = attsJSON.getInt(att.username);
-				att.eventID = eventID;
-				attendants.add(att);
-			}
+			attendants = Attendant.deserializeList(
+					new JSONObject(attsString).getString("attendants"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return attendants;
+		if (attendants == null)
+			return new ArrayList<Attendant>();
+		else
+			return attendants;
 	}
 	
 	public void refreshAttendants(int sentReturnCode){

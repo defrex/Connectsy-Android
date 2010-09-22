@@ -45,9 +45,8 @@
             </LinearLayout>
             <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
-        <EditText style="@style/EventNewField"
+        <EditText style="@style/EventNewEditText"
             android:hint="@string/events_new_desc"
-            android:autoText="true"
             android:maxLength="150"
             android:id="@+id/events_new_what" />
 	    
@@ -66,9 +65,8 @@
             </LinearLayout>
 			<View style="@style/EventNewTitleBorder" />
 		</LinearLayout>
-		<EditText style="@style/EventNewField"
+		<EditText style="@style/EventNewEditText"
 		    android:hint="@string/events_new_where"
-		    android:autoText="true"
             android:maxLength="25"
 		    android:id="@+id/events_new_where" />
 		
