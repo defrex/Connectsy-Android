@@ -148,9 +148,9 @@ public class NotificationListener implements ApiRequestListener,
 		String title;
 		String body;
 		Intent i;
-		/*
-		 * if (notifications.length() == 0) { return; }else
-		 */if (notifications.length() == 1) {
+		if (notifications.length() == 0) {
+			return;
+		}else if (notifications.length() == 1) {
 			String rev = notifications.getJSONObject(0).getString(
 					"event_revision");
 			EventManager eventManager = new EventManager(context, this, null,
