@@ -148,9 +148,9 @@ public class NotificationListener implements ApiRequestListener,
 		String title;
 		String body;
 		Intent i;
-		if (notifications.length() == 0) {
-			return;
-		}else if (notifications.length() == 1) {
+		/*
+		 * if (notifications.length() == 0) { return; }else
+		 */if (notifications.length() == 1) {
 			String rev = notifications.getJSONObject(0).getString(
 					"event_revision");
 			EventManager eventManager = new EventManager(context, this, null,
@@ -180,9 +180,13 @@ public class NotificationListener implements ApiRequestListener,
 	}
 
 	private Notification getNotification() {
-		if (notification == null)
-			notification = new Notification(R.drawable.notification, "",
-					System.currentTimeMillis());
+		if (notification == null) {
+			notification = new Notification(R.drawable.notification,
+					"New Connectsy Event", System.currentTimeMillis());
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
+			// notification.defaults |= Notification.DEFAULT_SOUND;
+			notification.defaults |= Notification.DEFAULT_LIGHTS;
+		}
 		return notification;
 	}
 
@@ -197,9 +201,6 @@ public class NotificationListener implements ApiRequestListener,
 	}
 
 	// nothing to see here, please move along...
-	public void onRemoteError(int httpStatus, int code) {
-	}
-
-	public void onApiRequestError(int httpStatus, int retCode) {
-	}
+	public void onRemoteError(int httpStatus, int code) {}
+	public void onApiRequestError(int httpStatus, int retCode) {}
 }
