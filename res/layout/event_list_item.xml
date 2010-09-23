@@ -22,22 +22,28 @@
                 android:visibility="gone"
                 android:id="@+id/event_category"
                 android:clickable="true" />
+            
+            <View style="@style/Spring"/>
+            <ImageView
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+                android:background="@drawable/icon_right_arrow_grey"/>
 		</LinearLayout>
-                
-            <TextView style="@style/EventWh"
-                android:id="@+id/event_what" />
         
-            <TextView style="@style/EventWh"
-                android:id="@+id/event_where" />
-        
-            <TextView style="@style/EventWh"
-                android:id="@+id/event_when" />
-                
-            <TextView style="@style/EventDeEm"
-                android:id="@+id/event_created" />
-        
-            <TextView style="@style/EventDeEm"
-                android:id="@+id/event_distance" />
+        <TextView style="@style/EventWh"
+            android:id="@+id/event_what" />
+    
+        <TextView style="@style/EventWh"
+            android:id="@+id/event_where" />
+    
+        <TextView style="@style/EventWh"
+            android:id="@+id/event_when" />
+            
+        <TextView style="@style/EventDeEm"
+            android:id="@+id/event_created" />
+    
+        <TextView style="@style/EventDeEm"
+            android:id="@+id/event_distance" />
 		    
 	</LinearLayout>
 	

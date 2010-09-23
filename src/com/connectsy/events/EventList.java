@@ -72,9 +72,9 @@ public class EventList extends Activity implements DataUpdateListener,
         
         TextView heading = (TextView)findViewById(R.id.event_list_heading_text);
         if (filter == Filter.ALL)
-        	heading.setText("Nearby Events");
+        	heading.setText("All Activity");
         if (filter == Filter.FRIENDS)
-        	heading.setText("Friends Events");
+        	heading.setText("Friends Activity");
         if (filter == Filter.CATEGORY){
         	heading.setText("Category: "+category);
         	findViewById(R.id.event_list_heading_arrow).setVisibility(View.VISIBLE);

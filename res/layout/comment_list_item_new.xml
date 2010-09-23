@@ -11,6 +11,6 @@
             android:text="New Comment" />
         <View style="@style/Spring" />
         <ImageView style="@style/WrapAll"
-            android:src="@drawable/icon_right_arrow"/>
+            android:src="@drawable/icon_comment"/>
     </LinearLayout>
 </LinearLayout>
