@@ -1,5 +1,7 @@
 package com.connectsy.events;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -148,13 +150,16 @@ public class EventView extends Activity implements DataUpdateListener,
 			attsList.setVisibility(ListView.VISIBLE);
 			comments.setVisibility(ListView.GONE);
 			if (event != null) {
+				ArrayList<Attendant> atts = new ArrayList<Attendant>();
+				for (Attendant a : getAttManager().getAttendants())
+					if (a.status == Status.ATTENDING)
+						atts.add(a);
 				if (attAdapter == null) {
 					attAdapter = new AttendantsAdapter(this,
-							R.layout.attendant_list_item, getAttManager()
-									.getAttendants());
+							R.layout.attendant_list_item, atts);
 				} else {
 					attAdapter.clear();
-					for (Attendant a : getAttManager().getAttendants())
+					for (Attendant a : atts)
 						attAdapter.add(a);
 					attAdapter.notifyDataSetChanged();
 				}

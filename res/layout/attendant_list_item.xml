@@ -10,8 +10,6 @@
         <TextView style="@style/UserListItemUsername"
             android:id="@+id/user_list_item_username"
             android:clickable="true" />
-        <TextView style="@style/AttendantsListItemStatus"
-            android:id="@+id/attendant_list_item_status" />
     </LinearLayout>
     
 </LinearLayout>

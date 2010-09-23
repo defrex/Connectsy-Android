@@ -51,8 +51,6 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         String status_text = r.getString(r.getIdentifier(
         		"string/attendant_status_"+Integer.toString(att.status), null, 
         		context.getPackageName()));
-        TextView status = (TextView)view.findViewById(R.id.attendant_list_item_status);
-        status.setText(status_text);
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
         avatar.setOnClickListener(userClick);
