@@ -58,7 +58,7 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
         profile.setOnClickListener(this);
 
         MapView mapView = (MapView) findViewById(R.id.dashboard_map);
-        mapView.setBuiltInZoomControls(false);
+        mapView.setBuiltInZoomControls(true);
         mapView.getController().setZoom(13);
         
         loc = new LocManager(this);
@@ -120,8 +120,6 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
 			JSONArray points = new JSONArray(pointsStr);
 			for (int i=0;i<points.length();i++){
 				JSONObject point = points.getJSONObject(i);
-//				double lat = point.getJSONObject("loc").getDouble("lat");
-//				double lng = point.getJSONObject("loc").getDouble("lng");
 				double lat = point.getJSONArray("loc").getDouble(0);
 				double lng = point.getJSONArray("loc").getDouble(1);
 				overlay.addOverlay(lat, lng, point.getString("rev"));

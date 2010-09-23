@@ -2,6 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<ScrollView style="@style/FullWidth">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
     android:padding="10px" >
@@ -38,4 +43,6 @@
 		    android:text="@string/auth_register_register"
 		    android:id="@+id/auth_register_button" />
 	</LinearLayout> 
+</LinearLayout>
+</ScrollView>
 </LinearLayout> 

@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
@@ -98,13 +97,13 @@ public class UserView extends Activity implements OnClickListener,
 	        	for (int i = 0;i < friends.size();i++)
 	        		if (friends.get(i).username.equals(curUsername))
 	        			isFriend = true;
-        		Button f = (Button)findViewById(R.id.user_view_befriend);
+        		ImageView f = (ImageView)findViewById(R.id.user_view_befriend);
+        		f.setOnClickListener(this);
+        		f.setVisibility(Button.VISIBLE);
 	        	if (!isFriend){
-	        		f.setVisibility(Button.VISIBLE);
-	        		f.setText("F+");
-	        		f.setOnClickListener(this);
+	        		f.setImageResource(R.drawable.icon_friend_plus);
 	        	}else{
-	        		f.setVisibility(Button.INVISIBLE);
+	        		f.setImageResource(R.drawable.icon_friend_minus);
 	        	}
 	        }
 		}

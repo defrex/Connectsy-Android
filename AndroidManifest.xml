@@ -52,8 +52,10 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".users.Register" />
-        <activity android:name=".users.Login" />
+        <activity android:name=".users.Register"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".users.Login"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".users.Logout"
                   android:theme="@android:style/Theme.NoDisplay" />
         <activity android:name=".users.UserView">

@@ -39,7 +39,7 @@
 			
 		<View style="@style/Spring" />
 		
-		<Button style="@style/UserViewBefriend"
+		<ImageView style="@style/UserViewBefriend"
 		    android:id="@+id/user_view_befriend"
 		    android:visibility="invisible" />
 			

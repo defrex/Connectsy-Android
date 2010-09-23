@@ -5,12 +5,10 @@
     <string name="menu_logout">Logout</string>
     <string name="menu_settings">Settings</string>
     
-    <string name="dashboard_events_nearby">Everything</string>
-    <string name="dashboard_events_friends">Friends</string>
-    <string name="dashboard_events_category">Category</string>
-    <string name="dashboard_events_new">Create Event</string>
-    <string name="dashboard_profile">Profile</string>
-    <string name="dashboard_account">Account</string>
+    <string name="dashboard_events_nearby">All Activity</string>
+    <string name="dashboard_events_friends">Friends Activity</string>
+    <string name="dashboard_events_category">Activity by Category</string>
+    <string name="dashboard_profile">My Profile</string>
     
     <string name="auth_login_username">username</string>
     <string name="auth_login_password">password</string>

@@ -10,10 +10,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.connectsy.R;
 import com.connectsy.data.ApiRequest;
@@ -42,12 +44,19 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
     	String password = passwordText.getText().toString();
     	String password2 = password2Text.getText().toString();
     	
-    	//check password equality
-    	if (!password.equals(password2)) {
-    		new AlertDialog.Builder(this)
-    			.setMessage("Passwords don't match")
-    			.setPositiveButton("Ok", null)
-    			.show();
+    	String invalid = null;
+
+    	if (username.equals(""))
+    		invalid = "Username is required.";
+    	else if (password.equals(""))
+    		invalid = "Password is required.";
+    	else if (!password.equals(password2))
+    		invalid = "Passwords don't match.";
+    	
+    	if (invalid != null){
+    		Toast t = Toast.makeText(this, invalid, 5000);
+			t.setGravity(Gravity.TOP, 0, 20);
+			t.show();
     		return;
     	}
     	
@@ -78,19 +87,18 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
 		    setResult(RESULT_OK, intent);
 		    this.finish();
 		}else{
-			AlertDialog.Builder alert = new AlertDialog.Builder(this); 
-			alert.setMessage("An Error occured, please try again."); 
-			alert.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-				    dialog.dismiss();
-				}
-			});
-			alert.show();
+    		Toast t = Toast.makeText(this, "An Error occured, please try again.", 5000);
+			t.setGravity(Gravity.TOP, 0, 20);
+			t.show();
 		}
 	}
 
 	public void onApiRequestError(int httpStatus, int code) {
-		Log.e(TAG, "an API error occured");
 		loadingDialog.dismiss();
+		if (httpStatus == 409){
+    		Toast t = Toast.makeText(this, "Sorry, that username is taken.", 5000);
+			t.setGravity(Gravity.TOP, 0, 20);
+			t.show();
+		}
 	}
 }
