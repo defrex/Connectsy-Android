@@ -24,6 +24,7 @@ import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.users.UserManager.User;
+import com.connectsy.utils.Utils;
 
 public class UserSearch extends Activity implements OnClickListener, 
 		ApiRequestListener, DataUpdateListener, OnKeyListener {
@@ -62,10 +63,10 @@ public class UserSearch extends Activity implements OnClickListener,
 					users.add(u);
 				}
 			}
-			
+
+			ListView result_list = (ListView)findViewById(R.id.user_search_results);
 			if (adapter == null){
 				adapter = new UserAdapter(this, R.id.user_search_results, users, false);
-				ListView result_list = (ListView)findViewById(R.id.user_search_results);
 				result_list.setAdapter(adapter);
 			}else{
 	        	adapter.clear();
@@ -73,6 +74,7 @@ public class UserSearch extends Activity implements OnClickListener,
 	        		adapter.add(users.get(i));
 	    		adapter.notifyDataSetChanged();
 			}
+			Utils.setFooterView(this, result_list);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -48,8 +48,9 @@
     </style>
 	    <style name="Avatar" parent="Image">
             <item name="android:layout_marginRight">5dp</item>
-	        <item name="android:layout_width">50dp</item>
+	        <item name="android:layout_width">wrap_content</item>
 	        <item name="android:layout_height">50dp</item>
+	        <item name="android:adjustViewBounds">true</item>
 	    </style>
     
     <style name="Button" parent="WrapAll">
@@ -196,18 +197,6 @@
                 <item name="android:textColor">@color/text_grey</item>
 		        <item name="android:background">@drawable/dashboard_bg</item>
 		    </style>
-        <style name="DashboardExtra" parent="FullWidth">
-            <item name="android:layout_weight">1</item>
-            <item name="android:layout_height">300dp</item>
-            <item name="android:background">@color/consy_dark_green</item>
-        </style>
-            <style name="DashboardExtraBackgroundTop" parent="FullWidth">
-                <item name="android:layout_height">5dp</item>
-                <item name="android:background">@drawable/dashboard_extra_top</item>
-            </style>
-            <style name="DashboardExtraMap" parent="FillAll">
-                <item name="android:layout_weight">1</item>
-            </style>
     
     <style name="EventListHeadingWrapper" parent="FullWidth">
         <item name="android:orientation">vertical</item>

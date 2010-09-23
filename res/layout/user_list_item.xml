@@ -21,6 +21,11 @@
     <Button style="@style/UserListItemConfirm"
         android:id="@+id/user_list_item_confirm"
         android:text="confirm"
+        android:visibility="gone"
         android:clickable="true" />
+    
+    <ImageView style="@style/UserViewBefriend"
+        android:id="@+id/user_view_befriend"
+        android:visibility="gone" />
     
 </LinearLayout>

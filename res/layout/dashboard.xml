@@ -22,10 +22,23 @@
                 android:id="@+id/dashboard_events_nearby"
                 android:text="@string/dashboard_events_nearby"
                 android:drawableTop="@drawable/dashboard_events_nearby"/>
+                
+            <Button style="@style/DashboardButton"
+                android:id="@+id/dashboard_new_event"
+                android:text="@string/dashboard_new_event"
+                android:drawableTop="@drawable/dashboard_new_event"/>
+        </LinearLayout>
+
+        <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_events_friends"
                 android:text="@string/dashboard_events_friends"
                 android:drawableTop="@drawable/dashboard_events_friends"/>
+                
+            <Button style="@style/DashboardButton"
+                android:id="@+id/dashboard_profile"
+                android:text="@string/dashboard_profile"
+                android:drawableTop="@drawable/dashboard_profile"/>
         </LinearLayout>
 
         <LinearLayout style="@style/DashboardRow">
@@ -33,13 +46,16 @@
                 android:id="@+id/dashboard_events_category"
                 android:text="@string/dashboard_events_category"
                 android:drawableTop="@drawable/dashboard_events_category"/>
+                
             <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_profile"
-                android:text="@string/dashboard_profile"
-                android:drawableTop="@drawable/dashboard_profile"/>
+                android:id="@+id/dashboard_search"
+                android:text="@string/dashboard_search"
+                android:drawableTop="@drawable/dashboard_search"/>
         </LinearLayout>
     </LinearLayout>
     
+    
+    <!--
     <FrameLayout style="@style/DashboardExtra">
         <ImageView style="@style/DashboardExtraBackgroundTop" />
         <com.google.android.maps.MapView 
@@ -48,5 +64,5 @@
             android:clickable="true"
             android:apiKey="0rr3ewYP3KKBt3NHO9EqlrJSovDWNZeq7_nICmQ" />
     </FrameLayout>
-    
+    -->
 </LinearLayout>

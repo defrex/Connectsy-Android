@@ -24,7 +24,7 @@ import com.connectsy.users.UserManager.User;
 public class UserAdapter extends ArrayAdapter<User> {
 	private boolean multi;
 	private HashMap<Integer, Boolean> selected = new HashMap<Integer, Boolean>();
-	
+
 	public UserAdapter(Context context, int viewResourceId,
 			ArrayList<User> users, boolean selectMultiple) {
 		super(context, viewResourceId, users);

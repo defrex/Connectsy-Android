@@ -4,12 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -95,10 +92,13 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
 
 	public void onApiRequestError(int httpStatus, int code) {
 		loadingDialog.dismiss();
-		if (httpStatus == 409){
-    		Toast t = Toast.makeText(this, "Sorry, that username is taken.", 5000);
-			t.setGravity(Gravity.TOP, 0, 20);
-			t.show();
-		}
+		String message = "Unknown Error.";
+		if (httpStatus == 409)
+    		message = "Sorry, that username is taken.";
+		else if (httpStatus == 404)
+			message = "Invalid username. Only numbers, letters, and underscores please.";
+		Toast t = Toast.makeText(this, message, 5000);
+		t.setGravity(Gravity.TOP, 0, 20);
+		t.show();
 	}
 }

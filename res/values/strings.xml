@@ -9,6 +9,8 @@
     <string name="dashboard_events_friends">Friends Activity</string>
     <string name="dashboard_events_category">Activity by Category</string>
     <string name="dashboard_profile">My Profile</string>
+    <string name="dashboard_search">Search Users</string>
+    <string name="dashboard_new_event">Create Event</string>
     
     <string name="auth_login_username">username</string>
     <string name="auth_login_password">password</string>

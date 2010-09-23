@@ -34,15 +34,15 @@ public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
 		long expNum = cache.getLong(getCacheName(), 0);
 		if (expNum != 0){
 			if (DateUtils.isCacheExpired(new Date(expNum), 2)){
+				cleanCachedFile();
+			}else{
 				renderCached();
 				return;
-			}else{
-				cleanCachedFile();
 			}
 		}
 		execute();
 	}
-
+	
 	private String getFilename(){
 		return "avatar-"+username;
 	}
@@ -56,7 +56,8 @@ public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
 	
 	private void renderCached() {
 		try {
-			view.setImageDrawable(new BitmapDrawable(context.openFileInput(getFilename())));
+			BitmapDrawable avy = new BitmapDrawable(context.openFileInput(getFilename()));
+			view.setImageDrawable(avy);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -70,7 +71,11 @@ public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
 		HttpResponse response;
 		try {
 			response = client.execute(request);
-			response.getEntity().writeTo(context.openFileOutput(getFilename(), Context.MODE_PRIVATE));
+			if (response.getStatusLine().getStatusCode() == 200)
+				response.getEntity().writeTo(context.openFileOutput(getFilename(), 
+						Context.MODE_PRIVATE));
+			else
+				return false;
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return false;

@@ -52,6 +52,6 @@ public class DateUtils{
 	public static boolean isCacheExpired(Date cached, int hours){
 		Date now = new Date();
 		now.setHours(now.getHours()+hours);
-		return (cached.compareTo(now) <= 0);
+		return (cached.compareTo(now) > 0);
 	}
 }
