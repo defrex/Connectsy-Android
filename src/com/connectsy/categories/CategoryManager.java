@@ -63,22 +63,26 @@ public class CategoryManager extends DataManager {
 	private ApiRequest getRequest(){
 		return new ApiRequest(this, context, Method.GET, "/categories/", false, 0);
 	}
-	
+
 	public ArrayList<Category> getCategories(){
 		ArrayList<Category> cats = new ArrayList<Category>();
 		try {
 			ApiRequest r = getRequest();
-			if (r.getCached() != null)
+			if (r.getCached() != null){
 				cats = Category.deserializeList(r.getCached());
-			else
+			}else{
 				r.execute();
+			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return cats;
 	}
 
+	public void refreshCategories(){
+		getRequest().execute();
+	}
+	
 	public static void precacheCategories(Context c){
 		ApiRequest r = new ApiRequest(null, c, Method.GET, "/categories/", false, 0);
 		long cached = DataManager.getCache(c).getLong("categories_cached", 0);

@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
-import com.connectsy.categories.CategoryManager;
 import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
@@ -63,9 +62,12 @@ public class EventList extends Activity implements DataUpdateListener,
         }else{
         	filter = Filter.ALL;
         }
-        
+
         if (filter == Filter.CATEGORY && category == null){
-        	category = DataManager.getCache(this).getString("category_saved", "All");
+    		Intent i = new Intent(Intent.ACTION_CHOOSER);
+    		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
+    		startActivityForResult(i, SELECT_CATEGORY);
+    		category = "None";
         }
         
         updateData();
@@ -87,8 +89,6 @@ public class EventList extends Activity implements DataUpdateListener,
         lv.setOnItemClickListener(this);
         lv.setAdapter(adapter);
         refresh();
-        
-        CategoryManager.precacheCategories(this);
     }
     
     public boolean onCreateOptionsMenu(Menu menu) {

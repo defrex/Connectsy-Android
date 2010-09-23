@@ -35,7 +35,9 @@ public abstract class DataManager implements ApiRequestListener {
 		return d;
 	}
 	
-	public void onApiRequestFinish(int status, String response, int code){};
+	public void onApiRequestFinish(int status, String response, int code){
+		listener.onDataUpdate(code, response);
+	};
 	
 	public void onApiRequestError(int httpStatus, int code) {
 		if (httpStatus == 401){

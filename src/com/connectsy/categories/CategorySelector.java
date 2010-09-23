@@ -35,6 +35,8 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
 			}
         }else{
         	categories = new CategoryManager(this, this).getCategories();
+        	if (categories.size() == 0)
+        		findViewById(R.id.ab_refresh_spinner).setVisibility(View.VISIBLE);
         }
         adapter = new CategoryAdapter(this, R.layout.category_list_item, categories);
         ListView lv = (ListView)findViewById(R.id.category_list);
@@ -71,6 +73,7 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
 	    adapter = new CategoryAdapter(this, R.layout.category_list_item, categories);
 	    ListView lv = (ListView)findViewById(R.id.category_list);
 	    lv.setAdapter(adapter);
+	    findViewById(R.id.ab_refresh_spinner).setVisibility(View.GONE);
 	}
 	public void onRemoteError(int httpStatus, int code) {}
 }

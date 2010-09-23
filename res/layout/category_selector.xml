@@ -7,8 +7,15 @@
     <FrameLayout style="@style/ActionBarFrame">
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
+        
             <ImageView style="@style/ActionBarLogo" />
+            
             <View style="@style/Spring" />
+            
+            <ProgressBar style="@style/ActionBarAction"
+                android:id="@+id/ab_refresh_spinner"
+                android:src="@drawable/icon_refresh"
+                android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
     

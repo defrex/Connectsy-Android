@@ -82,7 +82,6 @@ public class Dashboard extends MapActivity implements OnClickListener, LocListen
     		i.putExtra("filter", EventManager.Filter.FRIENDS);
     	}else if (v.getId() == R.id.dashboard_events_category){
     		i.putExtra("filter", EventManager.Filter.CATEGORY);
-    		//i.putExtra("category", "all");
     	}
 		startActivity(i);
 	}
