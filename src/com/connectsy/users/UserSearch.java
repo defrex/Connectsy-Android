@@ -8,9 +8,12 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,12 +26,15 @@ import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.users.UserManager.User;
 
 public class UserSearch extends Activity implements OnClickListener, 
-		ApiRequestListener, DataUpdateListener {
+		ApiRequestListener, DataUpdateListener, OnKeyListener {
 	private static final int REFRESH_USER = 1;
 	private static final int SEARCH_USERS = 2;
+	@SuppressWarnings("unused")
 	private static final String TAG = "UserSearch";
 	UserAdapter adapter;
 	String lastResponse;
+	boolean canRequest = true;
+	boolean requestPending = false;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,11 +43,12 @@ public class UserSearch extends Activity implements OnClickListener,
         
         ImageView search = (ImageView)findViewById(R.id.ab_user_search);
         search.setOnClickListener(this);
+        EditText box = (EditText) findViewById(R.id.user_search_box);
+        box.setOnKeyListener(this);
     }
 
     private void updateDisplay(String response){
     	if (response != null) lastResponse = response;
-    	Log.d(TAG, "displaying: "+lastResponse);
 		try {
 			ArrayList<User> users = new ArrayList<User>();
 			JSONArray usersJson = new JSONObject(lastResponse)
@@ -51,10 +58,8 @@ public class UserSearch extends Activity implements OnClickListener,
 				User u = manager(userJson.getString("username")).getUser();
 				if (u == null){
 					manager(userJson.getString("username")).refreshUser(REFRESH_USER);
-					Log.d(TAG, userJson.getString("username")+" refreshing");
 				}else{
 					users.add(u);
-					Log.d(TAG, u.username+" added");
 				}
 			}
 			
@@ -73,15 +78,24 @@ public class UserSearch extends Activity implements OnClickListener,
 		}
     }
     
-	public void onClick(View v) {
+    private void doSearch(){
         EditText search = (EditText)findViewById(R.id.user_search_box);
-		ApiRequest r = new ApiRequest(this, this, Method.GET, "/users/", true, SEARCH_USERS);
-		r.addGetArg("q", search.getText().toString());
-		r.execute();
+        String q = search.getText().toString();
+        if (!q.equals("")){
+			requestPending = true;
+			ApiRequest r = new ApiRequest(this, this, Method.GET, "/users/", 
+					true, SEARCH_USERS);
+			r.addGetArg("q", q);
+			r.execute();
+        }
+    }
+    
+	public void onClick(View v) {
+		doSearch();
 	}
 
 	public void onApiRequestFinish(int status, String response, int code) {
-		Log.d(TAG, "onApiRequestFinish: "+response);
+		requestPending = false;
 		updateDisplay(response);
 	}
 
@@ -92,11 +106,21 @@ public class UserSearch extends Activity implements OnClickListener,
 	private UserManager manager(String username){
 		return new UserManager(this, this, username);
 	}
+
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		if (canRequest){
+			if (!requestPending) doSearch();
+			canRequest = false;
+			new Handler().postDelayed(new Runnable() {
+				public void run() {
+					Log.d(TAG, "setting canRequest");
+					canRequest = true;
+				}
+			}, 500);
+		}
+		return false;
+	}
 	
-	public void onApiRequestError(int httpStatus, int retCode) {
-		Log.d(TAG, "onApiRequestError: "+httpStatus);
-		// TODO Auto-generated method stub
-	}
-	public void onRemoteError(int httpStatus, int code) {
-	}
+	public void onApiRequestError(int httpStatus, int retCode) {}
+	public void onRemoteError(int httpStatus, int code) {}
 }

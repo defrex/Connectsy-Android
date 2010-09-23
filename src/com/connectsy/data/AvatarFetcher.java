@@ -80,8 +80,8 @@ public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
 		}
 		return true;
 	}
-	
 
+	@Override
 	protected void onPostExecute(Boolean worked) {
 		if (!worked) return;
 		cache.edit().putLong(getCacheName(), new Date().getTime()).commit();

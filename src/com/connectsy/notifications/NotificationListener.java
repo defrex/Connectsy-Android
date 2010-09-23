@@ -46,7 +46,7 @@ public class NotificationListener implements ApiRequestListener,
 	/**
 	 * How long to wait in between polls
 	 */
-	static final int PERIOD = 1000 * 10; // 10s
+	static final int PERIOD = 1000 * 60 * 5; // 5 min
 
 	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;

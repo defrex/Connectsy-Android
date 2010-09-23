@@ -95,10 +95,8 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	private void prepRequest(){
 		try {
 			url = Settings.API_DOMAIN+path+"?";
-			for (NameValuePair arg : getArgs){
-				Log.d(TAG, "get arg: "+arg);
+			for (NameValuePair arg : getArgs)
 				url += URLEncoder.encode(arg.getName())+"="+URLEncoder.encode(arg.getValue())+"&";
-			}
 			
 			if (method == Method.GET){
 				request = new HttpGet(url);

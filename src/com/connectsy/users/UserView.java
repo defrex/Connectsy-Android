@@ -24,6 +24,7 @@ import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager.User;
+import com.connectsy.utils.Utils;
 
 public class UserView extends Activity implements OnClickListener, 
 		DataUpdateListener {
@@ -89,7 +90,9 @@ public class UserView extends Activity implements OnClickListener,
         }else{
             adapter = new UserAdapter(this, R.layout.user_list_item, friends, false);
         }
-        ((ListView) findViewById(R.id.friends_list)).setAdapter(adapter);
+        ListView lv = (ListView) findViewById(R.id.friends_list);
+        lv.setAdapter(adapter);
+		Utils.setFooterView(this, lv);
         
 		if (user != null){
 	        if (!user.username.equals(curUsername)){
