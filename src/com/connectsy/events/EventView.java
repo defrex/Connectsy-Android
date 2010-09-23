@@ -75,7 +75,7 @@ public class EventView extends Activity implements DataUpdateListener,
 		eventRev = i.getExtras().getString("com.connectsy.events.revision");
 
 		event = getEventManager().getEvent(eventRev);
-
+		
 		refresh();
 		update();
 		setTabSelected("comments");
@@ -138,6 +138,8 @@ public class EventView extends Activity implements DataUpdateListener,
 					commentAdapter.notifyDataSetChanged();
 				}
 				comments.setAdapter(commentAdapter);
+				
+				Utils.setFooterView(this, comments);
 			}
 
 		} else if (tabSelected == "atts") {
@@ -157,6 +159,8 @@ public class EventView extends Activity implements DataUpdateListener,
 					attAdapter.notifyDataSetChanged();
 				}
 				attsList.setAdapter(attAdapter);
+
+				Utils.setFooterView(this, attsList);
 			}
 		}
 	}
@@ -175,11 +179,11 @@ public class EventView extends Activity implements DataUpdateListener,
 		if (curUserStatus == Status.ATTENDING) {
 			in.setSelected(true);
 			in.setImageDrawable(getResources().getDrawable(
-					R.drawable.icon_check_black));
+					R.drawable.icon_check_selected));
 		} else {
 			in.setSelected(false);
 			in.setImageDrawable(getResources().getDrawable(
-					R.drawable.icon_check_white));
+					R.drawable.icon_check));
 		}
 		if (doRequest) {
 			getAttManager().setStatus(curUserStatus, ATT_SET);

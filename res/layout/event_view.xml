@@ -24,7 +24,7 @@
             <ImageView style="@style/ActionBarAction"
                 android:id="@+id/event_view_ab_in"
                 android:visibility="gone"
-                android:src="@drawable/icon_check_white" />
+                android:src="@drawable/icon_check" />
         </LinearLayout>
     </FrameLayout>
 	
@@ -77,15 +77,15 @@
             android:text="Comments"/>
         <Button style="@style/TabBarButtonRight"
             android:id="@+id/event_view_tab_atts"
-            android:text="Attendants"/>
+            android:text="Who's In"/>
 	</LinearLayout>
 	
     <ListView android:id="@+id/attendants_list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"/>
         
     <ListView android:id="@+id/comments_list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"/>
         
 </LinearLayout>

@@ -32,6 +32,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.comment_list_item, parent, false);
+		view.setClickable(false);
 		
 		OnClickListener userClick = new View.OnClickListener(){
 			public void onClick(View v) {
@@ -54,5 +55,9 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         body.setText(comment.getComment());
 
 		return view;
+	}
+	
+	public boolean isEnabled(int position){
+		return false;
 	}
 }
