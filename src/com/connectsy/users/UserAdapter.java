@@ -23,7 +23,17 @@ import com.connectsy.users.UserManager.User;
 
 public class UserAdapter extends ArrayAdapter<User> {
 	private boolean multi;
+	private DataUpdateListener listener;
+	private int returnCode;
 	private HashMap<Integer, Boolean> selected = new HashMap<Integer, Boolean>();
+
+	public UserAdapter(Context context, DataUpdateListener listener, int viewResourceId,
+			ArrayList<User> users, boolean selectMultiple, int returnCode) {
+		super(context, viewResourceId, users);
+		multi = selectMultiple;
+		this.listener = listener;
+		this.returnCode = returnCode;
+	}
 
 	public UserAdapter(Context context, int viewResourceId,
 			ArrayList<User> users, boolean selectMultiple) {
@@ -77,14 +87,9 @@ public class UserAdapter extends ArrayAdapter<User> {
         	Button confirm = (Button)view.findViewById(R.id.user_list_item_confirm);
         	confirm.setVisibility(Button.VISIBLE);
         	confirm.setOnClickListener(new Button.OnClickListener(){
-        		private DataUpdateListener l = new DataUpdateListener() {
-					public void onRemoteError(int httpStatus, int code) {}
-					public void onDataUpdate(int code, String response) {}
-				};
-        		
     			public void onClick(View v) {
-    				UserManager manager = new UserManager(context, l, user.username);
-    				manager.befriend(0);
+    				UserManager manager = new UserManager(context, listener, user.username);
+    				manager.befriend(returnCode);
     			}
             });
         }

@@ -39,7 +39,7 @@ public class NotificationListener implements ApiRequestListener {
 	/**
 	 * How long to wait in between polls
 	 */
-	static final int PERIOD = 5000;//1000 * 60 * 5; // 5 min
+	static final int PERIOD = 1000 * 60 * 5; // 5 min
 
 	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;
@@ -57,7 +57,7 @@ public class NotificationListener implements ApiRequestListener {
 		handler = new Handler();
 		
 		notificationHandlers = new HashMap<String, NotificationHandler>();
-		notificationHandlers.put("event", new EventNotification());
+		notificationHandlers.put("invites", new EventNotification());
 	}
 
 	public boolean isRunning() {
@@ -135,9 +135,9 @@ public class NotificationListener implements ApiRequestListener {
 
 			if (status == 200) {
 				try {
-					Log.d(TAG, "got notices");
 					JSONArray notifications = new JSONObject(response)
 							.getJSONArray("notifications");
+					Log.d(TAG, "got notices: "+notifications);
 					for (int i=0;i<notifications.length();i++){
 						JSONObject notice = notifications.getJSONObject(i);
 						if (notificationHandlers.containsKey(notice.getString("type")))

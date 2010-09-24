@@ -18,7 +18,7 @@
 	        android:clickable="true" />
     </LinearLayout>
     
-    <Button style="@style/UserListItemConfirm"
+    <Button style="@style/Button"
         android:id="@+id/user_list_item_confirm"
         android:text="confirm"
         android:visibility="gone"

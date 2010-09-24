@@ -2,6 +2,7 @@ package com.connectsy.utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ListView;
 
 import com.connectsy.R;
@@ -17,7 +18,8 @@ public class Utils {
 	public static void setFooterView(Context context, ListView parent){
 		if (parent.getFooterViewsCount() == 0){
 			LayoutInflater i = LayoutInflater.from(context);
-			parent.addFooterView(i.inflate(R.layout.list_view_footer, parent, false));
+			View footer = i.inflate(R.layout.list_view_footer, parent, false);
+			parent.addFooterView(footer, null, false);
 		}
 	}
 }

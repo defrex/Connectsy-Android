@@ -43,6 +43,7 @@ public class UserView extends Activity implements OnClickListener,
     private static final int REFRESH_FRIENDS = 3;
     private static final int REFRESH_PENDING_FRIENDS = 4;
 	private static final int REFRESH_CUR_PENDING_FRIENDS = 5;
+	private static final int CONFIRM_USER = 6;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,8 +130,8 @@ public class UserView extends Activity implements OnClickListener,
 	        		pendingAdapter.add(pendingFriends.get(n));
 	        	pendingAdapter.notifyDataSetChanged();
 	        }else{
-	        	pendingAdapter = new UserAdapter(this, R.layout.user_list_item, 
-	        			pendingFriends, false);
+	        	pendingAdapter = new UserAdapter(this, this, R.layout.user_list_item, 
+	        			pendingFriends, false, CONFIRM_USER);
 	        }
 			
 	        ListView plv = (ListView)findViewById(R.id.pending_friends_list);
@@ -214,6 +215,10 @@ public class UserView extends Activity implements OnClickListener,
 			operationsPending++;
 		}else if (code == REFRESH_USER){
 			updateUserDisplay();
+		}else if (code == CONFIRM_USER){
+			new UserManager(this, this, curUsername).refreshFriends(true, 
+					REFRESH_CUR_PENDING_FRIENDS);
+			operationsPending++;
 		}else {
 			updateFriendsDisplay();
 			updatePendingFriendsDisplay();
