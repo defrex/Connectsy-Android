@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/AttendantsListItem" >
     
-    <ImageView style="@style/UserListItemAvatar"
+    <ImageView style="@style/Avatar"
         android:src="@drawable/avatar_default"
         android:id="@+id/user_list_item_avatar" />
     

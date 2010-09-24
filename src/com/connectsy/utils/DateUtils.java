@@ -27,7 +27,7 @@ public class DateUtils{
     					"th","th","th","th","th","th","th","th","th","th",
     					"st","nd","rd","th","th","th","th","th","th","th",
     					"st" };
-    			dateString = dateString+thArray[formatting.get(Calendar.DAY_OF_MONTH)];
+    			dateString = dateString+thArray[formatting.get(Calendar.DAY_OF_MONTH)-1];
     		}
     	}else if (formatting.get(Calendar.YEAR) == today.get(Calendar.YEAR)){
     		dateString = new SimpleDateFormat("MMM d").format(date);

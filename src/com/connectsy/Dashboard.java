@@ -65,7 +65,7 @@ public class Dashboard extends Activity implements OnClickListener {
 		}else if (v.getId() == R.id.dashboard_search){
 			startActivity(new Intent(this, UserSearch.class));
     		return;
-		}else if (v.getId() == R.id.dashboard_search){
+		}else if (v.getId() == R.id.dashboard_new_event){
     		startActivity(new Intent(this, EventNew.class));
     		return;
 		}

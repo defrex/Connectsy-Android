@@ -42,6 +42,7 @@ public class UserView extends Activity implements OnClickListener,
     private static final int BEFRIEND = 2;
     private static final int REFRESH_FRIENDS = 3;
     private static final int REFRESH_PENDING_FRIENDS = 4;
+	private static final int REFRESH_CUR_PENDING_FRIENDS = 5;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,21 +81,21 @@ public class UserView extends Activity implements OnClickListener,
     }
     
     private void updateFriendsDisplay(){
-		ArrayList<User> friends = getUserManager().getFriends(false);
-		Log.d(TAG, "updating freinds to: "+friends);
-        if (adapter != null){
-        	adapter.clear();
-        	for (int n = 0;n < friends.size();n++)
-        		adapter.add(friends.get(n));
-    		adapter.notifyDataSetChanged();
-        }else{
-            adapter = new UserAdapter(this, R.layout.user_list_item, friends, false);
-        }
-        ListView lv = (ListView) findViewById(R.id.friends_list);
-        lv.setAdapter(adapter);
-		Utils.setFooterView(this, lv);
-        
 		if (user != null){
+			ArrayList<User> friends = getUserManager().getFriends(false);
+			Log.d(TAG, "freinds: "+friends);
+	        if (adapter != null){
+	        	adapter.clear();
+	        	for (int n = 0;n < friends.size();n++)
+	        		adapter.add(friends.get(n));
+	    		adapter.notifyDataSetChanged();
+	        }else{
+	            adapter = new UserAdapter(this, R.layout.user_list_item, friends, false);
+	        }
+	        ListView lv = (ListView) findViewById(R.id.friends_list);
+	        lv.setAdapter(adapter);
+			Utils.setFooterView(this, lv);
+	        
 	        if (!user.username.equals(curUsername)){
 	        	boolean isFriend = false;
 	        	for (int i = 0;i < friends.size();i++)
@@ -102,11 +103,13 @@ public class UserView extends Activity implements OnClickListener,
 	        			isFriend = true;
         		ImageView f = (ImageView)findViewById(R.id.user_view_befriend);
         		f.setOnClickListener(this);
-        		f.setVisibility(Button.VISIBLE);
+        		//f.setVisibility(Button.VISIBLE);
 	        	if (!isFriend){
-	        		f.setImageResource(R.drawable.icon_friend_plus);
+	        		//f.setImageResource(R.drawable.icon_friend_plus);
+	        		f.setVisibility(Button.VISIBLE);
 	        	}else{
-	        		f.setImageResource(R.drawable.icon_friend_minus);
+	        		//f.setImageResource(R.drawable.icon_friend_minus);
+	        		f.setVisibility(Button.GONE);
 	        	}
 	        }
 		}
@@ -132,6 +135,17 @@ public class UserView extends Activity implements OnClickListener,
 			
 	        ListView plv = (ListView)findViewById(R.id.pending_friends_list);
 	        plv.setAdapter(pendingAdapter);
+		}else if (user != null){
+			UserManager curUserManager = new UserManager(this, this, curUsername);
+			ArrayList<User> pendingFriends = curUserManager.getFriends(true);
+        	boolean isPending = false;
+        	for (int i = 0;i < pendingFriends.size();i++)
+        		if (pendingFriends.get(i).username.equals(curUsername))
+        			isPending = true;
+        	if (isPending)
+        		findViewById(R.id.user_view_befriend).setVisibility(Button.GONE);
+        	else
+        		Log.d(TAG, "pending: "+pendingFriends);
 		}
     }
     
@@ -194,8 +208,10 @@ public class UserView extends Activity implements OnClickListener,
 
 	public void onDataUpdate(int code, String response) {
 		if (code == BEFRIEND){
-    		Button f = (Button)findViewById(R.id.user_view_befriend);
-    		f.setVisibility(Button.VISIBLE);
+			findViewById(R.id.user_view_befriend).setVisibility(View.GONE);
+			new UserManager(this, this, curUsername).refreshFriends(true, 
+					REFRESH_CUR_PENDING_FRIENDS);
+			operationsPending++;
 		}else if (code == REFRESH_USER){
 			updateUserDisplay();
 		}else {
@@ -203,8 +219,12 @@ public class UserView extends Activity implements OnClickListener,
 			updatePendingFriendsDisplay();
 		}
 		operationsPending--;
-		if (operationsPending == 0)
+		if (operationsPending <= 0){
+			// refresh friends can return from more then one request 
+			// if the friends aren't cached.
+			operationsPending = 0;
 			setRefreshing(false);
+		}
 	}
 
 	public void onRemoteError(int httpStatus, int code) {

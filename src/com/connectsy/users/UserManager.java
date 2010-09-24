@@ -111,14 +111,10 @@ public class UserManager extends DataManager {
 	private ApiRequest getFriendsRequest(boolean pending){
 		ApiRequest r = new ApiRequest(this, context, Method.GET, 
 				"/users/"+username+"/friends/", true, GET_USER);
-		if (pending){
-			ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(); 
-			args.add(new BasicNameValuePair("pending", "true"));
-			r.setGetArgs(args);
-		}
+		if (pending) r.addGetArg("pending", "true");
 		return r;
 	}
-	
+
 	public ArrayList<User> getFriends(boolean pending){
 		String friendString = getFriendsRequest(pending).getCached();
 		ArrayList<User> friends = new ArrayList<User>();

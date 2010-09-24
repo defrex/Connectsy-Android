@@ -2,32 +2,25 @@
 
 package com.connectsy.notifications;
 
+import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 
 import com.connectsy.LocManager;
-import com.connectsy.R;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
-import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.events.EventList;
-import com.connectsy.events.EventManager;
-import com.connectsy.events.EventManager.Event;
+import com.connectsy.events.EventNotification;
 
-public class NotificationListener implements ApiRequestListener,
-		DataUpdateListener {
+public class NotificationListener implements ApiRequestListener {
 
 	// singleton junk
 	static NotificationListener instance;
@@ -46,25 +39,25 @@ public class NotificationListener implements ApiRequestListener,
 	/**
 	 * How long to wait in between polls
 	 */
-	static final int PERIOD = 1000 * 60 * 5; // 5 min
+	static final int PERIOD = 5000;//1000 * 60 * 5; // 5 min
 
 	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;
 	static final int POLL = 1;
-	static final int GET_EVENT = 2;
-	static final int NOTIFICATION_ID = 3;
 
 	Handler handler;
 	boolean running;
 	Context context;
 	String clientId;
 	LocManager location;
-	Notification notification;
-	JSONArray notifications;
+	HashMap<String, NotificationHandler> notificationHandlers;
 
 	private NotificationListener() {
 		// prep handler
 		handler = new Handler();
+		
+		notificationHandlers = new HashMap<String, NotificationHandler>();
+		notificationHandlers.put("event", new EventNotification());
 	}
 
 	public boolean isRunning() {
@@ -82,7 +75,8 @@ public class NotificationListener implements ApiRequestListener,
 		context = c;
 		
 		//get clientid
-		clientId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+		clientId = Settings.Secure.getString(context.getContentResolver(), 
+				Settings.Secure.ANDROID_ID);
 		if (clientId == null)
 			clientId = "EMULATOR";
 		
@@ -141,9 +135,16 @@ public class NotificationListener implements ApiRequestListener,
 
 			if (status == 200) {
 				try {
-					notifications = new JSONObject(response)
+					Log.d(TAG, "got notices");
+					JSONArray notifications = new JSONObject(response)
 							.getJSONArray("notifications");
-					sendNotification();
+					for (int i=0;i<notifications.length();i++){
+						JSONObject notice = notifications.getJSONObject(i);
+						if (notificationHandlers.containsKey(notice.getString("type")))
+							notificationHandlers.get(notice.getString("type")).add(notice);
+					}
+					for (NotificationHandler handler: notificationHandlers.values())
+						handler.send(context);
 				} catch (JSONException e) {}
 			} else {
 				Log.e(TAG, "Failed notification poll");
@@ -152,64 +153,6 @@ public class NotificationListener implements ApiRequestListener,
 			notifyCallback();
 		}
 	}
-
-	private void sendNotification() throws JSONException {
-		String title;
-		String body;
-		Intent i;
-		if (notifications.length() == 0) {
-			return;
-		}else if (notifications.length() == 1) {
-			String rev = notifications.getJSONObject(0).getString(
-					"event_revision");
-			EventManager eventManager = new EventManager(context, this, null,
-					null);
-			Event event = eventManager.getEvent(rev);
-			if (event == null) {
-				eventManager.refreshEvent(rev, GET_EVENT);
-				return;
-			}
-			title = "New Event";
-			body = event.creator + " is going to " + event.where + ".";
-			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-			i.putExtra("com.connectsy.events.revision", event.revision);
-		} else {
-			title = "New Events";
-			body = notifications.length() + " new events by your friends.";
-			i = new Intent(context, EventList.class);
-			i.putExtra("filter", EventManager.Filter.FRIENDS);
-		}
-		PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
-		Notification n = getNotification();
-		n.setLatestEventInfo(context, title, body, pi);
-		NotificationManager notManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		notManager.notify(NOTIFICATION_ID, n);
-	}
-
-	private Notification getNotification() {
-		if (notification == null) {
-			notification = new Notification(R.drawable.notification,
-					"New Connectsy Event", System.currentTimeMillis());
-			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			// notification.defaults |= Notification.DEFAULT_SOUND;
-			notification.defaults |= Notification.DEFAULT_LIGHTS;
-		}
-		return notification;
-	}
-
-	public void onDataUpdate(int code, String response) {
-		if (code == GET_EVENT) {
-			try {
-				sendNotification();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	// nothing to see here, please move along...
-	public void onRemoteError(int httpStatus, int code) {}
 	public void onApiRequestError(int httpStatus, int retCode) {}
 }

@@ -31,7 +31,7 @@
 	<LinearLayout style="@style/Event"
 	    android:id="@+id/event">
 	
-	    <ImageView style="@style/EventViewAvatar"
+	    <ImageView style="@style/Avatar"
 	        android:src="@drawable/avatar_default"
 	        android:id="@+id/event_avatar" />
 	        
