@@ -8,4 +8,5 @@ import android.content.Context;
 public interface NotificationHandler {
 	public void add(JSONObject notification) throws JSONException;
 	public void send(Context context) throws JSONException;
+	public void comfirmed(Context context);
 }

@@ -10,12 +10,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.connectsy.R;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.notifications.NotificationHandler;
+import com.connectsy.notifications.NotificationRedirect;
 
 public class EventNotification implements NotificationHandler, DataUpdateListener {
 
@@ -32,18 +32,17 @@ public class EventNotification implements NotificationHandler, DataUpdateListene
 	}
 	
 	public void add(JSONObject notification){
-		Log.d(TAG, "adding: "+notification);
 		notifications.add(notification);
 		pending = true;
 	}
 	
 	public void send(Context context) throws JSONException{
-		Log.d(TAG, "sending: "+notifications);
 		this.context = context;
 		if (pending) sendNotification();
 	}
 
 	private void sendNotification() throws JSONException {
+		pending = false;
 		String title;
 		String body;
 		Intent i;
@@ -67,6 +66,7 @@ public class EventNotification implements NotificationHandler, DataUpdateListene
 			i = new Intent(context, EventList.class);
 			i.putExtra("filter", EventManager.Filter.FRIENDS);
 		}
+		i = NotificationRedirect.wrapIntent(context, i, "invite");
 		PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
 		Notification n = getNotification();
 		n.setLatestEventInfo(context, title, body, pi);
@@ -97,4 +97,8 @@ public class EventNotification implements NotificationHandler, DataUpdateListene
 	}
 
 	public void onRemoteError(int httpStatus, int code) {}
+
+	public void comfirmed(Context context) {
+		notifications = new ArrayList<JSONObject>();
+	}
 }

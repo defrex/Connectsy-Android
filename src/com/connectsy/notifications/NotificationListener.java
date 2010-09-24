@@ -57,7 +57,7 @@ public class NotificationListener implements ApiRequestListener {
 		handler = new Handler();
 		
 		notificationHandlers = new HashMap<String, NotificationHandler>();
-		notificationHandlers.put("invites", new EventNotification());
+		notificationHandlers.put("invite", new EventNotification());
 	}
 
 	public boolean isRunning() {
@@ -139,20 +139,27 @@ public class NotificationListener implements ApiRequestListener {
 							.getJSONArray("notifications");
 					Log.d(TAG, "got notices: "+notifications);
 					for (int i=0;i<notifications.length();i++){
+						Log.d(TAG, "in loop");
 						JSONObject notice = notifications.getJSONObject(i);
-						if (notificationHandlers.containsKey(notice.getString("type")))
+						Log.d(TAG, "adding notice type: "+notice.getString("type"));
+						if (notificationHandlers.containsKey(notice.getString("type"))){
+							Log.d(TAG, "added");
 							notificationHandlers.get(notice.getString("type")).add(notice);
+						}
 					}
 					for (NotificationHandler handler: notificationHandlers.values())
 						handler.send(context);
-				} catch (JSONException e) {}
-			} else {
-				Log.e(TAG, "Failed notification poll");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
-
 			notifyCallback();
 		}
 	}
 	// nothing to see here, please move along...
 	public void onApiRequestError(int httpStatus, int retCode) {}
+
+	public HashMap<String, NotificationHandler> getNotificationHandlers() {
+		return notificationHandlers;
+	}
 }

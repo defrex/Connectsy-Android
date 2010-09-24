@@ -6,7 +6,7 @@ import android.os.IBinder;
 
 public class NotificationService extends Service {
 	NotificationListener listener;
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -21,11 +21,20 @@ public class NotificationService extends Service {
 		
 		super.onDestroy();
 	}
+	
+	public NotificationListener getListener() {
+		return listener;
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
+		return new NotificationServiceBinder(listener);
 	}
 
+	@Override
+	public void onStart(Intent intent, int startId) {
+		if (!listener.isRunning())
+			listener.start(this);
+		super.onStart(intent, startId);
+	}
 }

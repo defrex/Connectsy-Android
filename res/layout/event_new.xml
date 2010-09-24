@@ -34,7 +34,8 @@
         <LinearLayout style="@style/EventNewTitle" >
             <View style="@style/EventNewTitleBorderTop" />
             <LinearLayout style="@style/FullWidth"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:background="#66eeeeee">
                 <TextView style="@style/EventNewTitleText"
                     android:text="@string/events_new_title_what" />
                 <View style="@style/Spring" />
