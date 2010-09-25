@@ -8,7 +8,8 @@
         android:layout_alignParentTop="true">
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
-            <ImageView style="@style/ActionBarLogo" />
+            <ImageView style="@style/ActionBarLogo"
+                android:id="@+id/ab_logo" />
             <View style="@style/Spring" />
         </LinearLayout>
     </FrameLayout>
