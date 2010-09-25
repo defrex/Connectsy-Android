@@ -1,95 +1,27 @@
 package com.connectsy.data;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Date;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.connectsy.settings.Settings;
-import com.connectsy.utils.DateUtils;
 
-public class AvatarFetcher extends AsyncTask<Void, Void, Boolean>{
+public class AvatarFetcher extends ImageFetcher{
 	@SuppressWarnings("unused")
 	private final String TAG = "AvatarFetcher";
 	private String username;
-	private ImageView view;
-	private SharedPreferences cache;
-	private Context context;
 	
 	public AvatarFetcher(Context context, String username, ImageView view){
+		super(context, view);
 		this.username = username;
-		this.view = view;
-		this.context = context;
-		cache = DataManager.getCache(context);
-		long expNum = cache.getLong(getCacheName(), 0);
-		if (expNum != 0){
-			if (DateUtils.isCacheExpired(new Date(expNum), 2)){
-				cleanCachedFile();
-			}else{
-				renderCached();
-				return;
-			}
-		}
-		execute();
 	}
 	
-	private String getFilename(){
+	protected String getFilename(){
 		return "avatar-"+username;
 	}
-	private String getCacheName(){
+	protected String getCacheName(){
 		return "avatar-"+username;
 	}
-	
-	private void cleanCachedFile() {
-		context.deleteFile(getFilename());
-	}
-	
-	private void renderCached() {
-		try {
-			BitmapDrawable avy = new BitmapDrawable(context.openFileInput(getFilename()));
-			view.setImageDrawable(avy);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	protected Boolean doInBackground(Void... params) {
-		String url = Settings.API_DOMAIN+"/users/"+username+"/avatar/";
-		HttpGet request = new HttpGet(url);
-		DefaultHttpClient client = new DefaultHttpClient();
-		HttpResponse response;
-		try {
-			response = client.execute(request);
-			if (response.getStatusLine().getStatusCode() == 200)
-				response.getEntity().writeTo(context.openFileOutput(getFilename(), 
-						Context.MODE_PRIVATE));
-			else
-				return false;
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	protected void onPostExecute(Boolean worked) {
-		if (!worked) return;
-		cache.edit().putLong(getCacheName(), new Date().getTime()).commit();
-		renderCached();
+	protected String getImageURL(){
+		return Settings.API_DOMAIN+"/users/"+username+"/avatar/";
 	}
 }

@@ -9,23 +9,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.connectsy.R;
-import com.connectsy.events.EventManager.Event;
 
-public class EventsAdapter extends ArrayAdapter<Event> {
+public class EventsAdapter extends ArrayAdapter<String> {
  
 	public EventsAdapter(Context context, int viewResourceId,
-			ArrayList<Event> events) {
+			ArrayList<String> events) {
 		super(context, viewResourceId, events);
 	}
 
 	@Override
 	public View getView (int position, View convertView, ViewGroup parent) {
 		final Context context = getContext();
-		final Event event = getItem(position);
+		final String rev = getItem(position);
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View view = inflater.inflate(R.layout.event_list_item, parent, false);
 		
-        return EventView.renderView(context, view, event, true);
+		new EventRenderer(context, view, rev, true);
+		
+		return view;
 	}
 }

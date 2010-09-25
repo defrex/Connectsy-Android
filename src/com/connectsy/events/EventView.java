@@ -3,27 +3,21 @@ package com.connectsy.events;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.connectsy.LocManager;
 import com.connectsy.R;
-import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
@@ -35,7 +29,6 @@ import com.connectsy.events.comments.CommentAdapter;
 import com.connectsy.events.comments.CommentManager;
 import com.connectsy.events.comments.CommentManager.Comment;
 import com.connectsy.settings.MainMenu;
-import com.connectsy.utils.DateUtils;
 import com.connectsy.utils.Utils;
 
 public class EventView extends Activity implements DataUpdateListener,
@@ -87,6 +80,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	private void update() {
 		setUserStatus(null, false);
 		setTabSelected(null);
+		new EventRenderer(this, findViewById(R.id.event), event.revision, false);
 		event = getEventManager().getEvent(eventRev);
 		if (event != null) {
 			setTabSelected(null);
@@ -105,8 +99,6 @@ public class EventView extends Activity implements DataUpdateListener,
 					in.setSelected(false);
 				}
 			}
-
-			EventView.renderView(this, findViewById(R.id.event), event, false);
 		}
 	}
 
@@ -317,62 +309,9 @@ public class EventView extends Activity implements DataUpdateListener,
 		return eventManager;
 	}
 
-	static View renderView(final Context context, View view, final Event event,
-			boolean truncate) {
-		OnClickListener userClick = new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-				i.putExtra("com.connectsy.user.username", event.creator);
-				context.startActivity(i);
-			}
-		};
-
-		ImageView avatar = (ImageView) view.findViewById(R.id.event_avatar);
-		avatar.setOnClickListener(userClick);
-		new AvatarFetcher(context, event.creator, avatar);
-
-		TextView username = (TextView) view.findViewById(R.id.event_username);
-		username.setText(event.creator);
-		username.setOnClickListener(userClick);
-
-		if (event.category != null && !event.category.equals("")) {
-			view.findViewById(R.id.event_pipe).setVisibility(View.VISIBLE);
-			TextView category = (TextView) view
-					.findViewById(R.id.event_category);
-			category.setVisibility(View.VISIBLE);
-			category.setText(event.category);
-			category.setOnClickListener(new TextView.OnClickListener() {
-				public void onClick(View v) {
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setType("vnd.android.cursor.dir/vnd.connectsy.event");
-					i.putExtra("filter", EventManager.Filter.CATEGORY);
-					i.putExtra("category", event.category);
-					context.startActivity(i);
-				}
-			});
-		}
-
-		TextView where = (TextView) view.findViewById(R.id.event_where);
-		where.setText(Html.fromHtml("<b>where:</b> "
-				+ Utils.maybeTruncate(event.where, 25, truncate)));
-		TextView what = (TextView) view.findViewById(R.id.event_what);
-		what.setText(Html.fromHtml("<b>what:</b> "
-				+ Utils.maybeTruncate(event.description, 25, truncate)));
-		TextView when = (TextView) view.findViewById(R.id.event_when);
-		when.setText(Html.fromHtml("<b>when:</b> "
-				+ DateUtils.formatTimestamp(event.when)));
-
-		TextView distance = (TextView) view.findViewById(R.id.event_distance);
-		String distanceText = new LocManager(context).distanceFrom(
-				event.posted_from[0], event.posted_from[1]);
-		if (distanceText != null)
-			distance.setText(distanceText);
-		else
-			distance.setVisibility(View.VISIBLE);
-		TextView created = (TextView) view.findViewById(R.id.event_created);
-		created.setText("created " + DateUtils.formatTimestamp(event.created));
-
-		return view;
-	}
+//	static View renderView(final Context context, final View view, final String rev,
+//			final boolean truncate) {
+//		
+//		return view;
+//	}
 }

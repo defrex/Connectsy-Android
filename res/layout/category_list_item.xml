@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/FullWidth" >
+    style="@style/FullWidth"
+    android:gravity="center_vertical">
+    
+    <ImageView style="@style/Avatar"
+        android:id="@+id/category_list_item_image"
+        android:src="@drawable/category_default"
+        android:background="@null"
+        android:layout_margin="5dp"/>
+        
     <TextView style="@style/FullWidth"
         android:padding="5dp"
-        android:id="@+id/category_list_item_name" />
+        android:id="@+id/category_list_item_name"
+        android:textSize="18sp"/>
 </LinearLayout>

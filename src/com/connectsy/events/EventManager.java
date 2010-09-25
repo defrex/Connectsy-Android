@@ -131,6 +131,26 @@ public class EventManager extends DataManager {
 		}
 	}
 	
+	public ArrayList<String> getRevisions(){
+		ArrayList<String> revs = new ArrayList<String>();
+		String eventsCache = getEventsRequest().getCached();
+		if (eventsCache == null) return revs;
+		try {
+			JSONArray revisions = new JSONObject(eventsCache)
+					.getJSONArray("events");
+			for(int i=0;i<revisions.length();i++)
+				revs.add(revisions.getString(i));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return revs;
+	}
+	
+	public void refreshRevisions(int returnCode){
+		this.returnCode = returnCode;
+		getEventsRequest().execute();
+	}
+	
 	private ApiRequest getEventRequest(String revision){
 		ApiRequest r = new ApiRequest(this, context, Method.GET, 
 				"/events/"+revision+"/", true, GET_EVENT);

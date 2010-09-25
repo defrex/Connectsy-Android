@@ -6,7 +6,11 @@
 	    android:src="@drawable/avatar_default"
 	    android:id="@+id/event_avatar" />
 	    
-	<LinearLayout style="@style/EventTextSection" >
+	<ProgressBar style="@style/WrapAll"
+	    android:id="@+id/event_loading"/>
+	    
+	<LinearLayout style="@style/EventTextSection"
+	   android:id="@+id/event_details">
 		<LinearLayout style="@style/FullWidth"
 		    android:orientation="horizontal">
 			<TextView style="@style/Link"

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,6 @@ import com.connectsy.R;
 import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.EventManager.Filter;
 import com.connectsy.settings.MainMenu;
 
@@ -35,7 +35,6 @@ public class EventList extends Activity implements DataUpdateListener,
 	private static final String TAG = "EventList";
 	private EventsAdapter adapter;
     private EventManager eventManager = null;
-    private ArrayList<Event> events;
     private Filter filter;
     private String category;
     private final int GET_EVENTS = 0;
@@ -126,7 +125,6 @@ public class EventList extends Activity implements DataUpdateListener,
 				updateData();
 				refresh();
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -134,19 +132,19 @@ public class EventList extends Activity implements DataUpdateListener,
 	
 	private void updateData(){
         eventManager = new EventManager(this, this, filter, category);
-        events = eventManager.getEvents();
+        ArrayList<String> revs = eventManager.getRevisions();
         if (adapter != null){
         	adapter.clear();
-        	for (int n = 0;n < events.size();n++)
-        		adapter.add(events.get(n));
+        	for (int n = 0;n < revs.size();n++)
+        		adapter.add(revs.get(n));
     		adapter.notifyDataSetChanged();
         }else{
-            adapter = new EventsAdapter(this, R.layout.event_list_item, events);
+            adapter = new EventsAdapter(this, R.layout.event_list_item, revs);
         }
 	}
 	
 	private void refresh(){
-		eventManager.refreshEvents(GET_EVENTS);
+		eventManager.refreshRevisions(GET_EVENTS);
 		setRefreshing(true);
 	}
 	
@@ -161,10 +159,10 @@ public class EventList extends Activity implements DataUpdateListener,
     }
 
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		Event event = adapter.getItem(position);
+		String rev = adapter.getItem(position);
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-		i.putExtra("com.connectsy.events.revision", event.revision);
+		i.putExtra("com.connectsy.events.revision", rev);
 		startActivity(i);
 	}
 

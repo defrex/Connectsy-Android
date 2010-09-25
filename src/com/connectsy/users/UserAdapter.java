@@ -81,7 +81,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         });
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
-        new AvatarFetcher(context, user.username, avatar);
+        new AvatarFetcher(context, user.username, avatar).fetch();
         
         if (user.friendStatusPending){
         	Button confirm = (Button)view.findViewById(R.id.user_list_item_confirm);
