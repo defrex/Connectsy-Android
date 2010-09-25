@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.connectsy.R;
 import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
+import com.connectsy.ActionBarHandler;
 
 public class CategorySelector extends Activity implements DataUpdateListener, OnItemClickListener {
 	private CategoryAdapter adapter;
@@ -23,6 +24,9 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_selector);
+        
+        //set up logo clicks
+        ActionBarHandler ab = new ActionBarHandler(this);
         
         Intent i = getIntent();
         ArrayList<Category> categories = null;

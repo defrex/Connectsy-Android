@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
@@ -50,6 +51,9 @@ public class UserView extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_view);
 
+        //set up logo clicks
+        ActionBarHandler ab = new ActionBarHandler(this);
+        
         ImageView abRefresh = (ImageView)findViewById(R.id.ab_refresh);
         abRefresh.setOnClickListener(this);
         ImageView abSearch = (ImageView)findViewById(R.id.ab_user_search);

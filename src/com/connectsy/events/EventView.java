@@ -29,6 +29,7 @@ import com.connectsy.events.comments.CommentAdapter;
 import com.connectsy.events.comments.CommentManager;
 import com.connectsy.events.comments.CommentManager.Comment;
 import com.connectsy.settings.MainMenu;
+import com.connectsy.ActionBarHandler;
 import com.connectsy.utils.Utils;
 
 public class EventView extends Activity implements DataUpdateListener,
@@ -59,6 +60,9 @@ public class EventView extends Activity implements DataUpdateListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_view);
 
+		//set up logo clicks
+        ActionBarHandler ab = new ActionBarHandler(this);
+        
 		ImageView abRefresh = (ImageView) findViewById(R.id.ab_refresh);
 		abRefresh.setOnClickListener(this);
 		Button comments = (Button) findViewById(R.id.event_view_tab_comments);
