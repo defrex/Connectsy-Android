@@ -87,12 +87,7 @@ public class NotificationListener implements ApiRequestListener {
 		running = true;
 
 		// bootstrap the poll by registering for notifications
-		ApiRequest request = new ApiRequest(this, context, Method.POST,
-				"/notifications/register/", true, REGISTER);
-		request.setBodyString(String.format(
-				"{\"client_type\":\"%s\", \"client_id\":\"%s\"}",
-				"generic_poll", clientId));
-		request.execute();
+		registerForNotifications();
 	}
 
 	/**
@@ -100,6 +95,15 @@ public class NotificationListener implements ApiRequestListener {
 	 */
 	public void stop() {
 		running = false;
+	}
+	
+	private void registerForNotifications() {
+		ApiRequest request = new ApiRequest(this, context, Method.POST,
+				"/notifications/register/", true, REGISTER);
+		request.setBodyString(String.format(
+				"{\"client_type\":\"%s\", \"client_id\":\"%s\"}",
+				"generic_poll", clientId));
+		request.execute();
 	}
 
 	private void notifyCallback() {
@@ -127,10 +131,11 @@ public class NotificationListener implements ApiRequestListener {
 	public void onApiRequestFinish(int status, String response, int code) {
 		if (code == REGISTER) {
 			if (status == 200) {
-				notifyCallback();
+				//throw a party or something
 			} else {
 				Log.e(TAG, "Failed notification register!");
 			}
+			notifyCallback();
 		} else if (code == POLL) {
 
 			if (status == 200) {
@@ -152,8 +157,17 @@ public class NotificationListener implements ApiRequestListener {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+			
+				//start notifying
+				notifyCallback();
+			} else {
+				final NotificationListener self = this;
+				handler.postDelayed(new Runnable() {
+					public void run() {
+						self.registerForNotifications();
+					}
+				}, PERIOD);
 			}
-			notifyCallback();
 		}
 	}
 	// nothing to see here, please move along...
