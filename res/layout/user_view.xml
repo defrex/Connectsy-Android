@@ -56,7 +56,7 @@
         android:visibility="gone" >
         <View style="@style/ListTitleBorderTop" />
         <TextView style="@style/ListTitleText"
-            android:text="Pending Freind Requests" />
+            android:text="Pending Friend Requests" />
         <View style="@style/ListTitleBorder" />
     </LinearLayout>
     <ListView android:id="@+id/pending_friends_list"

@@ -84,7 +84,7 @@ public class UserView extends Activity implements OnClickListener,
     private void updateFriendsDisplay(){
 		if (user != null){
 			ArrayList<User> friends = getUserManager().getFriends(false);
-			Log.d(TAG, "freinds: "+friends);
+			Log.d(TAG, "friends: "+friends);
 	        if (adapter != null){
 	        	adapter.clear();
 	        	for (int n = 0;n < friends.size();n++)
