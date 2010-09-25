@@ -33,8 +33,10 @@ public class NotificationService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		if (!listener.isRunning())
-			listener.start(this);
+		if (intent.getAction().equals("com.connectsy.START_NOTIFICATIONS")) {
+			if (!listener.isRunning())
+				listener.start(this);
+		}
 		super.onStart(intent, startId);
 	}
 }

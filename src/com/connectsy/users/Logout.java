@@ -16,6 +16,12 @@ public class Logout extends Activity {
         dataEditor.remove("authed");
         dataEditor.remove("token");
         dataEditor.commit();
+        //todo - flush everything?
+        
+        //stop notification service
+        Intent i = new Intent();
+		i.setAction("com.connectsy.STOP_NOTIFICATIONS");
+		stopService(i);
         
         Log.d("auth", "logged out, starting Launcher");
         startActivity(new Intent(this, Launcher.class));

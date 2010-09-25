@@ -81,6 +81,7 @@
         <service android:name=".notifications.NotificationService">
             <intent-filter>
                 <action android:name="com.connectsy.START_NOTIFICATIONS" />
+                <action android:name="com.connectsy.STOP_NOTIFICATIONS" />
             </intent-filter>
         </service>
         <receiver android:name=".notifications.StartupCatcher">
