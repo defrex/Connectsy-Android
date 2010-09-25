@@ -15,7 +15,8 @@ public class ActionBarHandler implements OnClickListener{
 		activity = a;
 		
 		ImageView logo = (ImageView)a.findViewById(R.id.ab_logo);
-		logo.setOnClickListener(this);
+		if (logo != null)
+			logo.setOnClickListener(this);
 	}
 	
 	public void onClick(View abAction) {
