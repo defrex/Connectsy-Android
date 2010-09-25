@@ -37,6 +37,7 @@ import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
+import com.connectsy.ActionBarHandler;
 import com.connectsy.users.UserManager;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
@@ -72,6 +73,9 @@ public class EventNew extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_new);
 
+        //set up logo clicks
+        ActionBarHandler ab = new ActionBarHandler(this);
+        
         EditText what = (EditText) findViewById(R.id.events_new_what);
         what.setOnKeyListener(this);
         EditText where = (EditText) findViewById(R.id.events_new_where);
