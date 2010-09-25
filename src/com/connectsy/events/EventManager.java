@@ -46,7 +46,7 @@ public class EventManager extends DataManager {
 		public boolean friends;
 		public ArrayList<User> someFriends;
 		public ArrayList<Attendant> attendants;
-		public int created;
+		public long created;
 		public float[] posted_from = new float[2];
 
 		public Event(){}
@@ -55,7 +55,7 @@ public class EventManager extends DataManager {
 			JSONObject event = response.getJSONObject("event");
 			ID = event.getString("id");
 			revision = event.getString("revision");
-			created = event.getInt("created");
+			created = event.getLong("created");
 			creator = event.getString("creator");
 			description = event.getString("desc");
 			where = event.getString("where");
