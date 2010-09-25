@@ -51,7 +51,6 @@ public class EventRenderer implements DataUpdateListener {
 		};
 
 		view.findViewById(R.id.event_loading).setVisibility(View.GONE);
-		view.findViewById(R.id.event_details).setVisibility(View.VISIBLE);
 		
 		ImageView avatar = (ImageView) view.findViewById(R.id.event_avatar);
 		avatar.setOnClickListener(userClick);
