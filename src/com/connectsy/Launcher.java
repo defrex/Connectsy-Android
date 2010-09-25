@@ -20,6 +20,7 @@ public class Launcher extends Activity {
         if (!authed){
         	startActivityForResult(new Intent(this, Login.class), AUTHENTICATE_USER);
         }else{
+        	//start the notification service
     		Intent i = new Intent();
     		i.setAction("com.connectsy.START_NOTIFICATIONS");
     		startService(i);

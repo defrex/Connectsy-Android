@@ -90,8 +90,10 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
         dataEditor.commit();
         setResult(RESULT_OK);
         
-        //start the notifications
-        NotificationListener.getInstance().start(this);
+        //start the notification service
+        Intent i = new Intent();
+		i.setAction("com.connectsy.START_NOTIFICATIONS");
+		startService(i);
         
         this.finish();
 	}
