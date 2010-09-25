@@ -1,11 +1,19 @@
 package com.connectsy.utils;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils{
+	// This is here because apparently Java is a shitty programming
+	// language...
+	final static String[] thArray = new String[] {
+		"st","nd","rd","th","th","th","th","th","th","th",
+		"th","th","th","th","th","th","th","th","th","th",
+		"st","nd","rd","th","th","th","th","th","th","th",
+		"st"
+	};
+	
 	public static String formatDate(Date date){
 		Calendar formatting = Calendar.getInstance();
 		formatting.setTime(date);
@@ -20,13 +28,6 @@ public class DateUtils{
     			dateString = "Tomorrow";
     		else{
     			dateString = new SimpleDateFormat("EEEE 'the' d").format(date);
-    			// This is here because apparently Java is a shitty programming
-    			// language...
-    			String[] thArray = new String[] {
-    					"st","nd","rd","th","th","th","th","th","th","th",
-    					"th","th","th","th","th","th","th","th","th","th",
-    					"st","nd","rd","th","th","th","th","th","th","th",
-    					"st" };
     			dateString = dateString+thArray[formatting.get(Calendar.DAY_OF_MONTH)-1];
     		}
     	}else if (formatting.get(Calendar.YEAR) == today.get(Calendar.YEAR)){
@@ -43,7 +44,7 @@ public class DateUtils{
 	}
 	
 	public static String formatTimestamp(long timestamp){
-		Date date = (Date)new Timestamp(timestamp);
+		Date date = new Date(timestamp);
     	String timeString = formatTime(date);
     	String dateString = formatDate(date);
 		return dateString+" at "+timeString;
