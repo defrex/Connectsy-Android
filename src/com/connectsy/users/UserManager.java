@@ -3,8 +3,6 @@ package com.connectsy.users;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +23,7 @@ public class UserManager extends DataManager {
 	private static final int GET_USER = 0;
 	private static final int UPLOAD_AVATAR = 1;
 	private static final int BEFRIEND = 2;
+	private static final int UNFRIEND = 3;
 	
 	private String username;
 	
@@ -150,6 +149,13 @@ public class UserManager extends DataManager {
 		returnCode = sentReturnCode;
 		new ApiRequest(this, context, Method.POST, 
 				"/users/"+username+"/friends/", true, BEFRIEND).execute();
+	}
+	
+	public void unfriend(int returnCode){
+		this.returnCode = returnCode;
+		new ApiRequest(this, context, Method.DELETE, 
+				"/users/"+currentUsername(context)+"/friends/"+username+"/", 
+				true, UNFRIEND).execute();
 	}
 	
 	public void uploadAvatar(Uri avatar) throws IOException{

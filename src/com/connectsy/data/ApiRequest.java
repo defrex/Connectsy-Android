@@ -11,6 +11,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -114,7 +115,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 				}
 				request = post;
 			}else if (method == Method.DELETE){
-				// TODO
+				request = new HttpDelete(url);
 			}
 			if (authorized){
 				String token = data.getString("token", "tokenfail");

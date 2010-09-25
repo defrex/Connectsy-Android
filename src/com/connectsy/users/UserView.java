@@ -103,13 +103,14 @@ public class UserView extends Activity implements OnClickListener,
 	        		if (friends.get(i).username.equals(curUsername))
 	        			isFriend = true;
         		ImageView f = (ImageView)findViewById(R.id.user_view_befriend);
-        		f.setOnClickListener(this);
-        		//f.setVisibility(Button.VISIBLE);
+        		ImageView unf = (ImageView)findViewById(R.id.user_view_unfriend);
 	        	if (!isFriend){
-	        		//f.setImageResource(R.drawable.icon_friend_plus);
+	        		f.setOnClickListener(this);
 	        		f.setVisibility(Button.VISIBLE);
+	        		unf.setVisibility(Button.GONE);
 	        	}else{
-	        		//f.setImageResource(R.drawable.icon_friend_minus);
+	        		unf.setOnClickListener(this);
+	        		unf.setVisibility(Button.VISIBLE);
 	        		f.setVisibility(Button.GONE);
 	        	}
 	        }
@@ -161,6 +162,12 @@ public class UserView extends Activity implements OnClickListener,
 		setRefreshing(true);
 	}
 	
+	private void unfriend(){
+		getUserManager(true).unfriend(BEFRIEND);
+		operationsPending++;
+		setRefreshing(true);
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    super.onActivityResult(requestCode, resultCode, data);
@@ -188,6 +195,7 @@ public class UserView extends Activity implements OnClickListener,
     			new Intent(this, UserSearch.class));
     	else if (v.getId() == R.id.user_view_avatar) changeAvatar();
     	else if (v.getId() == R.id.user_view_befriend) befriend();
+    	else if (v.getId() == R.id.user_view_unfriend) unfriend();
 	}
 	private void refresh(){
 		getUserManager(true).refreshUser(REFRESH_USER);

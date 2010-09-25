@@ -38,10 +38,16 @@
 			android:id="@+id/user_view_username" />
 			
 		<View style="@style/Spring" />
-		
-		<ImageView style="@style/UserViewBefriend"
-		    android:id="@+id/user_view_befriend"
-		    android:visibility="invisible" />
+        
+        <ImageView style="@style/UserViewBefriend"
+            android:id="@+id/user_view_befriend"
+            android:src="@drawable/icon_friend_plus"
+            android:visibility="invisible" />
+        
+        <ImageView style="@style/UserViewBefriend"
+            android:id="@+id/user_view_unfriend"
+            android:src="@drawable/icon_friend_minus"
+            android:visibility="gone" />
 			
 	</LinearLayout>
 	
