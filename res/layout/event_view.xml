@@ -36,8 +36,6 @@
 	        android:src="@drawable/avatar_default"
 	        android:id="@+id/event_avatar" />
 	        
-	    <ProgressBar style="@style/WrapAll"
-	        android:id="@+id/event_loading"/>
         
 	    <LinearLayout style="@style/EventTextSection" >
 	        <LinearLayout style="@style/FullWidth"

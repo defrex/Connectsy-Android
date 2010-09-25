@@ -84,7 +84,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	private void update() {
 		setUserStatus(null, false);
 		setTabSelected(null);
-		new EventRenderer(this, findViewById(R.id.event), event.revision, false);
+		new EventRenderer(this, findViewById(R.id.event), eventRev, false);
 		event = getEventManager().getEvent(eventRev);
 		if (event != null) {
 			setTabSelected(null);
