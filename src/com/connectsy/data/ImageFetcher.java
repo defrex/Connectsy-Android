@@ -15,8 +15,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
-import com.connectsy.utils.DateUtils;
-
 public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 	@SuppressWarnings("unused")
 	private final String TAG = "ImageFetcher";
@@ -32,15 +30,18 @@ public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 	}
 	
 	public void fetch(){
+		execute();
 		long expNum = cache.getLong(getCacheName(), 0);
 		if (expNum != 0){
-			if (DateUtils.isCacheExpired(new Date(expNum), 2)){
-				cleanCachedFile();
-				execute();
-			}else{
-				renderCached();
-			}
+			renderCached();
 		}
+//			if (DateUtils.isCacheExpired(new Date(expNum), 2)){
+//				cleanCachedFile();
+//				execute();
+//			}else{
+//				renderCached();
+//			}
+//		}
 	}
 	
 	protected abstract String getFilename();
