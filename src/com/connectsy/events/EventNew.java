@@ -15,6 +15,8 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -77,9 +79,23 @@ public class EventNew extends Activity implements OnClickListener,
         ActionBarHandler ab = new ActionBarHandler(this);
         
         EditText what = (EditText) findViewById(R.id.events_new_what);
-        what.setOnKeyListener(this);
+        what.addTextChangedListener(new TextWatcher(){
+			public void afterTextChanged(Editable s) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				((TextView)findViewById(R.id.events_new_chars_what))
+						.setText(Integer.toString(150-s.length()));
+			}
+        });
         EditText where = (EditText) findViewById(R.id.events_new_where);
-        where.setOnKeyListener(this);
+        where.addTextChangedListener(new TextWatcher(){
+			public void afterTextChanged(Editable s) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				((TextView)findViewById(R.id.events_new_chars_where))
+						.setText(Integer.toString(25-s.length()));
+			}
+        });
         
         mDateDisplay = (TextView) findViewById(R.id.events_new_date);
         mTimeDisplay = (TextView) findViewById(R.id.events_new_time);
