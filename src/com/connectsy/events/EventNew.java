@@ -45,7 +45,7 @@ import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
 
 public class EventNew extends Activity implements OnClickListener, 
-		DataUpdateListener, OnKeyListener {
+		DataUpdateListener {
 	private final String TAG = "NewEvent";
 	private ProgressDialog loadingDialog;
     private EventManager eventManager;
@@ -158,11 +158,8 @@ public class EventNew extends Activity implements OnClickListener,
 	}
 	
 	private void selectFriends(){
-		Log.d(TAG, "selecting friends");
 		Intent i = new Intent(Intent.ACTION_CHOOSER);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-		ArrayList<User> users = new UserManager(this, this, null).getFriends(false);
-		i.putExtra("com.connectsy.users", User.serializeList(users));
 		startActivityForResult(i, SELECT_FRIENDS);
 	}
 	private void getCategory(){
@@ -338,22 +335,5 @@ public class EventNew extends Activity implements OnClickListener,
 
 	public void onRemoteError(int httpStatus, int code) {
 		if (loadingDialog != null) loadingDialog.dismiss();
-	}
-
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		TextView chars;
-		int max;
-        if (v.getId() == R.id.events_new_what){
-        	chars = (TextView)findViewById(R.id.events_new_chars_what);
-        	max = 150;
-        }else if (v.getId() == R.id.events_new_where){
-        	chars = (TextView)findViewById(R.id.events_new_chars_where);
-        	max = 25;
-        }else{
-        	return false;
-        }
-    	int curChars = ((EditText)v).getText().length();
-        chars.setText(Integer.toString(max-curChars));
-		return false;
 	}
 }

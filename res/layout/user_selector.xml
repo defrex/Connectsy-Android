@@ -9,8 +9,14 @@
         android:layout_alignParentTop="true" >
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
-            <ImageView style="@style/ActionBarLogo" />
-            <View style="@style/Spring" />
+            <ImageView style="@style/ActionBarLogo"/>
+            
+            <View style="@style/Spring"/>
+            
+            <ProgressBar style="@style/ActionBarAction"
+                android:id="@+id/ab_refresh_spinner"
+                android:src="@drawable/icon_refresh"
+                android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
     
@@ -21,7 +27,8 @@
         android:id="@+id/user_list" />
     
     <LinearLayout style="@style/BorderWrapperVert"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentBottom="true"
+        android:background="#ffffffff">
         <View style="@style/BorderVert" />
 	    <LinearLayout style="@style/UserSelectorDone" >
 	        <View style="@style/Spring" />

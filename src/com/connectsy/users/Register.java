@@ -92,7 +92,7 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
 
 	public void onApiRequestError(int httpStatus, int code) {
 		loadingDialog.dismiss();
-		String message = "Unknown Error.";
+		String message = "Unknown Error: "+httpStatus;
 		if (httpStatus == 409)
     		message = "Sorry, that username is taken.";
 		else if (httpStatus == 404)

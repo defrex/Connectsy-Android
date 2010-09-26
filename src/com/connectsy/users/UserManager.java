@@ -78,8 +78,7 @@ public class UserManager extends DataManager {
 		}
 	}
 	
-	public UserManager(Context c, DataUpdateListener passedListener, 
-			String pUsername) {
+	public UserManager(Context c, DataUpdateListener passedListener, String pUsername) {
 		super(c, passedListener);
 		if (pUsername != null){
 			username = pUsername;
@@ -115,6 +114,9 @@ public class UserManager extends DataManager {
 	}
 
 	public ArrayList<User> getFriends(boolean pending){
+		return getFriends(pending, false);
+	}
+	public ArrayList<User> getFriends(boolean pending, boolean returnNull){
 		String friendString = getFriendsRequest(pending).getCached();
 		ArrayList<User> friends = new ArrayList<User>();
 		if (friendString != null){
@@ -135,6 +137,8 @@ public class UserManager extends DataManager {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+		}else if (returnNull){
+			return null;
 		}
 		return friends;
 	}
