@@ -4,7 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <application 
-	    	android:icon="@drawable/icon_dev" 
+	    	android:icon="@drawable/icon" 
 	    	android:label="@string/app_name"
 	    	android:theme="@style/Theme.Consy">
 	    <uses-library android:name="com.google.android.maps" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".events.EventNew"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".events.EventView">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

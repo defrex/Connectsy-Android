@@ -3,6 +3,10 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/text_light_grey"/>
 <ScrollView style="@style/FullWidth">
 <LinearLayout
     android:orientation="vertical"

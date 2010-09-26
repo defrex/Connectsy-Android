@@ -40,16 +40,18 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <View style="@style/Spring"/>
-            <Button style="@style/Button"
-                android:text="@string/auth_login_login"
-                android:id="@+id/auth_login_button" />
-            <TextView style="@style/Text"
-                android:paddingRight="5px"
-                android:text="or"/>
             <TextView style="@style/Link"
                 android:id="@+id/auth_login_reg"
                 android:text="@string/auth_login_reg"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:clickable="true"/>
+            <TextView style="@style/Text"
+                android:paddingLeft="5px"
+                android:text="or"/>
+            <Button style="@style/Button"
+                android:text="@string/auth_login_login"
+                android:id="@+id/auth_login_button" />
         </LinearLayout>
 	
 	</LinearLayout> 

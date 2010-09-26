@@ -6,9 +6,9 @@
     <string name="menu_settings">Settings</string>
     
     <string name="dashboard_events_nearby">All Events</string>
-    <string name="dashboard_events_friends">Friends\' Events</string>
+    <string name="dashboard_events_friends">Friends Events</string>
     <string name="dashboard_events_category">Events by Category</string>
-    <string name="dashboard_profile">User Page</string>
+    <string name="dashboard_profile">Profile</string>
     <string name="dashboard_search">Search Users</string>
     <string name="dashboard_new_event">Create Event</string>
     

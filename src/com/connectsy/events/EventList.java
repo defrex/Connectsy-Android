@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,9 +72,9 @@ public class EventList extends Activity implements DataUpdateListener,
         
         TextView heading = (TextView)findViewById(R.id.event_list_heading_text);
         if (filter == Filter.ALL)
-        	heading.setText("All Activity");
+        	heading.setText("All Events");
         if (filter == Filter.FRIENDS)
-        	heading.setText("Friends Activity");
+        	heading.setText("Friends Events");
         if (filter == Filter.CATEGORY){
         	heading.setText("Category: "+category);
         	findViewById(R.id.event_list_heading_arrow).setVisibility(View.VISIBLE);

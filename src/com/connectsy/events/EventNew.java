@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.categories.CategoryManager;
 import com.connectsy.categories.CategoryManager.Category;
@@ -37,7 +38,6 @@ import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
-import com.connectsy.ActionBarHandler;
 import com.connectsy.users.UserManager;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
@@ -105,6 +105,8 @@ public class EventNew extends Activity implements OnClickListener,
         submitButton.setOnClickListener(this);
         
         final Calendar c = Calendar.getInstance();
+        c.set(Calendar.MINUTE, 0);
+        c.roll(Calendar.HOUR, 1);
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);

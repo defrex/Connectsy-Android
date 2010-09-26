@@ -14,20 +14,9 @@
         </LinearLayout>
     </FrameLayout>
     
-    <LinearLayout style="@style/FullWidth"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/events_new_submit_wrapper"
-        android:orientation="horizontal">
-        <View style="@style/Spring" />
-        <Button style="@style/Button"
-            android:text="@string/events_new_button_submit"
-            android:id="@+id/events_new_submit" />
-    </LinearLayout>
-    
 	<ScrollView style="@style/FullWidth"
         android:layout_below="@id/events_new"
         android:layout_marginTop="@dimen/actionbar_height"
-        android:layout_above="@id/events_new_submit_wrapper"
         android:id="@+id/events_new_scroller">
 	<LinearLayout style="@style/EventNew"
 		android:orientation="vertical" >
@@ -38,6 +27,7 @@
                 android:orientation="horizontal"
                 android:background="#66eeeeee">
                 <TextView style="@style/EventNewTitleText"
+                    android:background="@null"
                     android:text="@string/events_new_title_what" />
                 <View style="@style/Spring" />
                 <TextView style="@style/Text"
@@ -56,9 +46,11 @@
 			android:paddingTop="0dp" >
             <View style="@style/EventNewTitleBorderTop" />
             <LinearLayout style="@style/FullWidth"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:background="#66eeeeee">
                 <TextView style="@style/EventNewTitleText"
-                    android:text="@string/events_new_title_where" />
+                    android:text="@string/events_new_title_where"
+                    android:background="@null"/>
                 <View style="@style/Spring" />
                 <TextView style="@style/Text"
                     android:layout_marginRight="5dp"
@@ -72,9 +64,11 @@
             android:maxLength="25"
 		    android:id="@+id/events_new_where" />
 		
-		<LinearLayout style="@style/EventNewTitle" >
+		<LinearLayout style="@style/EventNewTitle">
             <View style="@style/EventNewTitleBorderTop" />
 			<TextView style="@style/EventNewTitleText"
+                android:background="#66eeeeee"
+                android:layout_width="fill_parent"
 				android:text="@string/events_new_title_when" />
 			<View style="@style/EventNewTitleBorder" />
 		</LinearLayout>
@@ -104,9 +98,11 @@
 			</LinearLayout>
 		
 		
-		<LinearLayout style="@style/EventNewTitle" >
+		<LinearLayout style="@style/EventNewTitle">
             <View style="@style/EventNewTitleBorderTop" />
 			<TextView style="@style/EventNewTitleText"
+                android:background="#66eeeeee"
+                android:layout_width="fill_parent"
 				android:text="@string/events_new_title_who" />
 			<View style="@style/EventNewTitleBorder" />
 		</LinearLayout>
@@ -162,6 +158,16 @@
             </LinearLayout>
             <View style="@style/EventNewTitleBorder" />
         </LinearLayout>
+    
+	    <LinearLayout style="@style/FullWidth"
+	        android:layout_alignParentBottom="true"
+	        android:id="@+id/events_new_submit_wrapper"
+	        android:orientation="horizontal">
+	        <View style="@style/Spring" />
+	        <Button style="@style/Button"
+	            android:text="@string/events_new_button_submit"
+	            android:id="@+id/events_new_submit" />
+	    </LinearLayout>
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>
