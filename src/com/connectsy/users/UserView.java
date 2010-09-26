@@ -45,6 +45,7 @@ public class UserView extends Activity implements OnClickListener,
     private static final int REFRESH_PENDING_FRIENDS = 4;
 	private static final int REFRESH_CUR_PENDING_FRIENDS = 5;
 	private static final int CONFIRM_USER = 6;
+	private static final int UPLOAD_AVATAR = 7;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class UserView extends Activity implements OnClickListener,
 		
         if (user != null){
 	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-	        new AvatarFetcher(this, user.username, avatar);
+	        new AvatarFetcher(this, user.username, avatar).fetch();
 	        if (username.equals(DataManager.getCache(this).getString("username", null))){
 	        	avatar.setClickable(true);
 	        	avatar.setOnClickListener(this);
@@ -178,7 +179,9 @@ public class UserView extends Activity implements OnClickListener,
 	    if (requestCode == SELECT_AVATAR && resultCode == Activity.RESULT_OK) {
 			Uri selectedImage = data.getData();
 			try {
-				getUserManager(true).uploadAvatar(selectedImage);
+				getUserManager(true).uploadAvatar(selectedImage, UPLOAD_AVATAR);
+				operationsPending++;
+				setRefreshing(true);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -220,6 +223,7 @@ public class UserView extends Activity implements OnClickListener,
     }
 
 	public void onDataUpdate(int code, String response) {
+		Log.d(TAG, "onDataUpdate");
 		if (code == BEFRIEND){
 			findViewById(R.id.user_view_befriend).setVisibility(View.GONE);
 			new UserManager(this, this, curUsername).refreshFriends(true, 
@@ -227,11 +231,11 @@ public class UserView extends Activity implements OnClickListener,
 			operationsPending++;
 		}else if (code == REFRESH_USER){
 			updateUserDisplay();
-		}else if (code == CONFIRM_USER){
-			new UserManager(this, this, curUsername).refreshFriends(true, 
-					REFRESH_CUR_PENDING_FRIENDS);
-			operationsPending++;
-		}else {
+		}else if (code == UPLOAD_AVATAR){
+			Log.d(TAG, "upload avatar return");
+	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
+	        new AvatarFetcher(this, user.username, avatar).fetch(true);
+		}else{
 			updateFriendsDisplay();
 			updatePendingFriendsDisplay();
 		}
@@ -245,6 +249,7 @@ public class UserView extends Activity implements OnClickListener,
 	}
 
 	public void onRemoteError(int httpStatus, int code) {
+		Log.d(TAG, "onRemoteError: "+httpStatus);
 		operationsPending--;
 		if (operationsPending == 0)
 			setRefreshing(false);

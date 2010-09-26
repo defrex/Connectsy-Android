@@ -10,7 +10,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 
 import com.connectsy.R;
 import com.connectsy.data.DataManager.DataUpdateListener;
@@ -21,6 +20,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	@SuppressWarnings("unused")
 	private static final String TAG = "Preferances";
 	private static final int SELECT_AVATAR = 0;
+	private static final int UPLOAD_AVATAR = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 			Uri selectedImage = data.getData();
 			try {
 				new UserManager(this, this, UserManager.currentUsername(this))
-						.uploadAvatar(selectedImage);
+						.uploadAvatar(selectedImage, UPLOAD_AVATAR);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -141,7 +141,6 @@ public class UserManager extends DataManager {
 	
 	public void refreshFriends(boolean pending, int sentReturnCode){
 		returnCode = sentReturnCode;
-		Log.d(TAG, "refreshFriends");
 		getFriendsRequest(pending).execute();
 	}
 	
@@ -158,7 +157,8 @@ public class UserManager extends DataManager {
 				true, UNFRIEND).execute();
 	}
 	
-	public void uploadAvatar(Uri avatar) throws IOException{
+	public void uploadAvatar(Uri avatar, int returnCode) throws IOException{
+		this.returnCode = returnCode;
   	  	AssetFileDescriptor file = context.getContentResolver()
 		  		.openAssetFileDescriptor(avatar, "r");
 		ApiRequest r = new ApiRequest(this, context, Method.PUT, 
