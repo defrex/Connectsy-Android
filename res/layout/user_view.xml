@@ -51,28 +51,24 @@
             android:visibility="gone" />
 			
 	</LinearLayout>
+    
+    <LinearLayout style="@style/TabBar">
+        <Button style="@style/TabBarButtonLeft"
+            android:id="@+id/user_view_events_button"
+            android:text="Events"/>
+        <Button style="@style/TabBarButtonRight"
+            android:id="@+id/user_view_friends_button"
+            android:text="Friends"/>
+    </LinearLayout>
 	
-    <LinearLayout style="@style/ListTitle"
-        android:id="@+id/pending_friends_list_title"
-        android:visibility="gone" >
-        <View style="@style/ListTitleBorderTop" />
-        <TextView style="@style/ListTitleText"
-            android:text="Pending Friend Requests" />
-        <View style="@style/ListTitleBorder" />
-    </LinearLayout>
-    <ListView android:id="@+id/pending_friends_list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-    
-    
-    <LinearLayout style="@style/ListTitle"
-        android:id="@+id/pending_friends_list_title" >
-        <View style="@style/ListTitleBorderTop" />
-        <TextView style="@style/ListTitleText"
-            android:text="Friends" />
-        <View style="@style/ListTitleBorder" />
-    </LinearLayout>
-    <ListView android:id="@+id/friends_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+	<ListView
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/user_view_events"/>
+	
+	<ListView 
+	    android:id="@+id/user_view_friends"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" />
+	        
 </LinearLayout>

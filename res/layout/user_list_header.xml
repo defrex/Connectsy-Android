@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListTitle"
+    android:id="@+id/pending_friends_list_title">
+    <View style="@style/ListTitleBorderTop" />
+    <TextView style="@style/ListTitleText"
+        android:id="@+id/user_list_header_text" />
+    <View style="@style/ListTitleBorder" />
+</LinearLayout>

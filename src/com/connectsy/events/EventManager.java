@@ -30,8 +30,9 @@ public class EventManager extends DataManager {
 	private Filter filter;
 	private ArrayList<Event> events;
 	private LocManager locManager;
+	private String creatorName;
 	
-	public enum Filter{ALL, CATEGORY, FRIENDS}
+	public enum Filter{ALL, CATEGORY, FRIENDS, CREATOR}
 	
 	public class Event{
 		public String ID;
@@ -70,11 +71,14 @@ public class EventManager extends DataManager {
 				attendants = Attendant.deserializeList(response.getString("attendants"));
 		}
 	}
-	
+
 	public EventManager(Context c, DataUpdateListener l, Filter f, String cat) {
 		super(c, l);
 		filter = f;
-		category = cat;
+		if (filter == Filter.CREATOR)
+			creatorName = cat;
+		else
+			category = cat;
 		locManager = new LocManager(c);
 	}
 	
@@ -84,6 +88,10 @@ public class EventManager extends DataManager {
 			args.add(new BasicNameValuePair("filter", "friends"));
 		else if (filter == Filter.CATEGORY)
 			args.add(new BasicNameValuePair("filter", category));
+		else if (filter == Filter.CREATOR){
+			args.add(new BasicNameValuePair("filter", "creator"));
+			args.add(new BasicNameValuePair("username", creatorName));
+		}
 		
 		Location loc = locManager.getLocation();
 		if (loc != null){

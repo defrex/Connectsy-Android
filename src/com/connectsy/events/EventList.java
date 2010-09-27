@@ -27,6 +27,7 @@ import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Filter;
 import com.connectsy.settings.MainMenu;
+import com.connectsy.utils.Utils;
 
 public class EventList extends Activity implements DataUpdateListener, 
 		OnClickListener, OnItemClickListener, LocationListener {
@@ -86,6 +87,7 @@ public class EventList extends Activity implements DataUpdateListener,
         ListView lv = (ListView)findViewById(R.id.events_list);
         lv.setOnItemClickListener(this);
         lv.setAdapter(adapter);
+		Utils.setFooterView(this, lv);
         refresh();
     }
     
