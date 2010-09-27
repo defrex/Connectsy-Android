@@ -31,8 +31,13 @@ public abstract class DataManager implements ApiRequestListener {
 		SharedPreferences d = c.getSharedPreferences(Settings.PREFS_NAME, 
 				Context.MODE_PRIVATE);
 		if (d.getInt("CACHE_VERSION", 0) != Settings.CACHE_VERSION)
-			d.edit().clear().putInt("CACHE_VERSION", Settings.CACHE_VERSION).commit();
+			cleanCache(c);
 		return d;
+	}
+	
+	public static void cleanCache(Context context){
+		getCache(context).edit().clear()
+				.putInt("CACHE_VERSION", Settings.CACHE_VERSION).commit();
 	}
 	
 	public void onApiRequestFinish(int status, String response, int code){

@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
@@ -224,8 +225,10 @@ public class EventManager extends DataManager {
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		if (code == GET_EVENTS)
+		if (code == GET_EVENTS){
+			Log.d(TAG, "events: "+response);
 			refreshEventsReturn(response);
+		}
 		listener.onDataUpdate(returnCode, response);
 	}
 }

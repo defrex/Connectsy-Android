@@ -242,13 +242,15 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 			findViewById(R.id.user_view_befriend).setVisibility(View.GONE);
 			new UserManager(this, this, curUsername).refreshFriends(true, 
 					REFRESH_CUR_PENDING_FRIENDS);
-			operationsPending++;
 			updateTab(null);
+			return;
 		}else if (code == REFRESH_USER){
 			updateUserDisplay();
 		}else if (code == UPLOAD_AVATAR){
 	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
 	        new AvatarFetcher(this, user.username, avatar).fetch(true);
+		}else if (code == CONFIRM_USER){
+			refresh();
 		}else{
 			updateTab(null);
 		}

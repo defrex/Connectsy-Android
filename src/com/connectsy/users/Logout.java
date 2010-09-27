@@ -2,21 +2,17 @@ package com.connectsy.users;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.connectsy.Launcher;
+import com.connectsy.data.DataManager;
 
 public class Logout extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences.Editor dataEditor = getSharedPreferences("consy", 0).edit(); 
-        dataEditor.remove("authed");
-        dataEditor.remove("token");
-        dataEditor.commit();
-        //todo - flush everything?
+        DataManager.cleanCache(this);
         
         //stop notification service
         Intent i = new Intent();

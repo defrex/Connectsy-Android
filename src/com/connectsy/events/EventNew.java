@@ -119,7 +119,7 @@ public class EventNew extends Activity implements OnClickListener,
         
         final Calendar c = Calendar.getInstance();
         c.set(Calendar.MINUTE, 0);
-        c.roll(Calendar.HOUR, 1);
+        c.roll(Calendar.HOUR_OF_DAY, 1);
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);

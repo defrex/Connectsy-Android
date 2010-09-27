@@ -57,7 +57,7 @@ public class UserAdapter extends ArrayAdapter<User> {
 		final User user = getItem(position);
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View view = inflater.inflate(R.layout.user_list_item, parent, false);
+		final View view = inflater.inflate(R.layout.user_list_item, parent, false);
         
 		if (multi){
 			CheckBox sel = (CheckBox)view.findViewById(R.id.user_list_item_select);
@@ -88,7 +88,16 @@ public class UserAdapter extends ArrayAdapter<User> {
         	confirm.setVisibility(Button.VISIBLE);
         	confirm.setOnClickListener(new Button.OnClickListener(){
     			public void onClick(View v) {
-    				UserManager manager = new UserManager(context, listener, user.username);
+    				UserManager manager = new UserManager(context, new DataUpdateListener(){
+						public void onDataUpdate(int code, String response) {
+							listener.onDataUpdate(code, response);
+							view.findViewById(R.id.user_list_item_confirm)
+								.setVisibility(View.GONE);
+						}
+						public void onRemoteError(int httpStatus, int code) {
+							listener.onRemoteError(httpStatus, code);
+						}
+    				}, user.username);
     				manager.befriend(returnCode);
     			}
             });

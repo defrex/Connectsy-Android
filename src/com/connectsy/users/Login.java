@@ -73,11 +73,9 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
         }
     }
     private void doLogin(){
-        List<NameValuePair> args = new ArrayList<NameValuePair>(1);
-        args.add(new BasicNameValuePair("password", password));
-        args.add(new BasicNameValuePair("username", username));
 		ApiRequest r = new ApiRequest(this, this, Method.GET, "/token/", false, 0);
-		r.setGetArgs(args);
+		r.addGetArg("password", password);
+		r.addGetArg("username", username);
 		r.execute();
     }
     
