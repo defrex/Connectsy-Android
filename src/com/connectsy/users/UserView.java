@@ -144,14 +144,14 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     		if (user != null){
     			ArrayList<User> friends = getUserManager().getFriends(false);
     			ArrayList<User> pendingFriends = null;
+    			ArrayList<Object> inView = new ArrayList<Object>();
     			if (user.username.equals(curUsername)){
     				pendingFriends = getUserManager().getFriends(true);
-    			}
-    			ArrayList<Object> inView = new ArrayList<Object>();
-    			if (pendingFriends.size() != 0){
-    				inView.add("Pending Friends");
-    				inView.addAll(pendingFriends);
-        			inView.add("Friends");
+	    			if (pendingFriends.size() != 0){
+	    				inView.add("Pending Friends");
+	    				inView.addAll(pendingFriends);
+	        			inView.add("Friends");
+	    			}
     			}
     			inView.addAll(friends);
     	        if (adapter != null){
@@ -163,7 +163,6 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     	        lv.setAdapter(adapter);
     			Utils.setFooterView(this, lv);
     		}
-    		
     	}
     }
     
