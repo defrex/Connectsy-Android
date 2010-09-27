@@ -9,11 +9,11 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,7 +27,7 @@ import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.Utils;
 
 public class UserSearch extends Activity implements OnClickListener, 
-		ApiRequestListener, DataUpdateListener, OnKeyListener {
+		ApiRequestListener, DataUpdateListener{
 	private static final int REFRESH_USER = 1;
 	private static final int SEARCH_USERS = 2;
 	@SuppressWarnings("unused")
@@ -45,7 +45,22 @@ public class UserSearch extends Activity implements OnClickListener,
         ImageView search = (ImageView)findViewById(R.id.ab_user_search);
         search.setOnClickListener(this);
         EditText box = (EditText) findViewById(R.id.user_search_box);
-        box.setOnKeyListener(this);
+        box.addTextChangedListener(new TextWatcher(){
+			public void afterTextChanged(Editable s) {
+				if (canRequest){
+					if (!requestPending) doSearch();
+					canRequest = false;
+					new Handler().postDelayed(new Runnable() {
+						public void run() {
+							Log.d(TAG, "setting canRequest");
+							canRequest = true;
+						}
+					}, 500);
+				}
+			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
     }
 
     private void updateDisplay(String response){
@@ -109,20 +124,6 @@ public class UserSearch extends Activity implements OnClickListener,
 		return new UserManager(this, this, username);
 	}
 
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		if (canRequest){
-			if (!requestPending) doSearch();
-			canRequest = false;
-			new Handler().postDelayed(new Runnable() {
-				public void run() {
-					Log.d(TAG, "setting canRequest");
-					canRequest = true;
-				}
-			}, 500);
-		}
-		return false;
-	}
-	
 	public void onApiRequestError(int httpStatus, int retCode) {}
 	public void onRemoteError(int httpStatus, int code) {}
 }

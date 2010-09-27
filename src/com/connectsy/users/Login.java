@@ -56,7 +56,7 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
 	    	password = passwordText.getText().toString();
 	        doLogin();
 	        
-	        loadingDialog = ProgressDialog.show(this, "", "Logging in...", true);
+	        loadingDialog = ProgressDialog.show(this, "", "Signing in...", true);
     	}else if (v.getId() == R.id.auth_login_reg){
     		startActivityForResult(new Intent(this, Register.class), ACTIVITY_REGISTER);
     	}
