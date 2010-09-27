@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -14,9 +15,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.R;
 import com.connectsy.data.ApiRequest;
@@ -44,23 +47,35 @@ public class UserSearch extends Activity implements OnClickListener,
         
         ImageView search = (ImageView)findViewById(R.id.ab_user_search);
         search.setOnClickListener(this);
-        EditText box = (EditText) findViewById(R.id.user_search_box);
-        box.addTextChangedListener(new TextWatcher(){
-			public void afterTextChanged(Editable s) {
-				if (canRequest){
-					if (!requestPending) doSearch();
-					canRequest = false;
-					new Handler().postDelayed(new Runnable() {
-						public void run() {
-							Log.d(TAG, "setting canRequest");
-							canRequest = true;
-						}
-					}, 500);
-				}
+
+		ListView resultList = (ListView)findViewById(R.id.user_search_results);
+		resultList.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView<?> listView, View userView, 
+					int position, long id) {
+				User user = (User) listView.getAdapter().getItem(position);
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+				i.putExtra("com.connectsy.user.username", user.username);
+				startActivity(i);
 			}
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
+//        EditText box = (EditText) findViewById(R.id.user_search_box);
+//        box.addTextChangedListener(new TextWatcher(){
+//			public void afterTextChanged(Editable s) {
+//				if (canRequest){
+//					if (!requestPending) doSearch();
+//					canRequest = false;
+//					new Handler().postDelayed(new Runnable() {
+//						public void run() {
+//							Log.d(TAG, "setting canRequest");
+//							canRequest = true;
+//						}
+//					}, 500);
+//				}
+//			}
+//			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+//        });
     }
 
     private void updateDisplay(String response){
