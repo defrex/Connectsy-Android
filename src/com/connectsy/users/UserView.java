@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,11 +25,11 @@ import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
+import com.connectsy.events.EventManager;
+import com.connectsy.events.EventManager.Filter;
+import com.connectsy.events.EventsAdapter;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager.User;
-import com.connectsy.events.EventManager.Filter;
-import com.connectsy.events.EventManager;
-import com.connectsy.events.EventsAdapter;
 import com.connectsy.utils.Utils;
 
 public class UserView extends Activity implements OnClickListener, DataUpdateListener {
@@ -69,6 +71,17 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 
         findViewById(R.id.user_view_events_button).setOnClickListener(this);
         findViewById(R.id.user_view_friends_button).setOnClickListener(this);
+        ListView events = (ListView)findViewById(R.id.user_view_events);
+        events.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView<?> eventsView, View eventView, 
+					int position, long id) {
+				String rev = (String) eventsView.getAdapter().getItem(position);
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+				i.putExtra("com.connectsy.events.revision", rev);
+				startActivity(i);
+			}
+        });
         
 		updateUserDisplay();
 		updateTab(null);
