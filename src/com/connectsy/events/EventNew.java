@@ -18,12 +18,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -40,7 +38,6 @@ import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
-import com.connectsy.users.UserManager;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
 
@@ -297,7 +294,7 @@ public class EventNew extends Activity implements OnClickListener,
         if (event.broadcast && category != null)
         	event.category = category.name;
         eventManager.createEvent(event, CREATE_EVENT);
-        loadingDialog = ProgressDialog.show(this, "", "Posting event...", true);
+        loadingDialog = ProgressDialog.show(this, "", "Creating event...", true);
     }
     	
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -20,7 +20,7 @@
     
     <Button style="@style/Button"
         android:id="@+id/user_list_item_confirm"
-        android:text="confirm"
+        android:text="Confirm"
         android:visibility="gone"
         android:clickable="true" />
     
