@@ -73,7 +73,7 @@ public class EventNew extends Activity implements OnClickListener,
         setContentView(R.layout.event_new);
 
         //set up logo clicks
-        ActionBarHandler ab = new ActionBarHandler(this);
+        new ActionBarHandler(this);
         
         EditText what = (EditText) findViewById(R.id.events_new_what);
         what.addTextChangedListener(new TextWatcher(){

@@ -26,7 +26,7 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
         setContentView(R.layout.category_selector);
         
         //set up logo clicks
-        ActionBarHandler ab = new ActionBarHandler(this);
+        new ActionBarHandler(this);
         
         Intent i = getIntent();
         ArrayList<Category> categories = null;

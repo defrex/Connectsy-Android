@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.connectsy.utils.DateUtils;

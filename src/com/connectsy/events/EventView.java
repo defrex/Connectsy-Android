@@ -61,7 +61,7 @@ public class EventView extends Activity implements DataUpdateListener,
 		setContentView(R.layout.event_view);
 
 		//set up logo clicks
-        ActionBarHandler ab = new ActionBarHandler(this);
+        new ActionBarHandler(this);
         
 		ImageView abRefresh = (ImageView) findViewById(R.id.ab_refresh);
 		abRefresh.setOnClickListener(this);

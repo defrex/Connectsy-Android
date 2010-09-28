@@ -19,6 +19,7 @@ import com.connectsy.notifications.NotificationRedirect;
 
 public class EventNotification implements NotificationHandler, DataUpdateListener {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "EventNotification";
 	private static final int GET_EVENT = 0;
 	private static final int NOTIFICATION_ID = 0;
