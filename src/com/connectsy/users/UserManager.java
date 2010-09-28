@@ -170,6 +170,7 @@ public class UserManager extends DataManager {
 		r.setBodyFile(file);
 		r.setHeader("Content-Type", context.getContentResolver().getType(avatar));
 		r.execute();
+		Log.d(TAG, "uploading avatar");
 	}
 	
 	public static String currentUsername(Context context){
@@ -178,6 +179,8 @@ public class UserManager extends DataManager {
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
+		if (code == UPLOAD_AVATAR)
+			Log.d(TAG, "uploading avatar returned "+status+" with response "+response);
 		listener.onDataUpdate(returnCode, response);
 	}
 }

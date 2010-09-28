@@ -9,6 +9,7 @@ public class AvatarFetcher extends ImageFetcher{
 	@SuppressWarnings("unused")
 	private final String TAG = "AvatarFetcher";
 	private String username;
+	protected int cacheLength = 5;
 	
 	public AvatarFetcher(Context context, String username, ImageView view){
 		super(context, view);

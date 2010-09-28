@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.connectsy.utils.DateUtils;
@@ -21,9 +22,10 @@ public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 	@SuppressWarnings("unused")
 	private final String TAG = "ImageFetcher";
 	private SharedPreferences cache;
+	private String url;
 	protected Context context;
 	protected ImageView view;
-	private String url;
+	protected int cacheLength = 5;
 	
 	public ImageFetcher(Context context, ImageView view){
 		this.context = context;
@@ -37,13 +39,17 @@ public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 	public void fetch(boolean force){
 		long expNum = cache.getLong(getCacheName(), 0);
 		if (expNum != 0){
-			if (DateUtils.isCacheExpired(new Date(expNum), 2) || force){
+			renderCached();
+			if (DateUtils.isCacheExpired(new Date(expNum), cacheLength) || force){
+				Log.d(TAG, "image cache refresh");
 				cleanCachedFile();
 				execute();
 			}else{
+				Log.d(TAG, "image cache not expired");
 				renderCached();
 			}
 		}else{
+			Log.d(TAG, "no cache expiry set");
 			execute();
 		}
 	}
@@ -61,7 +67,7 @@ public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 			BitmapDrawable avy = new BitmapDrawable(context.openFileInput(getFilename()));
 			view.setImageDrawable(avy);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			
 		}
 	}
 

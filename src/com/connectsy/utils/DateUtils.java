@@ -50,9 +50,11 @@ public class DateUtils{
 		return dateString+" at "+timeString;
 	}
 	
-	public static boolean isCacheExpired(Date cached, int hours){
-		Date now = new Date();
-		now.setHours(now.getHours()+hours);
-		return (cached.compareTo(now) > 0);
+	public static boolean isCacheExpired(Date cached, int minutes){
+		Calendar c = Calendar.getInstance();
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(cached);
+		c.roll(Calendar.MINUTE, minutes);
+		return (c.compareTo(c2) >= 0);
 	}
 }
