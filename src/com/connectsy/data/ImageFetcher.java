@@ -41,15 +41,12 @@ public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 		if (expNum != 0){
 			renderCached();
 			if (DateUtils.isCacheExpired(new Date(expNum), cacheLength) || force){
-				Log.d(TAG, "image cache refresh");
 				cleanCachedFile();
 				execute();
 			}else{
-				Log.d(TAG, "image cache not expired");
 				renderCached();
 			}
 		}else{
-			Log.d(TAG, "no cache expiry set");
 			execute();
 		}
 	}

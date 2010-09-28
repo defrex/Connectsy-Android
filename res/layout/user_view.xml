@@ -31,7 +31,7 @@
     
 	<LinearLayout style="@style/UserViewTop" >
 	
-		<ImageView style="@style/UserViewAvatar"
+		<ImageView style="@style/Avatar"
             android:src="@drawable/avatar_default"
 			android:id="@+id/user_view_avatar" />
 			
