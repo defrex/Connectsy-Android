@@ -53,6 +53,7 @@ public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 	protected abstract String getFilename();
 	protected abstract String getCacheName();
 	protected abstract String getImageURL();
+	protected void onRenderFinish(){};
 	
 	protected void cleanCachedFile() {
 		context.deleteFile(getFilename());
@@ -62,6 +63,7 @@ public abstract class ImageFetcher extends AsyncTask<Void, Void, Boolean> {
 		try {
 			BitmapDrawable avy = new BitmapDrawable(context.openFileInput(getFilename()));
 			view.setImageDrawable(avy);
+			onRenderFinish();
 		} catch (FileNotFoundException e) {
 			
 		}
