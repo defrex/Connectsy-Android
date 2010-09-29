@@ -4,32 +4,28 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
-import com.connectsy.data.ImageFetcher;
+import com.connectsy.data.ImageStore;
+import com.connectsy.data.ImageStore.ImageListener;
 import com.connectsy.settings.Settings;
 
-public class CategoryImageFetcher extends ImageFetcher {
+public class CategoryImageFetcher extends Object {
 	@SuppressWarnings("unused")
 	private static final String TAG = "CategoryImageFetcher";
 	private String category;
 	
-	public CategoryImageFetcher(Context context, ImageView view, String category) {
-		super(context, view);
+	public CategoryImageFetcher(Context context, final ImageView view, String category) {
 		this.category = category;
+		new ImageStore().getImage("category-"+category, getImageURL(), new ImageListener(){
+			public void onImageReady(Bitmap image) {
+				view.setImageDrawable(new BitmapDrawable(image));
+			}
+		}, false);
 	}
 
-	@Override
-	protected String getFilename() {
-		return "category-"+category;
-	}
-
-	@Override
-	protected String getCacheName() {
-		return "category-"+category;
-	}
-
-	@Override
 	protected String getImageURL() {
 		try {
 			return Settings.API_DOMAIN+"/static/categories/"

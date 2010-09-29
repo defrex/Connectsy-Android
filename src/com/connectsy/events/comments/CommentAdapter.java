@@ -49,7 +49,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         
         ImageView avatar = (ImageView)view.findViewById(R.id.comment_avatar);
         avatar.setOnClickListener(userClick);
-        new AvatarFetcher(context, comment.getUsername(), avatar);
+        new AvatarFetcher(comment.getUsername(), avatar, false);
 
         TextView body = (TextView)view.findViewById(R.id.comment_text);
         body.setText(comment.getComment());

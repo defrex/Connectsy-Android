@@ -34,7 +34,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
     	if (cat.name != null){
 	        ImageView image = (ImageView)view.findViewById(R.id.category_list_item_image);
-	        new CategoryImageFetcher(context, image, cat.name).fetch();
+	        new CategoryImageFetcher(context, image, cat.name);
     	}
     	
 		return view;

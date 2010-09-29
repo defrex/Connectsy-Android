@@ -48,13 +48,13 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         username.setOnClickListener(userClick);
         
         Resources r = context.getResources();
-        String status_text = r.getString(r.getIdentifier(
-        		"string/attendant_status_"+Integer.toString(att.status), null, 
-        		context.getPackageName()));
+//        String status_text = r.getString(r.getIdentifier(
+//        		"string/attendant_status_"+Integer.toString(att.status), null, 
+//        		context.getPackageName()));
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
         avatar.setOnClickListener(userClick);
-        new AvatarFetcher(context, att.username, avatar);
+        new AvatarFetcher(att.username, avatar, false);
 		return view;
 	}
 }

@@ -97,7 +97,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 		
         if (user != null){
 	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-	        new AvatarFetcher(this, user.username, avatar).fetch();
+	        new AvatarFetcher(user.username, avatar, false);
 	        if (username.equals(DataManager.getCache(this).getString("username", null))){
 	        	avatar.setClickable(true);
 	        	avatar.setOnClickListener(this);
@@ -261,7 +261,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 			updateUserDisplay();
 		}else if (code == UPLOAD_AVATAR){
 	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-	        new AvatarFetcher(this, user.username, avatar).fetch(true);
+	        new AvatarFetcher(user.username, avatar, true);
 		}else if (code == CONFIRM_USER){
 			refresh();
 		}else{
