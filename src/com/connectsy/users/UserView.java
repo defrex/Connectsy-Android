@@ -167,13 +167,14 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 	    			}
     			}
     			inView.addAll(friends);
+    	        ListView lv = (ListView) findViewById(R.id.user_view_friends);
+    	        FriendsAdapter adapter = (FriendsAdapter)lv.getAdapter();
     	        if (adapter != null){
     	        	adapter.update(inView);
+    	        	adapter.notifyDataSetChanged();
     	        }else{
-    	            adapter = new FriendsAdapter(this, this, inView, CONFIRM_USER);
+        	        lv.setAdapter(new FriendsAdapter(this, this, inView, CONFIRM_USER));
     	        }
-    	        ListView lv = (ListView) findViewById(R.id.user_view_friends);
-    	        lv.setAdapter(adapter);
     			Utils.setFooterView(this, lv);
     		}
     	}
