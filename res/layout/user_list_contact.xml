@@ -13,12 +13,9 @@
         android:id="@+id/user_list_item_avatar" />
     
     <LinearLayout style="@style/UserListItemMiddle">
-        <TextView style="@style/UserListItemUsername"
-            android:id="@+id/user_list_item_username"
-            android:clickable="true" />
-        <TextView style="@style/UserListItemDetail"
-            android:id="@+id/user_list_item_detail"
-            android:visibility="gone"/>
+	    <TextView style="@style/UserListItemUsername"
+	        android:id="@+id/user_list_item_username"
+	        android:clickable="true" />
     </LinearLayout>
     
     <Button style="@style/Button"

@@ -373,7 +373,10 @@
         <style name="UserListItemUsername" parent="FullWidth">
             <item name="android:textStyle">bold</item>
             <item name="android:textColor">@color/link_blue</item>
-               <item name="android:textSize">18sp</item>
+            <item name="android:textSize">18sp</item>
+        </style>
+        <style name="UserListItemDetail" parent="FullWidth">
+            <item name="android:textSize">16sp</item>
         </style>
        <style name="UserListItemConfirm">
            <item name="android:textSize">14sp</item>

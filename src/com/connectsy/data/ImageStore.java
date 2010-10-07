@@ -1,5 +1,6 @@
 package com.connectsy.data;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
@@ -53,7 +54,7 @@ public final class ImageStore extends AsyncTask<Void, Void, Void> {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			// 404 from URL, do nothing.
 		}
 		return null;
 	}

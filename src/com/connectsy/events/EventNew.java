@@ -39,6 +39,7 @@ import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager.User;
+import com.connectsy.users.UserSelector.Contact;
 import com.connectsy.utils.DateUtils;
 
 public class EventNew extends Activity implements OnClickListener, 
@@ -48,6 +49,7 @@ public class EventNew extends Activity implements OnClickListener,
     private EventManager eventManager;
     private Category category;
     private ArrayList<User> chosenUsers;
+    private ArrayList<Contact> chosenContacts;
     private JSONObject eventJSON;
 	
     // where we display the selected date and time
@@ -172,15 +174,15 @@ public class EventNew extends Activity implements OnClickListener,
 				TextView title = (TextView)findViewById(R.id.events_new_category_title);
 				title.setText(category.name);
 			}else if (resultCode == RESULT_OK && requestCode == SELECT_FRIENDS){
-					chosenUsers = User.deserializeList(data.getExtras()
-							.getString("com.connectsy.users"));
-					String usersText = "";
-					for (int i=0;i<chosenUsers.size();i++){
-						usersText += chosenUsers.get(i).username;
-						usersText += " ";
-					}
-					TextView users = (TextView)findViewById(R.id.events_new_friends_selected_text);
-					users.setText(usersText);
+				Bundle e = data.getExtras();
+				chosenUsers = User.deserializeList(
+						e.getString("com.connectsy.users"));
+				chosenContacts = Contact.deserializeList(
+						e.getString("com.connectsy.contacts"));
+				String display = chosenUsers.size()+" friends, and "+
+						chosenContacts.size()+" contacts selected.";
+				((TextView)findViewById(R.id.events_new_friends_selected_text))
+					.setText(display);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -314,9 +316,9 @@ public class EventNew extends Activity implements OnClickListener,
 			if (code == CREATE_EVENT && (friends.isSelected() || choose.isSelected())){
 				AttendantManager att = new AttendantManager(this, this, eventJSON.getString("id"));
 				if (choose.isSelected())
-					att.bulkInvite(chosenUsers, 0);
+					att.bulkInvite(chosenUsers, chosenContacts, 0);
 				else
-					att.bulkInvite(null, 0);
+					att.bulkInvite(null, null, 0);
 			}else{
 				loadingDialog.dismiss();
 				Intent i = new Intent(Intent.ACTION_VIEW);

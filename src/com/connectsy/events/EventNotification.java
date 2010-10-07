@@ -81,8 +81,11 @@ public class EventNotification implements NotificationHandler, DataUpdateListene
 			notification = new Notification(R.drawable.notification,
 					"New Connectsy Event", System.currentTimeMillis());
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
+			
+			notification.ledARGB = 0xff00ff00;
+			notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+			
 			// notification.defaults |= Notification.DEFAULT_SOUND;
-			notification.defaults |= Notification.DEFAULT_LIGHTS;
 		}
 		return notification;
 	}

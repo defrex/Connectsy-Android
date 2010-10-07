@@ -16,6 +16,7 @@ import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
 import com.connectsy.users.UserManager.User;
+import com.connectsy.users.UserSelector.Contact;
 
 public class AttendantManager extends DataManager implements ApiRequestListener {
 	public static final String TAG = "AttendantManager";
@@ -143,19 +144,32 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		}
 	}
 	
-	public void bulkInvite(ArrayList<User> users, int passedReturnCode){
-		returnCode = passedReturnCode;
+	public void bulkInvite(ArrayList<User> users, ArrayList<Contact> contacts, 
+			int returnCode){
+		this.returnCode = returnCode;
 		ApiRequest r = new ApiRequest(this, context, Method.POST, 
 				"/events/"+eventID+"/invites/", true, SET_ATTS);
 		try {
 			JSONObject kwargs = new JSONObject();
 			if (users != null){
-				JSONArray usersJSON = new JSONArray();
-				for (int i=0;i<users.size();i++)
-					usersJSON.put(users.get(i).username);
-				kwargs.put("users", usersJSON);
+				if (users.size() > 0){
+					JSONArray usersJSON = new JSONArray();
+					for (int i=0;i<users.size();i++)
+						usersJSON.put(users.get(i).username);
+					kwargs.put("users", usersJSON);
+				}
 			}else{
 				kwargs.put("users", "friends");
+			}
+			if (contacts != null && contacts.size() > 0){
+				JSONArray jsonContacts = new JSONArray();
+				for (int i=0;i<contacts.size();i++){
+					JSONObject c = new JSONObject();
+					c.put("number", contacts.get(i).keyNumber);
+					c.put("name", contacts.get(i).displayName);
+					jsonContacts.put(c);
+				}
+				kwargs.put("contacts", jsonContacts);
 			}
 			r.setBodyString(kwargs.toString());
 			r.execute();
