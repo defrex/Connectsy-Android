@@ -39,10 +39,10 @@
     
     <string name="event_view_attend">Attend!</string>
     <string name="attendant_status_0">Invited</string>
-    <string name="attendant_status_1">Attending</string>
-    <string name="attendant_status_2">Maybe Attending</string>
-    <string name="attendant_status_3">Not Attending</string>
+    <string name="attendant_status_1">In</string>
+    <string name="attendant_status_3">Out</string>
     <string name="attendant_status_4">Running Late</string>
+    <string name="attendant_status_2">Maybe Attending</string>
     
     <string name="preferences_user">User preferances</string>
     <string name="preference_avatar">Select Avatar</string>

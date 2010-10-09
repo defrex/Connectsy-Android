@@ -19,7 +19,7 @@ public abstract class DataManager implements ApiRequestListener {
 	
 	public interface DataUpdateListener{
 		public void onDataUpdate(int code, String response);
-		public void onRemoteError(int httpStatus, int code);
+		public void onRemoteError(int httpStatus, String response, int code);
 	}
 	
 	public DataManager(Context c, DataUpdateListener passedListener){
@@ -44,7 +44,7 @@ public abstract class DataManager implements ApiRequestListener {
 		listener.onDataUpdate(code, response);
 	};
 	
-	public void onApiRequestError(int httpStatus, int code) {
+	public void onApiRequestError(int httpStatus, String response, int code) {
 		if (httpStatus == 401){
             SharedPreferences.Editor dataEditor = context
             		.getSharedPreferences(Settings.PREFS_NAME, 
@@ -54,6 +54,6 @@ public abstract class DataManager implements ApiRequestListener {
         	context.startActivity(new Intent(context, Launcher.class));
         	((Activity) context).finish();
 		}
-		listener.onRemoteError(httpStatus, returnCode);
+		listener.onRemoteError(httpStatus, response, returnCode);
 	}
 }

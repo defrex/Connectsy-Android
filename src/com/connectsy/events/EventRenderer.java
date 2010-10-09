@@ -84,7 +84,7 @@ public class EventRenderer implements DataUpdateListener {
 				+ Utils.maybeTruncate(event.where, 25, truncate)));
 		TextView what = (TextView) view.findViewById(R.id.event_what);
 		what.setText(Html.fromHtml("<b>what:</b> "
-				+ Utils.maybeTruncate(event.description, 25, truncate)));
+				+ Utils.maybeTruncate(event.what, 25, truncate)));
 		TextView when = (TextView) view.findViewById(R.id.event_when);
 		when.setText(Html.fromHtml("<b>when:</b> "
 				+ DateUtils.formatTimestamp(event.when)));
@@ -105,5 +105,5 @@ public class EventRenderer implements DataUpdateListener {
 		render();
 	}
 
-	public void onRemoteError(int httpStatus, int code) {}
+	public void onRemoteError(int httpStatus, String response, int code) {}
 }

@@ -47,9 +47,10 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		 * Called when an ApiRequest completes unsuccessfully.
 		 * 
 		 * @param httpStatus HTTP status code
+		 * @param response 
 		 * @param retCode retCode passed in the ApiRequest constructor
 		 */
-		public void onApiRequestError(int httpStatus, int retCode);
+		public void onApiRequestError(int httpStatus, String response, int retCode);
 	}
 
 	private static final String TAG = "ApiRequest";
@@ -184,14 +185,15 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 					+" you're connected to the internet.", 5000);
 			t.setGravity(Gravity.TOP, 0, 20);
 			t.show();
-			if (apiListener != null) apiListener.onApiRequestError(0, retCode);
-			return;
-		}else if(response.getStatusLine().getStatusCode()-200 > 100){
-			if (apiListener != null) apiListener.onApiRequestError(
-					response.getStatusLine().getStatusCode(), retCode);
+			if (apiListener != null) apiListener.onApiRequestError(0, null, retCode);
 			return;
 		}
 		String responseString = getResponseString(response);
+		if(response.getStatusLine().getStatusCode()-200 > 100){
+			if (apiListener != null) apiListener.onApiRequestError(
+					response.getStatusLine().getStatusCode(), responseString, retCode);
+			return;
+		}
 		if (responseString != null && request.getMethod() == "GET"){
 			data.edit().putString(url, responseString).commit();
 		}

@@ -104,7 +104,7 @@ public class EventList extends Activity implements DataUpdateListener,
 		setRefreshing(false);
 	}
 
-	public void onRemoteError(int httpStatus, int code) {
+	public void onRemoteError(int httpStatus, String response, int code) {
 		setRefreshing(false);
 	}
 

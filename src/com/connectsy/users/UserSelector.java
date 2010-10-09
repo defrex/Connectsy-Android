@@ -99,13 +99,17 @@ public class UserSelector extends Activity implements OnItemClickListener,
     	findViewById(R.id.ab_refresh_spinner).setVisibility(View.GONE);
 	}
 
-	public void onRemoteError(int httpStatus, int code) {}
+	public void onRemoteError(int httpStatus, String response, int code) {}
 	
 	public static class Contact{
 		public String keyNumber;
 		public String displayNumber;
 		public String displayName;
 		public Long personID;
+		
+		public String toString(){
+			return "Contact: "+displayName+" k:"+keyNumber+" d:"+displayNumber;
+		}
 		
 		public static String serializeList(ArrayList<Contact> contacts){
 			JSONArray jsonContacts = new JSONArray();
@@ -131,9 +135,9 @@ public class UserSelector extends Activity implements OnItemClickListener,
 			for(int i=0;i<jsonContacts.length();i++){
 				JSONObject jsonContact = jsonContacts.getJSONObject(i);
 				Contact contact = new Contact();
-				contact.displayName = jsonContact.getString("key_number");
-				contact.displayNumber = jsonContact.getString("display_numner");
 				contact.keyNumber = jsonContact.getString("key_number");
+				contact.displayNumber = jsonContact.getString("display_number");
+				contact.displayName = jsonContact.getString("display_name");
 				contact.personID = jsonContact.getLong("person_id");
 				contacts.add(contact);
 			}
@@ -262,15 +266,13 @@ public class UserSelector extends Activity implements OnItemClickListener,
 		}
 		
 		public ArrayList<Contact> getSelectedContacts(){
-			ArrayList<Contact> contacts = new ArrayList<Contact>();
+			ArrayList<Contact> selContacts = new ArrayList<Contact>();
 			for (HashMap.Entry<String, Boolean> entry : contactsSelected.entrySet())
 				if (entry.getValue())
 					for (Contact contact: contacts)
 						if (contact.keyNumber.equals(entry.getKey()))
-							contacts.add(contact);
-	    	Log.d(TAG, "getSelectedContacts: "+contacts.size());
-	    	Log.d(TAG, "contactsSelected: "+contactsSelected);
-			return contacts;
+							selContacts.add(contact);
+			return selContacts;
 		}
 
 		public View getView(final int position, View convertView, ViewGroup parent) {
@@ -325,7 +327,6 @@ public class UserSelector extends Activity implements OnItemClickListener,
 				sel.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 				    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 				    	contactsSelected.put(contact.keyNumber, isChecked);
-				    	Log.d(TAG, "contacts selected: "+contactsSelected);
 				    }
 				});
 				if (contactsSelected.containsKey(contact.keyNumber))

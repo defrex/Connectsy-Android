@@ -100,7 +100,7 @@ public class EventNotification implements NotificationHandler, DataUpdateListene
 		}
 	}
 
-	public void onRemoteError(int httpStatus, int code) {}
+	public void onRemoteError(int httpStatus, String response, int code) {}
 
 	public void comfirmed(Context context) {
 		notifications = new ArrayList<JSONObject>();

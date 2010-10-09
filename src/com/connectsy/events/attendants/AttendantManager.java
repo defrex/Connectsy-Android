@@ -8,13 +8,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.connectsy.Launcher;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.settings.Settings;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.users.UserSelector.Contact;
 
@@ -162,13 +167,24 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 				kwargs.put("users", "friends");
 			}
 			if (contacts != null && contacts.size() > 0){
+				Log.d(TAG, "formatting contacts: "+contacts);
 				JSONArray jsonContacts = new JSONArray();
 				for (int i=0;i<contacts.size();i++){
+					String number = contacts.get(i).keyNumber;
+					if (number.length() == 10)
+						number += "1";
+					if (number.charAt(number.length()-1) != '+')
+						number += "+";
+					String revNumber = "";
+					for (int n=number.length()-1;n>=0;n--)
+						revNumber += number.charAt(n);
+
 					JSONObject c = new JSONObject();
-					c.put("number", contacts.get(i).keyNumber);
+					c.put("number", revNumber);
 					c.put("name", contacts.get(i).displayName);
 					jsonContacts.put(c);
 				}
+				Log.d(TAG, "sending contacts: "+jsonContacts);
 				kwargs.put("contacts", jsonContacts);
 			}
 			r.setBodyString(kwargs.toString());
@@ -180,7 +196,6 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		Log.d(TAG, response);
 		getAttendants(true);
 		listener.onDataUpdate(returnCode, response);
 	}

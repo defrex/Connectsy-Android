@@ -38,7 +38,7 @@ public class EventManager extends DataManager {
 		public String ID;
 		public String revision;
 		public String creator;
-		public String description;
+		public String what;
 		public String where;
 		public long when;
 		public String category;
@@ -58,7 +58,7 @@ public class EventManager extends DataManager {
 			revision = event.getString("revision");
 			created = event.getLong("created");
 			creator = event.getString("creator");
-			description = event.getString("desc");
+			what = event.getString("what");
 			where = event.getString("where");
 			when = event.getLong("when");
 			category = event.getString("category");
@@ -194,17 +194,10 @@ public class EventManager extends DataManager {
 		try {
 			json.put("where", event.where);
 			json.put("when", event.when);
-			json.put("desc", event.description);
+			json.put("what", event.what);
 			json.put("category", event.category);
 			json.put("broadcast", event.broadcast);
 			json.put("client", "Connectsy for Android");
-//			json.put("friends", event.friends);
-//			if (event.someFriends != null){
-//				JSONArray chosen = new JSONArray();
-//				for (int i=0;i<event.someFriends.size();i++)
-//					chosen.put(event.someFriends.get(i).username);
-//				json.put("invited", chosen);
-//			}
 			Location loc = locManager.getLocation();
 			if (loc != null){
 				JSONArray jLoc = new JSONArray();

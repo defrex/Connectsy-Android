@@ -5,8 +5,10 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +23,7 @@ import com.connectsy.data.ApiRequest.Method;
 
 public class Register extends Activity implements OnClickListener, ApiRequestListener {
 	private ProgressDialog loadingDialog;
+	@SuppressWarnings("unused")
 	private static final String TAG = "Register";
 	
     @Override
@@ -60,6 +63,8 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
         try {
         	JSONObject body = new JSONObject();
         	body.put("password", password);
+        	body.put("number", ((TelephonyManager)getSystemService(
+        			Context.TELEPHONY_SERVICE)).getLine1Number());
         	
 			ApiRequest r = new ApiRequest(this, this, Method.PUT, "/users/"+username+"/", 
 					false, 0);
@@ -90,7 +95,7 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
 		}
 	}
 
-	public void onApiRequestError(int httpStatus, int code) {
+	public void onApiRequestError(int httpStatus, String response, int code) {
 		loadingDialog.dismiss();
 		String message = "Unknown Error: "+httpStatus;
 		if (httpStatus == 409)

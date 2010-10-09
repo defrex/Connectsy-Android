@@ -20,12 +20,12 @@
 	    android:paddingTop="5px"
 	    android:paddingBottom="10px"
 	    android:src="@drawable/logo_large" />
-	    
-	<EditText
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content"
-	    android:hint="@string/auth_login_username"
-	    android:id="@+id/auth_register_username" />
+        
+    <EditText
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:hint="@string/auth_login_username"
+        android:id="@+id/auth_register_username" />
 	<EditText
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content"

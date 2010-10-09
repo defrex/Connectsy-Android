@@ -171,7 +171,7 @@ public class NotificationListener implements ApiRequestListener {
 		}
 	}
 	// nothing to see here, please move along...
-	public void onApiRequestError(int httpStatus, int retCode) {}
+	public void onApiRequestError(int httpStatus, String response, int retCode) {}
 
 	public HashMap<String, NotificationHandler> getNotificationHandlers() {
 		return notificationHandlers;

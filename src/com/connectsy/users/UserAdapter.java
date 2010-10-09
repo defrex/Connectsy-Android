@@ -94,8 +94,8 @@ public class UserAdapter extends ArrayAdapter<User> {
 							view.findViewById(R.id.user_list_item_confirm)
 								.setVisibility(View.GONE);
 						}
-						public void onRemoteError(int httpStatus, int code) {
-							listener.onRemoteError(httpStatus, code);
+						public void onRemoteError(int httpStatus, String response, int code) {
+							listener.onRemoteError(httpStatus, response, code);
 						}
     				}, user.username);
     				manager.befriend(returnCode);

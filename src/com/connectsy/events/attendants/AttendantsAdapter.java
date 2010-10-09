@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,9 +49,10 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         username.setOnClickListener(userClick);
         
         Resources r = context.getResources();
-//        String status_text = r.getString(r.getIdentifier(
-//        		"string/attendant_status_"+Integer.toString(att.status), null, 
-//        		context.getPackageName()));
+        String status_text = r.getString(r.getIdentifier(
+        		"string/attendant_status_"+Integer.toString(att.status), null, 
+        		context.getPackageName()));
+        ((TextView)view.findViewById(R.id.user_list_item_detail)).setText(status_text);
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
         avatar.setOnClickListener(userClick);

@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -179,7 +182,7 @@ public class EventNew extends Activity implements OnClickListener,
 						e.getString("com.connectsy.users"));
 				chosenContacts = Contact.deserializeList(
 						e.getString("com.connectsy.contacts"));
-				String display = chosenUsers.size()+" friends, and "+
+				String display = chosenUsers.size()+" friends, "+
 						chosenContacts.size()+" contacts selected.";
 				((TextView)findViewById(R.id.events_new_friends_selected_text))
 					.setText(display);
@@ -288,7 +291,7 @@ public class EventNew extends Activity implements OnClickListener,
         
         eventManager = new EventManager(this, this, null, null);
         Event event = eventManager.new Event();
-        event.description = strDesc;
+        event.what = strDesc;
         event.where = strWhere;
         event.when = when;
         event.creator = username;
@@ -325,14 +328,49 @@ public class EventNew extends Activity implements OnClickListener,
 				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
 				i.putExtra("com.connectsy.events.revision", eventJSON.getString("revision"));
 				startActivity(i);
-				this.finish();
+				finish();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void onRemoteError(int httpStatus, int code) {
+	public void onRemoteError(int httpStatus, String response, int code) {
 		if (loadingDialog != null) loadingDialog.dismiss();
+		if (httpStatus == 409){
+			try {
+				JSONObject jsonResp = new JSONObject(response);
+				if (jsonResp.getString("error").equals("OUT_OF_NUMBERS")){
+					String message = "The following users are rock stars "
+							+"(apparently) and have hit our SMS limit. \n\n";
+					
+					JSONArray contacts = jsonResp.getJSONArray("contacts");
+					for (int i=0;i<contacts.length();i++)
+						message += "- "+contacts.getJSONObject(i).getString("name")+"\n";
+					
+					message += "\nThey won't recieve your invite. Tell "
+							+"them to get the app and friend you.";
+					
+					final String rev = jsonResp.getString("event_revision");
+					
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setMessage(message)
+					       .setCancelable(false)
+					       .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+					           public void onClick(DialogInterface dialog, int id) {
+									Intent i = new Intent(Intent.ACTION_VIEW);
+									i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+									i.putExtra("com.connectsy.events.revision", rev);
+									startActivity(i);
+									finish();
+					           }
+					       });
+					AlertDialog alert = builder.create();
+					alert.show();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

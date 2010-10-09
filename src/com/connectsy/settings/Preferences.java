@@ -57,7 +57,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 		
 	}
 
-	public void onRemoteError(int httpStatus, int code) {
+	public void onRemoteError(int httpStatus, String response, int code) {
 		// TODO Auto-generated method stub
 		
 	}

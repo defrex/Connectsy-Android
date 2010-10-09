@@ -149,8 +149,7 @@ public class EventView extends Activity implements DataUpdateListener,
 			if (event != null) {
 				ArrayList<Attendant> atts = new ArrayList<Attendant>();
 				for (Attendant a : getAttManager().getAttendants())
-					if (a.status == Status.ATTENDING)
-						atts.add(a);
+					atts.add(a);
 				if (attAdapter == null) {
 					attAdapter = new AttendantsAdapter(this,
 							R.layout.attendant_list_item, atts);
@@ -240,7 +239,7 @@ public class EventView extends Activity implements DataUpdateListener,
 			setRefreshing(false);
 	}
 
-	public void onRemoteError(int httpStatus, int returnCode) {
+	public void onRemoteError(int httpStatus, String response, int returnCode) {
 		if (httpStatus == 403 && returnCode == ATT_SET) {
 			Toast.makeText(this, "You are not invited.", 500).show();
 			setUserStatus(Status.NOT_ATTENDING, false);

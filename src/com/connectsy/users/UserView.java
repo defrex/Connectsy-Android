@@ -277,8 +277,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 		}
 	}
 
-	public void onRemoteError(int httpStatus, int code) {
-		Log.d(TAG, "onRemoteError: "+httpStatus);
+	public void onRemoteError(int httpStatus, String response, int code) {
 		operationsPending--;
 		if (operationsPending == 0)
 			setRefreshing(false);

@@ -1,13 +1,5 @@
 package com.connectsy.users;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -27,7 +19,6 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
-import com.connectsy.notifications.NotificationListener;
 
 public class Login extends Activity implements OnClickListener, ApiRequestListener {
 	private ProgressDialog loadingDialog;
@@ -96,7 +87,7 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
         this.finish();
 	}
 
-	public void onApiRequestError(int status, int code) {
+	public void onApiRequestError(int status, String response, int code) {
 		if (loadingDialog != null) loadingDialog.dismiss();
 		if (status == 404){
 			AlertDialog.Builder alert = new AlertDialog.Builder(this); 

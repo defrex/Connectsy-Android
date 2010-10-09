@@ -139,6 +139,6 @@ public class UserSearch extends Activity implements OnClickListener,
 		return new UserManager(this, this, username);
 	}
 
-	public void onApiRequestError(int httpStatus, int retCode) {}
-	public void onRemoteError(int httpStatus, int code) {}
+	public void onApiRequestError(int httpStatus, String response, int retCode) {}
+	public void onRemoteError(int httpStatus, String response, int code) {}
 }

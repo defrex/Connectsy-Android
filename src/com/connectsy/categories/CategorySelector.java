@@ -79,5 +79,5 @@ public class CategorySelector extends Activity implements DataUpdateListener, On
 	    lv.setAdapter(adapter);
 	    findViewById(R.id.ab_refresh_spinner).setVisibility(View.GONE);
 	}
-	public void onRemoteError(int httpStatus, int code) {}
+	public void onRemoteError(int httpStatus, String response, int code) {}
 }
