@@ -32,7 +32,7 @@ public class EventManager extends DataManager {
 	private LocManager locManager;
 	private String creatorName;
 	
-	public enum Filter{ALL, CATEGORY, FRIENDS, CREATOR}
+	public enum Filter{ALL, CATEGORY, FRIENDS, CREATOR, MY}
 	
 	public class Event{
 		public String ID;

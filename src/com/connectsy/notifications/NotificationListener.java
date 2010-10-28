@@ -19,6 +19,7 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.events.EventNotification;
+import com.connectsy.events.comments.CommentNotification;
 
 public class NotificationListener implements ApiRequestListener {
 
@@ -39,7 +40,7 @@ public class NotificationListener implements ApiRequestListener {
 	/**
 	 * How long to wait in between polls
 	 */
-	static final int PERIOD = 1000 * 60 * 2; // 2 min
+	static final int PERIOD = 2000; //1000 * 60 * 5; // 5 min
 
 	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;
@@ -58,6 +59,7 @@ public class NotificationListener implements ApiRequestListener {
 		
 		notificationHandlers = new HashMap<String, NotificationHandler>();
 		notificationHandlers.put("invite", new EventNotification());
+		notificationHandlers.put("comment", new CommentNotification());
 	}
 
 	public boolean isRunning() {
@@ -142,13 +144,9 @@ public class NotificationListener implements ApiRequestListener {
 				try {
 					JSONArray notifications = new JSONObject(response)
 							.getJSONArray("notifications");
-					Log.d(TAG, "got notices: "+notifications);
 					for (int i=0;i<notifications.length();i++){
-						Log.d(TAG, "in loop");
 						JSONObject notice = notifications.getJSONObject(i);
-						Log.d(TAG, "adding notice type: "+notice.getString("type"));
 						if (notificationHandlers.containsKey(notice.getString("type"))){
-							Log.d(TAG, "added");
 							notificationHandlers.get(notice.getString("type")).add(notice);
 						}
 					}

@@ -28,7 +28,29 @@
         </LinearLayout>
     </FrameLayout>
 	
-    <LinearLayout style="@style/EventListHeadingWrapper">
+	<LinearLayout style="@style/TabBar"
+		android:layout_marginTop="3dp">
+        <Button style="@style/TabBarButtonLeft"
+            android:id="@+id/event_list_tab_all"
+            android:textSize="12sp"
+            android:text="All"/>
+        <Button style="@style/TabBarButtonMiddle"
+            android:id="@+id/event_list_tab_my"
+            android:textSize="12sp"
+            android:text="My"/>
+        <Button style="@style/TabBarButtonMiddle"
+            android:id="@+id/event_list_tab_friends"
+            android:textSize="12sp"
+            android:text="Friends"/>
+        <Button style="@style/TabBarButtonRight"
+            android:id="@+id/event_list_tab_category"
+            android:textSize="12sp"
+            android:text="Category"/>
+	</LinearLayout>
+	
+    <LinearLayout style="@style/EventListHeadingWrapper"
+    	android:visibility="gone"
+    	android:id="@+id/event_list_heading_wrapper">
 	    <LinearLayout style="@style/EventListHeading"
 	       android:id="@+id/event_list_heading">
 	        <TextView style="@style/EventListHeadingText"
@@ -36,8 +58,7 @@
 	        <View style="@style/Spring" />
 	        <ImageView style="@style/EventListHeadingChange"
                 android:id="@+id/event_list_heading_arrow"
-	            android:src="@drawable/icon_right_arrow"
-	            android:visibility="gone"/>
+	            android:src="@drawable/icon_right_arrow"/>
 	    </LinearLayout>
         <ImageView style="@style/EventListHeadingBorder" />
     </LinearLayout>

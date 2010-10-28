@@ -31,16 +31,16 @@
 
         <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_events_friends"
-                android:text="@string/dashboard_events_friends"
-                android:drawableTop="@drawable/dashboard_events_friends"/>
+                android:id="@+id/dashboard_search"
+                android:text="@string/dashboard_search"
+                android:drawableTop="@drawable/dashboard_search"/>
                 
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_profile"
                 android:text="@string/dashboard_profile"
                 android:drawableTop="@drawable/dashboard_profile"/>
         </LinearLayout>
-
+<!-- 
         <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_events_category"
@@ -48,21 +48,22 @@
                 android:drawableTop="@drawable/dashboard_events_category"/>
                 
             <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_search"
-                android:text="@string/dashboard_search"
-                android:drawableTop="@drawable/dashboard_search"/>
+                android:id="@+id/dashboard_events_friends"
+                android:text="@string/dashboard_events_friends"
+                android:drawableTop="@drawable/dashboard_events_friends"/>
         </LinearLayout>
+ -->
     </LinearLayout>
     
     
-    <!--
     <FrameLayout style="@style/DashboardExtra">
-        <ImageView style="@style/DashboardExtraBackgroundTop" />
+        <!-- -->
         <com.google.android.maps.MapView 
             style="@style/DashboardExtraMap"
             android:id="@+id/dashboard_map"
             android:clickable="true"
-            android:apiKey="0rr3ewYP3KKBt3NHO9EqlrJSovDWNZeq7_nICmQ" />
+            android:apiKey="0rr3ewYP3KKCfD9Jpfj0BE3nmtQ-objio0PRAuA" />
+         
     </FrameLayout>
-    -->
+    
 </LinearLayout>

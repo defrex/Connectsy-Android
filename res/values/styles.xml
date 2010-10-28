@@ -90,6 +90,11 @@
         </style>
         <style name="TabBarButtonLeft" parent="TabBarButton">
             <item name="android:background">@drawable/tabbar_button_left</item>
+            <item name="android:layout_marginRight">5dp</item>
+        </style>
+        <style name="TabBarButtonMiddle" parent="TabBarButton">
+            <item name="android:background">@drawable/tabbar_button_middle</item>
+            <item name="android:layout_marginRight">5dp</item>
         </style>
         <style name="TabBarButtonRight" parent="TabBarButton">
             <item name="android:background">@drawable/tabbar_button_right</item>
@@ -197,6 +202,16 @@
                 <item name="android:textColor">@color/text_grey</item>
 		        <item name="android:background">@drawable/dashboard_bg</item>
 		    </style>
+        <style name="DashboardExtra" parent="FullWidth">
+            <item name="android:layout_weight">1</item>
+            <item name="android:layout_height">300dp</item>
+            <item name="android:background">@color/consy_dark_green</item>
+    	    <item name="android:foreground">@drawable/dashboard_extra_top</item>
+    	    <item name="android:foregroundGravity">top|fill_horizontal</item>
+        </style>
+            <style name="DashboardExtraMap" parent="FillAll">
+                <item name="android:layout_weight">1</item>
+            </style>
     
     <style name="EventListHeadingWrapper" parent="FullWidth">
         <item name="android:orientation">vertical</item>
