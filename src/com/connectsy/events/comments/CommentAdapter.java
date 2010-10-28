@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +25,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 			ArrayList<Comment> objects) {
 		super(context, viewResourceId, objects);
 	}
- 
+
 	@Override
 	public View getView (int position, View convertView, ViewGroup parent) {
 		final Context context = getContext();
@@ -44,13 +45,21 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         };
 		
         TextView username = (TextView)view.findViewById(R.id.comment_username);
-        username.setText(comment.getUsername());
-        username.setOnClickListener(userClick);
-        
-        ImageView avatar = (ImageView)view.findViewById(R.id.comment_avatar);
-        avatar.setOnClickListener(userClick);
-        new AvatarFetcher(comment.getUsername(), avatar, false);
+        if (comment.getUsername() != null){
+	        username.setText(comment.getUsername());
+	        username.setOnClickListener(userClick);
+	        Log.d(TAG, "displaying username");
+        }else if (comment.getDisplayName() != null){
+	        username.setText(comment.getDisplayName());
+	        Log.d(TAG, "displaying displayName");
+        }
 
+        if (comment.getUsername() != null){
+	        ImageView avatar = (ImageView)view.findViewById(R.id.comment_avatar);
+	        avatar.setOnClickListener(userClick);
+	        new AvatarFetcher(comment.getUsername(), avatar, false);
+        }
+        
         TextView body = (TextView)view.findViewById(R.id.comment_text);
         body.setText(comment.getComment());
 

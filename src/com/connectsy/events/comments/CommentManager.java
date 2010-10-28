@@ -7,10 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
-import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.events.EventManager;
 
 public class CommentManager extends DataManager {
@@ -22,26 +23,39 @@ public class CommentManager extends DataManager {
 	 */
 	public static class Comment {
 		String id;
-		String username;
 		String nonce;
 		String comment;
-		int timestamp;
+		String userID;
+		String username;
+		String displayName;
+		long timestamp;
 		
 		public Comment(String json) throws JSONException {
-			//Log.d(TAG, "event json: "+json);
+			Log.d(TAG, "comment json: "+json);
 			JSONObject obj = new JSONObject(json);
 			id = obj.getString("id");
-			username = obj.getString("user");
 			nonce = obj.getString("nonce");
-			timestamp = (int)obj.getLong("timestamp");
+			timestamp = obj.getLong("timestamp");
 			comment = obj.getString("comment");
+			userID = obj.getString("user");
+
+			if (obj.has("username"))
+				username = obj.getString("username");
+			if (obj.has("display_name"))
+				displayName = obj.getString("display_name");
 		}
 		
 		public String getId() {
 			return id;
 		}
+		public String getUserID() {
+			return userID;
+		}
 		public String getUsername() {
 			return username;
+		}
+		public String getDisplayName() {
+			return displayName;
 		}
 		public String getNonce() {
 			return nonce;
@@ -49,7 +63,7 @@ public class CommentManager extends DataManager {
 		public String getComment() {
 			return comment;
 		}
-		public int getTimestamp() {
+		public long getTimestamp() {
 			return timestamp;
 		}
 		
@@ -72,7 +86,8 @@ public class CommentManager extends DataManager {
 	EventManager.Event event;
 	int lastTimestamp = 0;
 	
-	public CommentManager(Context c, DataUpdateListener l, EventManager.Event event) {
+	public CommentManager(Context c, DataUpdateListener l, 
+			EventManager.Event event) {
 		super(c, l);
 		this.event = event;
 	}

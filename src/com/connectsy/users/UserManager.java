@@ -13,8 +13,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
-import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.data.ApiRequest.Method;
 
 public class UserManager extends DataManager {
 	@SuppressWarnings("unused")
@@ -29,16 +29,24 @@ public class UserManager extends DataManager {
 	
 	public static class User{
 		public String username;
-		public String revision;
-		public int created;
-		public boolean friendStatusPending = false;
+		public String display_name;
+		public String id;
+		public Integer friendStatus;
+		public Integer created;
+		public Boolean friendStatusPending = false;
 		
 		public User(){}
 		
 		public User(String userString) throws JSONException{
 			JSONObject user = new JSONObject(userString);
-			username = user.getString("username");
-			revision = user.getString("revision");
+			if (user.has("id"))
+				id = user.getString("id");
+			if (user.has("username"))
+				username = user.getString("username");
+			if (user.has("display_name"))
+				display_name = user.getString("display_name");
+			if (user.has("friend_status"))
+				friendStatus = user.getInt("friend_status");
 			if (user.has("friend_status_pending"))
 				friendStatusPending = user.getBoolean("friend_status_pending");
 			if (user.has("created"))
@@ -52,10 +60,18 @@ public class UserManager extends DataManager {
 		public String serialize(){
 			JSONObject ret = new JSONObject();
 			try {
-				ret.put("username", username);
-				ret.put("revision", revision);
-				ret.put("created", created);
-				ret.put("friendStatusPending", friendStatusPending);
+				if (username != null)
+					ret.put("username", username);
+				if (display_name != null)
+					ret.put("display_name", display_name);
+				if (created != null)
+					ret.put("created", created);
+				if (friendStatusPending != null)
+					ret.put("friendStatusPending", friendStatusPending);
+				if (friendStatus != null)
+					ret.put("friendStatus", friendStatus);
+				if (id != null)
+					ret.put("id", id);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -182,5 +198,49 @@ public class UserManager extends DataManager {
 		if (code == UPLOAD_AVATAR)
 			Log.d(TAG, "uploading avatar returned "+status+" with response "+response);
 		listener.onDataUpdate(returnCode, response);
+	}
+	
+	public static class Contact{
+		public String keyNumber;
+		public String displayNumber;
+		public String displayName;
+		public Long personID;
+		
+		public String toString(){
+			return "Contact: "+displayName+" k:"+keyNumber+" d:"+displayNumber;
+		}
+		
+		public static String serializeList(ArrayList<Contact> contacts){
+			JSONArray jsonContacts = new JSONArray();
+			try {
+				for (Contact contact: contacts){
+					JSONObject jsonContact = new JSONObject();
+					jsonContact.put("key_number", contact.keyNumber);
+					jsonContact.put("display_number", contact.displayNumber);
+					jsonContact.put("display_name", contact.displayName);
+					jsonContact.put("person_id", contact.personID);
+					jsonContacts.put(jsonContact);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return jsonContacts.toString();
+		}
+		
+		public static ArrayList<Contact> deserializeList(String sContacts) 
+				throws JSONException{
+			ArrayList<Contact> contacts = new ArrayList<Contact>();
+			JSONArray jsonContacts = new JSONArray(sContacts);
+			for(int i=0;i<jsonContacts.length();i++){
+				JSONObject jsonContact = jsonContacts.getJSONObject(i);
+				Contact contact = new Contact();
+				contact.keyNumber = jsonContact.getString("key_number");
+				contact.displayNumber = jsonContact.getString("display_number");
+				contact.displayName = jsonContact.getString("display_name");
+				contact.personID = jsonContact.getLong("person_id");
+				contacts.add(contact);
+			}
+			return contacts;
+		}
 	}
 }

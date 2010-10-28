@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
@@ -41,8 +43,8 @@ import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
+import com.connectsy.users.UserManager.Contact;
 import com.connectsy.users.UserManager.User;
-import com.connectsy.users.UserSelector.Contact;
 import com.connectsy.utils.DateUtils;
 
 public class EventNew extends Activity implements OnClickListener, 
@@ -301,7 +303,7 @@ public class EventNew extends Activity implements OnClickListener,
         eventManager.createEvent(event, CREATE_EVENT);
         loadingDialog = ProgressDialog.show(this, "", "Creating event...", true);
     }
-    	
+	
     public boolean onCreateOptionsMenu(Menu menu) {
         return MainMenu.onCreateOptionsMenu(menu);
 	}
@@ -337,40 +339,43 @@ public class EventNew extends Activity implements OnClickListener,
 
 	public void onRemoteError(int httpStatus, String response, int code) {
 		if (loadingDialog != null) loadingDialog.dismiss();
-		if (httpStatus == 409){
-			try {
-				JSONObject jsonResp = new JSONObject(response);
-				if (jsonResp.getString("error").equals("OUT_OF_NUMBERS")){
-					String message = "The following users are rock stars "
-							+"(apparently) and have hit our SMS limit. \n\n";
-					
-					JSONArray contacts = jsonResp.getJSONArray("contacts");
-					for (int i=0;i<contacts.length();i++)
-						message += "- "+contacts.getJSONObject(i).getString("name")+"\n";
-					
-					message += "\nThey won't recieve your invite. Tell "
-							+"them to get the app and friend you.";
-					
-					final String rev = jsonResp.getString("event_revision");
-					
-					AlertDialog.Builder builder = new AlertDialog.Builder(this);
-					builder.setMessage(message)
-					       .setCancelable(false)
-					       .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-					           public void onClick(DialogInterface dialog, int id) {
-									Intent i = new Intent(Intent.ACTION_VIEW);
-									i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-									i.putExtra("com.connectsy.events.revision", rev);
-									startActivity(i);
-									finish();
-					           }
-					       });
-					AlertDialog alert = builder.create();
-					alert.show();
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+		try {
+			JSONObject jsonResp = new JSONObject(response);
+			if (jsonResp.getString("error").equals("OUT_OF_NUMBERS")){
+				String message = "The following users are rock stars "
+						+"(apparently) and have hit our SMS limit. \n\n";
+				
+				JSONArray contacts = jsonResp.getJSONArray("contacts");
+				for (int i=0;i<contacts.length();i++)
+					message += "- "+contacts.getJSONObject(i).getString("name")+"\n";
+				
+				message += "\nThey won't recieve your invite. Tell "
+						+"them to get the app and friend you.";
+				
+				final String rev = jsonResp.getString("event_revision");
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage(message)
+				       .setCancelable(false)
+				       .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+				           public void onClick(DialogInterface dialog, int id) {
+								Intent i = new Intent(Intent.ACTION_VIEW);
+								i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+								i.putExtra("com.connectsy.events.revision", rev);
+								startActivity(i);
+								finish();
+				           }
+				       });
+				AlertDialog alert = builder.create();
+				alert.show();
+			}else if (jsonResp.getString("error").equals("MISSING_FIELDS")){
+				String message = "Please fill out "+jsonResp.getString("field_missing");
+				Toast t = Toast.makeText(this, message, 5000);
+				t.setGravity(Gravity.TOP, 0, 20);
+				t.show();
 			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 	}
 }

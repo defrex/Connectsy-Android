@@ -45,8 +45,12 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         };
 		
         TextView username = (TextView)view.findViewById(R.id.user_list_item_username);
-        username.setText(att.username);
-        username.setOnClickListener(userClick);
+        if (att.username != null){
+	        username.setText(att.username);
+	        username.setOnClickListener(userClick);
+        }else if (att.display_name != null){
+	        username.setText(att.display_name);
+        }
         
         Resources r = context.getResources();
         String status_text = r.getString(r.getIdentifier(
@@ -54,9 +58,11 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         		context.getPackageName()));
         ((TextView)view.findViewById(R.id.user_list_item_detail)).setText(status_text);
         
-        ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
-        avatar.setOnClickListener(userClick);
-        new AvatarFetcher(att.username, avatar, false);
+        if (att.username != null){
+	        ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
+	        avatar.setOnClickListener(userClick);
+	        new AvatarFetcher(att.username, avatar, false);
+        }
 		return view;
 	}
 }

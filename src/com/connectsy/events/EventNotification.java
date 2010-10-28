@@ -1,49 +1,22 @@
 package com.connectsy.events;
 
-import java.util.ArrayList;
-
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 
-import com.connectsy.R;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
-import com.connectsy.notifications.NotificationHandler;
-import com.connectsy.notifications.NotificationRedirect;
+import com.connectsy.notifications.NotificationHandlerBase;
 
-public class EventNotification implements NotificationHandler, DataUpdateListener {
+public class EventNotification extends NotificationHandlerBase implements DataUpdateListener {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "EventNotification";
 	private static final int GET_EVENT = 0;
-	private static final int NOTIFICATION_ID = 0;
-	ArrayList<JSONObject> notifications;
-	boolean pending = false;
-	Notification notification;
-	Context context;
+	protected String tickerText = "New Connectsy Event";
 	
-	public EventNotification(){
-		notifications = new ArrayList<JSONObject>();
-	}
-	
-	public void add(JSONObject notification){
-		notifications.add(notification);
-		pending = true;
-	}
-	
-	public void send(Context context) throws JSONException{
-		this.context = context;
-		if (pending) sendNotification();
-	}
-
-	private void sendNotification() throws JSONException {
-		pending = false;
+	@Override
+	protected void prepareNotification() throws JSONException {
 		String title;
 		String body;
 		Intent i;
@@ -67,33 +40,13 @@ public class EventNotification implements NotificationHandler, DataUpdateListene
 			i = new Intent(context, EventList.class);
 			i.putExtra("filter", EventManager.Filter.FRIENDS);
 		}
-		i = NotificationRedirect.wrapIntent(context, i, "invite");
-		PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
-		Notification n = getNotification();
-		n.setLatestEventInfo(context, title, body, pi);
-		NotificationManager notManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		notManager.notify(NOTIFICATION_ID, n);
-	}
-
-	private Notification getNotification() {
-		if (notification == null) {
-			notification = new Notification(R.drawable.notification,
-					"New Connectsy Event", System.currentTimeMillis());
-			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			
-			notification.ledARGB = 0xff00ff00;
-			notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-			
-			// notification.defaults |= Notification.DEFAULT_SOUND;
-		}
-		return notification;
+		sendNotification(title, body, i, "invite");
 	}
 
 	public void onDataUpdate(int code, String response) {
 		if (code == GET_EVENT) {
 			try {
-				sendNotification();
+				prepareNotification();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -102,7 +55,4 @@ public class EventNotification implements NotificationHandler, DataUpdateListene
 
 	public void onRemoteError(int httpStatus, String response, int code) {}
 
-	public void comfirmed(Context context) {
-		notifications = new ArrayList<JSONObject>();
-	}
 }

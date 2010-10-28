@@ -8,20 +8,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.connectsy.Launcher;
 import com.connectsy.data.ApiRequest;
+import com.connectsy.data.DataManager;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
-import com.connectsy.data.DataManager;
-import com.connectsy.settings.Settings;
+import com.connectsy.users.UserManager.Contact;
 import com.connectsy.users.UserManager.User;
-import com.connectsy.users.UserSelector.Contact;
 
 public class AttendantManager extends DataManager implements ApiRequestListener {
 	public static final String TAG = "AttendantManager";
@@ -40,15 +35,21 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	
 	public static class Attendant{
 		public String username;
+		public String display_name;
+		public String userID;
 		public String eventID;
 		public int status;
 		
 		public Attendant(){}
 		
 		public Attendant(JSONObject jsonAttendant) throws JSONException{
-			username = jsonAttendant.getString("username");
 			status = jsonAttendant.getInt("status");
-			//eventID = jsonAttendant.getString("event");
+			userID = jsonAttendant.getString("user_id");
+
+			if (jsonAttendant.has("username"))
+				username = jsonAttendant.getString("username");
+			if (jsonAttendant.has("display_name"))
+				display_name = jsonAttendant.getString("display_name");
 		}
 		
 		public static ArrayList<Attendant> deserializeList(String attsString) throws JSONException{
@@ -84,12 +85,12 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		return apiRequest;
 	}
 	
-	public Attendant getAttendant(String username){
-		return getAttendant(username, false);}
-	public Attendant getAttendant(String username, boolean force){
+	public Attendant getAttendant(String userID){
+		return getAttendant(userID, false);}
+	public Attendant getAttendant(String userID, boolean force){
 		getAttendants(force);
 		for (Attendant a: attendants)
-			if (a.username.equals(username)) return a;
+			if (a.userID.equals(userID)) return a;
 		return null;
 	}
 	
@@ -97,13 +98,15 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		return getCurrentUserStatus(false);}
 	public Integer getCurrentUserStatus(boolean force){
 		String username = DataManager.getCache(context).getString("username", null);
-		Attendant att = getAttendant(username, force);
-		if (att != null) return att.status;
-		else return null;
+		getAttendants(force);
+		for (Attendant a: attendants)
+			if (a.username != null && a.username.equals(username)) 
+				return a.status;
+		return null;
 	}
 	
-	public boolean isUserAttending(String username){
-		Attendant a = getAttendant(username);
+	public boolean isUserAttending(String userID){
+		Attendant a = getAttendant(userID);
 		if (a == null) return false;
 		return (a.status == Status.ATTENDING);
 	}
