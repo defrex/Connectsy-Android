@@ -71,7 +71,6 @@ public class Dashboard extends MapActivity implements OnClickListener,
         loc.requestUpdates(this);
         setMapLocation();
         getMapOverlay();
-        Log.d("Dashboard",  "mutherfuckin dev");
     }
     
 	public void onClick(View v) {
