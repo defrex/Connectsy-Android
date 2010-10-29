@@ -8,4 +8,5 @@ public class Settings {
 	public final static String API_DOMAIN = "http://dev.connectsy.com";
 	public final static int CACHE_VERSION = 5;
 	public final static String PREFS_NAME = "consy";
+	public final static int NOTIFICATION_UPDATE_PERIOD = 1000 * 60 * 5; // 5 min
 }

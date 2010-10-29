@@ -50,10 +50,9 @@ public class EventList extends Activity implements DataUpdateListener,
         findViewById(R.id.ab_new_event).setOnClickListener(
         		new ActionBarHandler(this));
         findViewById(R.id.ab_refresh).setOnClickListener(this);
-        findViewById(R.id.event_list_tab_all).setOnClickListener(this);
-        findViewById(R.id.event_list_tab_my).setOnClickListener(this);
-        findViewById(R.id.event_list_tab_friends).setOnClickListener(this);
-        findViewById(R.id.event_list_tab_category).setOnClickListener(this);
+        findViewById(R.id.event_list_tab_invited).setOnClickListener(this);
+        findViewById(R.id.event_list_tab_created).setOnClickListener(this);
+        findViewById(R.id.event_list_tab_public).setOnClickListener(this);
         
         Bundle b = getIntent().getExtras();
         if (b != null && b.containsKey("filter")){
@@ -61,14 +60,7 @@ public class EventList extends Activity implements DataUpdateListener,
 	        if (b.containsKey("category"))
 	        	category = b.getString("category");
         }else{
-        	filter = Filter.ALL;
-        }
-
-        if (filter == Filter.CATEGORY && category == null){
-    		Intent i = new Intent(Intent.ACTION_CHOOSER);
-    		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
-    		startActivityForResult(i, SELECT_CATEGORY);
-    		category = "None";
+        	filter = Filter.INVITED;
         }
         
         updateData();
@@ -102,20 +94,12 @@ public class EventList extends Activity implements DataUpdateListener,
 		Log.d(TAG, "onClick");
     	if (v.getId() == R.id.ab_refresh){ 
     		refresh();
-    	}else if (v.getId() == R.id.event_list_tab_all){
-    		newFilter = Filter.ALL;
-    	}else if (v.getId() == R.id.event_list_tab_my){
-    		newFilter = Filter.MINE;
-    	}else if (v.getId() == R.id.event_list_tab_friends){
-    		newFilter = Filter.FRIENDS;
-    	}else if (v.getId() == R.id.event_list_tab_category){
-    		newFilter = Filter.CATEGORY;
-    		if (category == null){
-        		Intent i = new Intent(Intent.ACTION_CHOOSER);
-        		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
-        		startActivityForResult(i, SELECT_CATEGORY);
-        		category = "None";
-    		}
+    	}else if (v.getId() == R.id.event_list_tab_invited){
+    		newFilter = Filter.INVITED;
+    	}else if (v.getId() == R.id.event_list_tab_created){
+    		newFilter = Filter.CREATED;
+    	}else if (v.getId() == R.id.event_list_tab_public){
+    		newFilter = Filter.PUBLIC;
     	}else if (v.getId() == R.id.event_list_heading){
     		Intent i = new Intent(Intent.ACTION_CHOOSER);
     		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
@@ -146,42 +130,34 @@ public class EventList extends Activity implements DataUpdateListener,
 	private void updateData(){
         
         //TextView heading = (TextView)findViewById(R.id.event_list_heading_text);
-        if (filter == Filter.ALL){
-			findViewById(R.id.event_list_tab_all).setSelected(true);
-			findViewById(R.id.event_list_tab_my).setSelected(false);
-			findViewById(R.id.event_list_tab_friends).setSelected(false);
-			findViewById(R.id.event_list_tab_category).setSelected(false);
+        if (filter == Filter.INVITED){
+			findViewById(R.id.event_list_tab_invited).setSelected(true);
+			findViewById(R.id.event_list_tab_created).setSelected(false);
+			findViewById(R.id.event_list_tab_public).setSelected(false);
         	findViewById(R.id.event_list_heading_wrapper)
 					.setVisibility(View.GONE);
         	//heading.setText("All Events");
-        }if (filter == Filter.MINE){
-			findViewById(R.id.event_list_tab_all).setSelected(false);
-			findViewById(R.id.event_list_tab_my).setSelected(true);
-			findViewById(R.id.event_list_tab_friends).setSelected(false);
-			findViewById(R.id.event_list_tab_category).setSelected(false);
+        }if (filter == Filter.CREATED){
+			findViewById(R.id.event_list_tab_invited).setSelected(false);
+			findViewById(R.id.event_list_tab_created).setSelected(true);
+			findViewById(R.id.event_list_tab_public).setSelected(false);
         	findViewById(R.id.event_list_heading_wrapper)
 					.setVisibility(View.GONE);
         	//heading.setText("My Events");
-        }if (filter == Filter.FRIENDS){
-			findViewById(R.id.event_list_tab_all).setSelected(false);
-			findViewById(R.id.event_list_tab_my).setSelected(false);
-			findViewById(R.id.event_list_tab_friends).setSelected(true);
-			findViewById(R.id.event_list_tab_category).setSelected(false);
-        	findViewById(R.id.event_list_heading_wrapper)
-        			.setVisibility(View.GONE);
-        	//heading.setText("Friends Events");
-        }if (filter == Filter.CATEGORY){
-			findViewById(R.id.event_list_tab_all).setSelected(false);
-			findViewById(R.id.event_list_tab_my).setSelected(false);
-			findViewById(R.id.event_list_tab_friends).setSelected(false);
-			findViewById(R.id.event_list_tab_category).setSelected(true);
-        	((TextView)findViewById(R.id.event_list_heading_text))
-        			.setText(category);
+        }if (filter == Filter.PUBLIC){
+			findViewById(R.id.event_list_tab_invited).setSelected(false);
+			findViewById(R.id.event_list_tab_created).setSelected(false);
+			findViewById(R.id.event_list_tab_public).setSelected(true);
         	findViewById(R.id.event_list_heading_wrapper)
 					.setVisibility(View.VISIBLE);
 			LinearLayout cat = (LinearLayout)findViewById(R.id.event_list_heading);
 			cat.setClickable(true);
 			cat.setOnClickListener(this);
+			String heading = category;
+			if (heading == null)
+				heading = "Select a Category";
+			((TextView)findViewById(R.id.event_list_heading_text))
+					.setText(heading);
         }
         
         eventManager = new EventManager(this, this, filter, category);

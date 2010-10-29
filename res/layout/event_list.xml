@@ -30,22 +30,18 @@
 	
 	<LinearLayout style="@style/TabBar"
 		android:layout_marginTop="3dp">
-        <Button style="@style/TabBarButtonLeft"
-            android:id="@+id/event_list_tab_all"
-            android:textSize="12sp"
-            android:text="All"/>
         <Button style="@style/TabBarButtonMiddle"
-            android:id="@+id/event_list_tab_my"
+            android:id="@+id/event_list_tab_invited"
             android:textSize="12sp"
-            android:text="Mine"/>
+            android:text="Invited"/>
         <Button style="@style/TabBarButtonMiddle"
-            android:id="@+id/event_list_tab_friends"
+            android:id="@+id/event_list_tab_created"
             android:textSize="12sp"
-            android:text="Friends"/>
+            android:text="Created"/>
         <Button style="@style/TabBarButtonRight"
-            android:id="@+id/event_list_tab_category"
+            android:id="@+id/event_list_tab_public"
             android:textSize="12sp"
-            android:text="Category"/>
+            android:text="Public"/>
 	</LinearLayout>
 	
     <LinearLayout style="@style/EventListHeadingWrapper"

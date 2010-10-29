@@ -40,8 +40,6 @@ public class NotificationListener implements ApiRequestListener {
 	/**
 	 * How long to wait in between polls
 	 */
-	static final int PERIOD = 2000; //1000 * 60 * 5; // 5 min
-
 	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;
 	static final int POLL = 1;
@@ -126,7 +124,7 @@ public class NotificationListener implements ApiRequestListener {
 					//fire it off
 					request.execute();
 				}
-			}, PERIOD);
+			}, com.connectsy.settings.Settings.NOTIFICATION_UPDATE_PERIOD);
 		}
 	}
 
@@ -164,7 +162,7 @@ public class NotificationListener implements ApiRequestListener {
 					public void run() {
 						self.registerForNotifications();
 					}
-				}, PERIOD);
+				}, com.connectsy.settings.Settings.NOTIFICATION_UPDATE_PERIOD);
 			}
 		}
 	}

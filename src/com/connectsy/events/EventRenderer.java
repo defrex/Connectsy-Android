@@ -72,7 +72,7 @@ public class EventRenderer implements DataUpdateListener {
 				public void onClick(View v) {
 					Intent i = new Intent(Intent.ACTION_VIEW);
 					i.setType("vnd.android.cursor.dir/vnd.connectsy.event");
-					i.putExtra("filter", EventManager.Filter.CATEGORY);
+					i.putExtra("filter", EventManager.Filter.PUBLIC);
 					i.putExtra("category", event.category);
 					context.startActivity(i);
 				}

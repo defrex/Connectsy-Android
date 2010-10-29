@@ -27,13 +27,12 @@ public class EventManager extends DataManager {
 	private static final int GET_EVENTS = 1;
 	private static final int GET_EVENT = 2;
 	
-	private String category;
+	private String extra;
 	private Filter filter;
 	private ArrayList<Event> events;
 	private LocManager locManager;
-	private String creatorName;
 	
-	public enum Filter{ALL, CATEGORY, FRIENDS, CREATOR, MINE}
+	public enum Filter{INVITED, CREATED, PUBLIC}
 	
 	public class Event{
 		public String ID;
@@ -73,30 +72,26 @@ public class EventManager extends DataManager {
 		}
 	}
 
-	public EventManager(Context c, DataUpdateListener l, Filter f, String cat) {
+	public EventManager(Context c, DataUpdateListener l, 
+			Filter filter, String extra) {
 		super(c, l);
-		filter = f;
-		if (filter == Filter.CREATOR)
-			creatorName = cat;
-		else
-			category = cat;
+		this.filter = filter;
+		this.extra = extra;
 		locManager = new LocManager(c);
 	}
 
 	private ApiRequest getEventsRequest(){
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(); 
-		if (filter == Filter.FRIENDS)
-			args.add(new BasicNameValuePair("filter", "friends"));
-		else if (filter == Filter.CATEGORY)
-			args.add(new BasicNameValuePair("filter", category));
-		else if (filter == Filter.CREATOR || filter == Filter.MINE){
-			String username;
-			if (filter == Filter.MINE)
-				username = UserManager.currentUsername(context);
-			else
-				username = creatorName;
+		if (filter == Filter.INVITED){
+			args.add(new BasicNameValuePair("filter", "invited"));
+		}else if (filter == Filter.PUBLIC){
+			args.add(new BasicNameValuePair("filter", "public"));
+			if (extra != null)
+				args.add(new BasicNameValuePair("category", extra));
+		}else if (filter == Filter.CREATED){
 			args.add(new BasicNameValuePair("filter", "creator"));
-			args.add(new BasicNameValuePair("username", username));
+			if (extra != null)
+				args.add(new BasicNameValuePair("username", extra));
 		}
 		
 		Location loc = locManager.getLocation();

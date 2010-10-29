@@ -133,7 +133,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 			findViewById(R.id.user_view_events_button).setSelected(true);
 			findViewById(R.id.user_view_friends_button).setSelected(false);
 			
-			ArrayList<String> revs = new EventManager(this, this, Filter.CREATOR, 
+			ArrayList<String> revs = new EventManager(this, this, Filter.CREATED, 
 					username).getRevisions();
 
 	        if (eventsAdapter != null){
@@ -235,7 +235,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 		getUserManager(true).refreshUser(REFRESH_USER);
 		getUserManager(true).refreshFriends(false, REFRESH_FRIENDS);
 		getUserManager(true).refreshFriends(true, REFRESH_PENDING_FRIENDS);
-		new EventManager(this, this, Filter.CREATOR, username)
+		new EventManager(this, this, Filter.CREATED, username)
 				.refreshRevisions(REFRESH_EVENTS);
 		operationsPending += 4;
 		setRefreshing(true);

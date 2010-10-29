@@ -38,7 +38,7 @@ public class EventNotification extends NotificationHandlerBase implements DataUp
 			title = "New Events";
 			body = notifications.size() + " new events by your friends.";
 			i = new Intent(context, EventList.class);
-			i.putExtra("filter", EventManager.Filter.FRIENDS);
+			i.putExtra("filter", EventManager.Filter.INVITED);
 		}
 		sendNotification(title, body, i, "invite");
 	}

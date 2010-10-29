@@ -54,7 +54,7 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 			title = "New Connectsy Comments";
 			body = notifications.size() + " new comments on events you're attending.";
 			i = new Intent(context, EventList.class);
-			i.putExtra("filter", EventManager.Filter.FRIENDS);
+			i.putExtra("filter", EventManager.Filter.INVITED);
 		}
 		sendNotification(title, body, i, "invite");
 	}
