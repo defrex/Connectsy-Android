@@ -19,7 +19,9 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.events.EventNotification;
+import com.connectsy.events.attendants.AttendantNotification;
 import com.connectsy.events.comments.CommentNotification;
+import com.connectsy.users.FriendNotification;
 
 public class NotificationListener implements ApiRequestListener {
 
@@ -58,6 +60,8 @@ public class NotificationListener implements ApiRequestListener {
 		notificationHandlers = new HashMap<String, NotificationHandler>();
 		notificationHandlers.put("invite", new EventNotification());
 		notificationHandlers.put("comment", new CommentNotification());
+		notificationHandlers.put("attendant", new AttendantNotification());
+		notificationHandlers.put("friend", new FriendNotification());
 	}
 
 	public boolean isRunning() {

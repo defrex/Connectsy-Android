@@ -1,4 +1,4 @@
-package com.connectsy.events.comments;
+package com.connectsy.events.attendants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,12 +11,13 @@ import com.connectsy.events.EventManager;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.notifications.NotificationHandlerBase;
 
-public class CommentNotification extends NotificationHandlerBase implements DataUpdateListener {
+public class AttendantNotification extends NotificationHandlerBase implements 
+		DataUpdateListener {
 
 	@SuppressWarnings("unused")
-	private static final String TAG = "CommentNotification";
+	private static final String TAG = "AttendantNotification";
 	private static final int GET_EVENT = 0;
-	protected String tickerText = "New Connectsy Comment";
+	protected String tickerText = "Someone new is in on Connectsy";
 	
 	@Override
 	protected void prepareNotification() throws JSONException {
@@ -43,20 +44,20 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
 			if (notifications.size() == 1) {
-				String commenter = notifications.get(0).getString("commenter");
-				title = "New Connectsy Comment";
-				body = commenter + " commented on " + event.where + ".";
+				String att = notifications.get(0).getString("attendant");
+				title = att+" is in on Connectsy";
+				body = att + " will come to " + event.where + ".";
 			} else {
-				title = "New Connectsy Comments";
-				body = notifications.size() + " new comments on " + event.where + ".";
+				title = "New people in on Connectsy";
+				body = notifications.size() + " new people are coming to " + event.where + ".";
 			}
 		}else{
-			title = "New Connectsy Comments";
-			body = notifications.size() + " new comments on events you're attending.";
+			title = "New people in on Connectsy";
+			body = notifications.size() + " new are in on Connectsy.";
 			i = new Intent(context, EventList.class);
 			i.putExtra("filter", EventManager.Filter.INVITED);
 		}
-		sendNotification(title, body, i, "comment");
+		sendNotification(title, body, i, "attendant");
 	}
 	
 	public void onDataUpdate(int code, String response) {
@@ -68,6 +69,6 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 			}
 		}
 	}
-
 	public void onRemoteError(int httpStatus, String response, int code) {}
+
 }

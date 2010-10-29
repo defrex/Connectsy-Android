@@ -43,15 +43,16 @@ public abstract class NotificationHandlerBase implements NotificationHandler {
 	}
 
 	protected void sendNotification(String title, String body, Intent i, 
-			String tyoe) throws JSONException {
+			String type) throws JSONException {
 		pending = false;
-		i = NotificationRedirect.wrapIntent(context, i, tyoe);
+		i = NotificationRedirect.wrapIntent(context, i, type);
 		PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
 		Notification n = getNotification();
 		n.setLatestEventInfo(context, title, body, pi);
 		NotificationManager notManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notManager.notify(NOTIFICATION_ID, n);
+		notification = null;
 	}
 
 	private Notification getNotification() {
