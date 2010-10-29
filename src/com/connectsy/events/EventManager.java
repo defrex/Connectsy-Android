@@ -82,7 +82,7 @@ public class EventManager extends DataManager {
 			category = cat;
 		locManager = new LocManager(c);
 	}
-	
+
 	private ApiRequest getEventsRequest(){
 		ArrayList<NameValuePair> args = new ArrayList<NameValuePair>(); 
 		if (filter == Filter.FRIENDS)
