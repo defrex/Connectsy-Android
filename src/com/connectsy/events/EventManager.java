@@ -16,6 +16,7 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
 import com.connectsy.events.attendants.AttendantManager.Attendant;
+import com.connectsy.users.UserManager;
 import com.connectsy.users.UserManager.User;
 
 public class EventManager extends DataManager {
@@ -32,7 +33,7 @@ public class EventManager extends DataManager {
 	private LocManager locManager;
 	private String creatorName;
 	
-	public enum Filter{ALL, CATEGORY, FRIENDS, CREATOR, MY}
+	public enum Filter{ALL, CATEGORY, FRIENDS, CREATOR, MINE}
 	
 	public class Event{
 		public String ID;
@@ -88,9 +89,14 @@ public class EventManager extends DataManager {
 			args.add(new BasicNameValuePair("filter", "friends"));
 		else if (filter == Filter.CATEGORY)
 			args.add(new BasicNameValuePair("filter", category));
-		else if (filter == Filter.CREATOR){
+		else if (filter == Filter.CREATOR || filter == Filter.MINE){
+			String username;
+			if (filter == Filter.MINE)
+				username = UserManager.currentUsername(context);
+			else
+				username = creatorName;
 			args.add(new BasicNameValuePair("filter", "creator"));
-			args.add(new BasicNameValuePair("username", creatorName));
+			args.add(new BasicNameValuePair("username", username));
 		}
 		
 		Location loc = locManager.getLocation();

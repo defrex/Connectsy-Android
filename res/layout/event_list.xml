@@ -37,7 +37,7 @@
         <Button style="@style/TabBarButtonMiddle"
             android:id="@+id/event_list_tab_my"
             android:textSize="12sp"
-            android:text="My"/>
+            android:text="Mine"/>
         <Button style="@style/TabBarButtonMiddle"
             android:id="@+id/event_list_tab_friends"
             android:textSize="12sp"

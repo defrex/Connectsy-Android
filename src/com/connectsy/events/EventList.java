@@ -105,7 +105,7 @@ public class EventList extends Activity implements DataUpdateListener,
     	}else if (v.getId() == R.id.event_list_tab_all){
     		newFilter = Filter.ALL;
     	}else if (v.getId() == R.id.event_list_tab_my){
-    		newFilter = Filter.MY;
+    		newFilter = Filter.MINE;
     	}else if (v.getId() == R.id.event_list_tab_friends){
     		newFilter = Filter.FRIENDS;
     	}else if (v.getId() == R.id.event_list_tab_category){
@@ -154,7 +154,7 @@ public class EventList extends Activity implements DataUpdateListener,
         	findViewById(R.id.event_list_heading_wrapper)
 					.setVisibility(View.GONE);
         	//heading.setText("All Events");
-        }if (filter == Filter.MY){
+        }if (filter == Filter.MINE){
 			findViewById(R.id.event_list_tab_all).setSelected(false);
 			findViewById(R.id.event_list_tab_my).setSelected(true);
 			findViewById(R.id.event_list_tab_friends).setSelected(false);
