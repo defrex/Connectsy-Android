@@ -199,48 +199,4 @@ public class UserManager extends DataManager {
 			Log.d(TAG, "uploading avatar returned "+status+" with response "+response);
 		listener.onDataUpdate(returnCode, response);
 	}
-	
-	public static class Contact{
-		public String keyNumber;
-		public String displayNumber;
-		public String displayName;
-		public Long personID;
-		
-		public String toString(){
-			return "Contact: "+displayName+" k:"+keyNumber+" d:"+displayNumber;
-		}
-		
-		public static String serializeList(ArrayList<Contact> contacts){
-			JSONArray jsonContacts = new JSONArray();
-			try {
-				for (Contact contact: contacts){
-					JSONObject jsonContact = new JSONObject();
-					jsonContact.put("key_number", contact.keyNumber);
-					jsonContact.put("display_number", contact.displayNumber);
-					jsonContact.put("display_name", contact.displayName);
-					jsonContact.put("person_id", contact.personID);
-					jsonContacts.put(jsonContact);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			return jsonContacts.toString();
-		}
-		
-		public static ArrayList<Contact> deserializeList(String sContacts) 
-				throws JSONException{
-			ArrayList<Contact> contacts = new ArrayList<Contact>();
-			JSONArray jsonContacts = new JSONArray(sContacts);
-			for(int i=0;i<jsonContacts.length();i++){
-				JSONObject jsonContact = jsonContacts.getJSONObject(i);
-				Contact contact = new Contact();
-				contact.keyNumber = jsonContact.getString("key_number");
-				contact.displayNumber = jsonContact.getString("display_number");
-				contact.displayName = jsonContact.getString("display_name");
-				contact.personID = jsonContact.getLong("person_id");
-				contacts.add(contact);
-			}
-			return contacts;
-		}
-	}
 }

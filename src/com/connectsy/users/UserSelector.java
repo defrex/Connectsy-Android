@@ -18,11 +18,12 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.R;
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.users.UserManager.Contact;
+import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 
 public class UserSelector extends Activity implements OnItemClickListener, 
 		OnClickListener, DataUpdateListener {
+	@SuppressWarnings("unused")
 	private static String TAG = "UserSelector";
 	UserSelectionAdapter adapter;
 	UserManager manager;
@@ -39,9 +40,8 @@ public class UserSelector extends Activity implements OnItemClickListener,
         update();
     }
 
-	public void onItemClick(AdapterView<?> adapterView, View itemView, int position, long id) {
-		
-	}
+	public void onItemClick(AdapterView<?> adapterView, View itemView, 
+			int position, long id) {}
 
 	private void update(){
         ArrayList<User> users = manager.getFriends(false, true);

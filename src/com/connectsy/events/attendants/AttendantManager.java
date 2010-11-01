@@ -15,7 +15,7 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
-import com.connectsy.users.UserManager.Contact;
+import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 
 public class AttendantManager extends DataManager implements ApiRequestListener {
@@ -170,20 +170,10 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 				kwargs.put("users", "friends");
 			}
 			if (contacts != null && contacts.size() > 0){
-				Log.d(TAG, "formatting contacts: "+contacts);
 				JSONArray jsonContacts = new JSONArray();
 				for (int i=0;i<contacts.size();i++){
-					String number = contacts.get(i).keyNumber;
-					if (number.length() == 10)
-						number += "1";
-					if (number.charAt(number.length()-1) != '+')
-						number += "+";
-					String revNumber = "";
-					for (int n=number.length()-1;n>=0;n--)
-						revNumber += number.charAt(n);
-
 					JSONObject c = new JSONObject();
-					c.put("number", revNumber);
+					c.put("number", contacts.get(i).normalizedNumber());
 					c.put("name", contacts.get(i).displayName);
 					jsonContacts.put(c);
 				}

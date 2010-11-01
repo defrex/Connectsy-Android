@@ -385,7 +385,7 @@
            <item name="android:orientation">vertical</item>
            <item name="android:gravity">center_vertical</item>
        </style>
-        <style name="UserListItemUsername" parent="FullWidth">
+        <style name="UserListItemUsername" parent="WrapAll">
             <item name="android:textStyle">bold</item>
             <item name="android:textColor">@color/link_blue</item>
             <item name="android:textSize">18sp</item>

@@ -1,17 +1,16 @@
 package com.connectsy.users;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.Contacts;
-import android.provider.Contacts.People;
+import android.provider.ContactsContract.Contacts;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,78 +24,17 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
-import com.connectsy.users.UserManager.Contact;
+import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 
 public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
-	
-	private class ContactCursor{
-		Cursor numbers;
-		Activity activity;
-		
-		public ContactCursor(Activity activity){
-			this.activity = activity;
-			numbers = activity.managedQuery(Contacts.Phones.CONTENT_URI, 
-        			new String[]{
-						Contacts.Phones.PERSON_ID,
-        				Contacts.Phones.NUMBER_KEY,
-        				Contacts.Phones.NUMBER, 
-        				Contacts.Phones.ISPRIMARY,
-        			},
-        			null, null, null);
-        			//Contacts.Phones.ISPRIMARY+" IS 1", null, null);
-			numbers.moveToFirst();
-		}
-		
-		public int getCount(){
-			return numbers.getCount();
-		}
-		
-		public Contact next(){
-			numbers.moveToNext();
-			return getCurrentContact();
-		}
-		
-		public Contact getAt(int position){
-			if (numbers.getCount() > position){
-				int curpos = numbers.getPosition();
-				numbers.moveToPosition(position);
-				Contact c = getCurrentContact();
-				numbers.moveToPosition(curpos);
-				return c;
-			}else{
-				return null;
-			}
-		}
-		
-		private Contact getCurrentContact(){
-			Uri personUri = ContentUris.withAppendedId(People.CONTENT_URI, 
-					numbers.getLong(numbers.getColumnIndex(
-							Contacts.Phones.PERSON_ID)));
-			Cursor person = activity.managedQuery(personUri,
-	        		new String[]{People.DISPLAY_NAME, People._ID},
-	        		null, null, null);
-			person.moveToFirst();
-			
-			Contact contact = new Contact();
-        	contact.keyNumber = numbers.getString(numbers.getColumnIndex(
-        			Contacts.Phones.NUMBER_KEY));
-        	contact.displayNumber = numbers.getString(numbers.getColumnIndex(
-        			Contacts.Phones.NUMBER));
-        	contact.displayName = person.getString(person.getColumnIndex(
-        			People.DISPLAY_NAME));
-        	contact.personID = person.getLong(person.getColumnIndex(
-        			People._ID));
-        	return contact;
-		}
-	}
-	
-	Activity context;
-	ArrayList<Object> objects = new ArrayList<Object>();
-	ArrayList<User> friends;
-	ArrayList<Contact> contacts = new ArrayList<Contact>();
-	ContactCursor contactsCursor;
 
+	private static String TAG = "UserSelectionAdapter";
+	private Activity context;
+	private ArrayList<Object> objects = new ArrayList<Object>();
+	private ArrayList<User> friends;
+	private ArrayList<Contact> contacts = new ArrayList<Contact>();
+	private ContactCursor contactsCursor;
 	private HashMap<String, Boolean> friendsSelected = new HashMap<String, Boolean>();
 	private HashMap<String, Boolean> contactsSelected = new HashMap<String, Boolean>();
 
@@ -105,7 +43,7 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	
 	public UserSelectionAdapter(Activity activity, ArrayList<User> friends){
 		this.context = activity;
-		this.contactsCursor = new ContactCursor(context);
+		this.contactsCursor = new ContactCursor(activity);
 		update(friends);
 	}
 
@@ -156,7 +94,7 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 				friendsSelected.put(user.username, true);
 		}else if (type == CONTACTS){
 			for (Contact contact: contacts)
-				contactsSelected.put(contact.keyNumber, true);
+				contactsSelected.put(contact.number, true);
 		}
 		this.notifyDataSetChanged();
 	}
@@ -167,7 +105,7 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 				friendsSelected.put(user.username, false);
 		}else if (type == CONTACTS){
 			for (Contact contact: contacts)
-				contactsSelected.put((String) contact.keyNumber, false);
+				contactsSelected.put((String) contact.number, false);
 		}
 		this.notifyDataSetChanged();
 	}
@@ -251,15 +189,24 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	        TextView name = (TextView)view.findViewById(R.id.user_list_item_username);
 	        name.setText(contact.displayName);
 	        name.setTextColor(context.getResources().getColor(R.color.text_grey));
-
+	        
+	        if (contact.stared)
+	        	view.findViewById(R.id.user_list_item_star)
+	        			.setVisibility(View.VISIBLE);
+	    	
 	        TextView number = (TextView)view.findViewById(R.id.user_list_item_detail);
-	        number.setText(contact.displayNumber);
+	        number.setText(contact.displayType +": "+ contact.displayNumber);
 	        number.setVisibility(TextView.VISIBLE);
 	        
 	        ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
-	        Uri avyUri = ContentUris.withAppendedId(People.CONTENT_URI, contact.personID);
-	        avatar.setImageBitmap(People.loadContactPhoto(context, 
-	        		avyUri, R.drawable.avatar_default, null));
+	        ContentResolver cr = context.getContentResolver();
+	        Uri lookupUri = Uri.withAppendedPath(Contacts.CONTENT_LOOKUP_URI, 
+	        		contact.lookupKey);
+	        Log.d(TAG, "lookup uri:"+lookupUri);
+	        Uri uri = Contacts.lookupContact(cr, lookupUri);
+	        InputStream input = Contacts.openContactPhotoInputStream(cr, uri);
+	        if (input != null) 
+	             avatar.setImageBitmap(BitmapFactory.decodeStream(input));
 
 	        return view;
 		}else if (obj instanceof User){

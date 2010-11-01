@@ -43,7 +43,7 @@ import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
-import com.connectsy.users.UserManager.Contact;
+import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
 

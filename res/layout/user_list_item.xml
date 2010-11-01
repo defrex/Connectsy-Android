@@ -13,9 +13,17 @@
         android:id="@+id/user_list_item_avatar" />
     
     <LinearLayout style="@style/UserListItemMiddle">
-        <TextView style="@style/UserListItemUsername"
-            android:id="@+id/user_list_item_username"
-            android:clickable="true" />
+    	<LinearLayout style="@style/FullWidth"
+    		android:orientation="horizontal">
+	        <TextView style="@style/UserListItemUsername"
+	            android:id="@+id/user_list_item_username"
+	            android:clickable="true" />
+            <View style="@style/Spring"/>
+            <ImageView style="@style/WrapAll"
+            	android:src="@drawable/star"
+            	android:visibility="gone"
+            	android:id="@+id/user_list_item_star"/>
+        </LinearLayout>
         <TextView style="@style/UserListItemDetail"
             android:id="@+id/user_list_item_detail"
             android:visibility="gone"/>
