@@ -23,11 +23,10 @@ public class ContactCursor {
 		public String displayNumber;
 		public String displayName;
 		public String lookupKey;
-		//public Long dbID;
 		public int type;
 		public String customType;
 		public String displayType;
-		public boolean stared;
+		public boolean starred;
 		
 		public String normalizedNumber(){
 			String cleanNumber = "";
@@ -48,15 +47,14 @@ public class ContactCursor {
 			try {
 				for (Contact contact: contacts){
 					JSONObject jsonContact = new JSONObject();
-					jsonContact.put("key_number", contact.number);
+					jsonContact.put("number", contact.number);
 					jsonContact.put("display_number", contact.displayNumber);
 					jsonContact.put("display_name", contact.displayName);
 					jsonContact.put("lookup_key", contact.lookupKey);
-					//jsonContact.put("db_id", contact.dbID);
 					jsonContact.put("type", contact.type);
 					jsonContact.put("custom_type", contact.customType);
 					jsonContact.put("display_type", contact.displayType);
-					jsonContact.put("stared", contact.stared);
+					jsonContact.put("starred", contact.starred);
 					jsonContacts.put(jsonContact);
 				}
 			} catch (JSONException e) {
@@ -72,15 +70,15 @@ public class ContactCursor {
 			for(int i=0;i<jsonContacts.length();i++){
 				JSONObject jsonContact = jsonContacts.getJSONObject(i);
 				Contact contact = new Contact();
-				contact.number = jsonContact.getString("key_number");
+				contact.number = jsonContact.getString("number");
 				contact.displayNumber = jsonContact.getString("display_number");
 				contact.displayName = jsonContact.getString("display_name");
 				contact.lookupKey = jsonContact.getString("lookup_key");
-				//contact.dbID = jsonContact.getLong("db_id");
 				contact.type = jsonContact.getInt("type");
-				contact.customType = jsonContact.getString("custom_type");
+				if (jsonContact.has("custom_type"))
+					contact.customType = jsonContact.getString("custom_type");
 				contact.displayType = jsonContact.getString("display_type");
-				contact.stared = jsonContact.getBoolean("stared");
+				contact.starred = jsonContact.getBoolean("starred");
 				contacts.add(contact);
 			}
 			return contacts;
@@ -90,12 +88,10 @@ public class ContactCursor {
 			Contact contact = new Contact();
 	    	contact.displayName = cursor.getString(
 	    			cursor.getColumnIndex(Data.DISPLAY_NAME));
-	    	contact.stared = (cursor.getInt(
+	    	contact.starred = (cursor.getInt(
 	    			cursor.getColumnIndex(Data.STARRED)) == 1);
 	    	contact.lookupKey = cursor.getString(
 	    			cursor.getColumnIndex(Data.LOOKUP_KEY));
-//	    	contact.dbID = cursor.getLong(
-//	    			cursor.getColumnIndex(Data._ID));
 	    	contact.number = cursor.getString(
 	    			cursor.getColumnIndex(Data.DATA1));
 	    	contact.type = cursor.getInt(

@@ -190,7 +190,7 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	        name.setText(contact.displayName);
 	        name.setTextColor(context.getResources().getColor(R.color.text_grey));
 	        
-	        if (contact.stared)
+	        if (contact.starred)
 	        	view.findViewById(R.id.user_list_item_star)
 	        			.setVisibility(View.VISIBLE);
 	    	
