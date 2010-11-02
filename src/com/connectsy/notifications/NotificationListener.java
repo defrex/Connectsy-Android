@@ -83,9 +83,10 @@ public class NotificationListener implements ApiRequestListener {
 				Settings.Secure.ANDROID_ID);
 		if (clientId == null)
 			clientId = "EMULATOR";
-		
+
 		//prep location listener
-		location = new LocManager(context);
+		if (com.connectsy.settings.Settings.BACKGROUND_LOCATION)
+			location = new LocManager(context);
 
 		// set the status
 		running = true;
@@ -120,10 +121,14 @@ public class NotificationListener implements ApiRequestListener {
 							Method.GET, "/notifications/poll/", true, POLL);
 					request.addGetArg("client_id", clientId);
 					//add geolocation data
-					Location loc = location.getLocation();
-					if (loc != null) {
-						request.addGetArg("lat", String.valueOf(loc.getLatitude()));
-						request.addGetArg("lng", String.valueOf(loc.getLongitude()));
+					if (location != null){
+						Location loc = location.getLocation();
+						if (loc != null) {
+							request.addGetArg("lat", 
+									String.valueOf(loc.getLatitude()));
+							request.addGetArg("lng", 
+									String.valueOf(loc.getLongitude()));
+						}
 					}
 					//fire it off
 					request.execute();
