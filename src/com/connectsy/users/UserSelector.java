@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -28,6 +29,8 @@ public class UserSelector extends Activity implements OnItemClickListener,
 	private static String TAG = "UserSelector";
 	UserSelectionAdapter adapter;
 	UserManager manager;
+    private ArrayList<User> chosenUsers;
+    private ArrayList<Contact> chosenContacts;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,21 @@ public class UserSelector extends Activity implements OnItemClickListener,
         Button done = (Button)findViewById(R.id.user_select_done);
         done.setOnClickListener(this);
         
+        Bundle e = getIntent().getExtras();
+        if (e != null){
+			try {
+				if (e.containsKey("com.connectsy.users"))
+					chosenUsers = User.deserializeList(
+							e.getString("com.connectsy.users"));
+				if (e.containsKey("com.connectsy.contacts"))
+					chosenContacts = Contact.deserializeList(
+							e.getString("com.connectsy.contacts"));
+		        
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+        }
+		
         update();
     }
 
@@ -48,6 +66,10 @@ public class UserSelector extends Activity implements OnItemClickListener,
         ArrayList<User> users = manager.getFriends(false, true);
         if (users != null){
             adapter = new UserSelectionAdapter(this, users);
+            if (chosenUsers != null)
+            	adapter.setSelectedFriends(chosenUsers);
+            if (chosenContacts != null)
+            	adapter.setSelectedContacts(chosenContacts);
             ListView lv = (ListView)findViewById(R.id.user_list);
             lv.setOnItemClickListener(this);
             lv.setAdapter(adapter);

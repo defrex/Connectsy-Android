@@ -164,6 +164,14 @@ public class EventNew extends Activity implements OnClickListener,
 	private void selectFriends(){
 		Intent i = new Intent(Intent.ACTION_CHOOSER);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+		
+		if (chosenUsers != null)
+			i.putExtra("com.connectsy.users", 
+					User.serializeList(chosenUsers));
+		if (chosenContacts != null)
+			i.putExtra("com.connectsy.contacts", 
+					Contact.serializeList(chosenContacts));
+		
 		startActivityForResult(i, SELECT_FRIENDS);
 	}
 	private void getCategory(){

@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract.Contacts;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +34,11 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	private Activity context;
 	private ArrayList<Object> objects = new ArrayList<Object>();
 	private ArrayList<User> friends;
-	private ArrayList<Contact> contacts = new ArrayList<Contact>();
-	private ContactCursor contactsCursor;
 	private HashMap<String, Boolean> friendsSelected = new HashMap<String, Boolean>();
-	private HashMap<String, Boolean> contactsSelected = new HashMap<String, Boolean>();
+
+	private ContactCursor contactsCursor;
+	private HashMap<String, Pair<Boolean, Contact>> contactsSelected = 
+		new HashMap<String, Pair<Boolean, Contact>>();
 
 	public static final int FRIENDS = 1;
 	public static final int CONTACTS = 1;
@@ -92,41 +94,42 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 		if (type == FRIENDS){
 			for (User user: friends)
 				friendsSelected.put(user.username, true);
-		}else if (type == CONTACTS){
-			for (Contact contact: contacts)
-				contactsSelected.put(contact.number, true);
+			this.notifyDataSetChanged();
 		}
-		this.notifyDataSetChanged();
 	}
 	
 	public void deselectAll(int type){
 		if (type == FRIENDS){
 			for (User user: friends)
 				friendsSelected.put(user.username, false);
-		}else if (type == CONTACTS){
-			for (Contact contact: contacts)
-				contactsSelected.put((String) contact.number, false);
+			this.notifyDataSetChanged();
 		}
-		this.notifyDataSetChanged();
 	}
 	
 	public ArrayList<User> getSelectedFriends(){
 		ArrayList<User> users = new ArrayList<User>();
-		for (HashMap.Entry<String, Boolean> entry : friendsSelected.entrySet())
-			if (entry.getValue())
-				for (User user: friends)
-					if (user.username == entry.getKey())
-						users.add(user);
+		for (User u: friends)
+			if (friendsSelected.containsKey(u.username) 
+					&& friendsSelected.get(u.username))
+				users.add(u);
 		return users;
 	}
 	
 	public ArrayList<Contact> getSelectedContacts(){
 		ArrayList<Contact> selContacts = new ArrayList<Contact>();
-		for (HashMap.Entry<String, Boolean> entry : contactsSelected.entrySet())
-			if (entry.getValue())
-				selContacts.add((Contact) getItem(
-						Integer.parseInt(entry.getKey())));
+		for (Pair<Boolean, Contact> pair: contactsSelected.values())
+			if (pair.first) selContacts.add(pair.second);
 		return selContacts;
+	}
+	
+	public void setSelectedFriends(ArrayList<User> friends){
+		for (User u: friends)
+			friendsSelected.put(u.username, true);
+	}
+	
+	public void setSelectedContacts(ArrayList<Contact> contacts){
+		for (Contact c: contacts)
+			contactsSelected.put(c.number, new Pair<Boolean, Contact>(true, c));
 	}
 
 	public View getView(final int position, View convertView, ViewGroup parent) {
@@ -180,11 +183,12 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 			sel.setVisibility(CheckBox.VISIBLE);
 			sel.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 			    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-			    	contactsSelected.put(Integer.toString(position), isChecked);
+			    	contactsSelected.put(contact.number, 
+			    			new Pair<Boolean, Contact>(isChecked, contact));
 			    }
 			});
-			if (contactsSelected.containsKey(Integer.toString(position)))
-				sel.setChecked(contactsSelected.get(Integer.toString(position)));
+			if (contactsSelected.containsKey(contact.number))
+				sel.setChecked(contactsSelected.get(contact.number).first);
 			
 	        TextView name = (TextView)view.findViewById(R.id.user_list_item_username);
 	        name.setText(contact.displayName);
