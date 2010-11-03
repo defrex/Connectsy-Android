@@ -109,6 +109,7 @@ public class EventList extends Activity implements DataUpdateListener,
     	if (newFilter != null && filter != newFilter){
     		filter = newFilter;
     		updateData();
+    		refresh();
     	}
     	
 	}

@@ -263,6 +263,7 @@ public class EventNew extends Activity implements OnClickListener,
 	        findViewById(R.id.events_new_friends_selected).setVisibility(View.VISIBLE);
 	        findViewById(R.id.events_new_cat).setVisibility(View.GONE);
 	        setEnabled(ch, fr, ev);
+	        selectFriends();
     	}else{
 	        findViewById(R.id.events_new_friends_selected).setVisibility(View.GONE);
 	        findViewById(R.id.events_new_cat).setVisibility(View.GONE);

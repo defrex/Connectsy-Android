@@ -151,7 +151,7 @@
                 android:orientation="horizontal">
 	            <TextView style="@style/FormElementTitle"
 	                 android:id="@+id/events_new_friends_selected_text"
-	                 android:text="Select Friends" />
+	                 android:text="No Friends Selected" />
 	            <View style="@style/Spring" />
 	            <ImageView style="@style/EventListHeadingChange"
 	                android:src="@drawable/icon_right_arrow"/>
