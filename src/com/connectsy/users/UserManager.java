@@ -186,17 +186,25 @@ public class UserManager extends DataManager {
 		r.setBodyFile(file);
 		r.setHeader("Content-Type", context.getContentResolver().getType(avatar));
 		r.execute();
-		Log.d(TAG, "uploading avatar");
 	}
 	
 	public static String currentUsername(Context context){
 		return UserManager.getCache(context).getString("username", "");
 	}
 	
+	public static User currentUser(Context context){
+		String userJSON = UserManager.getCache(context).getString("user", null);
+		if (userJSON != null)
+			try {
+				return new User(userJSON);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		return null;
+	}
+	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		if (code == UPLOAD_AVATAR)
-			Log.d(TAG, "uploading avatar returned "+status+" with response "+response);
 		listener.onDataUpdate(returnCode, response);
 	}
 }

@@ -18,14 +18,18 @@ import com.connectsy.R;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
+import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.data.DataManager;
 
-public class Login extends Activity implements OnClickListener, ApiRequestListener {
+public class Login extends Activity implements OnClickListener, 
+		ApiRequestListener, DataUpdateListener {
 	private ProgressDialog loadingDialog;
 	static final int ACTIVITY_REGISTER = 0;
 	private static final String TAG = "Login";
 	private String username;
 	private String password;
+	private int LOGIN = 0;
+	private int FETCH = 1;
     
     @Override
     public void onCreate(Bundle state) {
@@ -64,27 +68,22 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
         }
     }
     private void doLogin(){
-		ApiRequest r = new ApiRequest(this, this, Method.GET, "/token/", false, 0);
+		ApiRequest r = new ApiRequest(this, this, Method.GET, "/token/", false, LOGIN );
 		r.addGetArg("password", password);
 		r.addGetArg("username", username);
 		r.execute();
     }
     
 	public void onApiRequestFinish(int status, String strResponse, int code){
-		if (loadingDialog != null) loadingDialog.dismiss();
-		SharedPreferences data = DataManager.getCache(this);
-        SharedPreferences.Editor dataEditor = data.edit(); 
-        dataEditor.putString("token", strResponse);
-        dataEditor.putString("username", username);
-        dataEditor.commit();
-        setResult(RESULT_OK);
-        
-        //start the notification service
-        Intent i = new Intent();
-		i.setAction("com.connectsy.START_NOTIFICATIONS");
-		startService(i);
-        
-        this.finish();
+		if (code == LOGIN){
+			SharedPreferences data = DataManager.getCache(this);
+	        SharedPreferences.Editor dataEditor = data.edit(); 
+	        dataEditor.putString("token", strResponse);
+	        dataEditor.putString("username", username);
+	        dataEditor.commit();
+	        
+	        new UserManager(this, this, username).refreshUser(FETCH);
+		}
 	}
 
 	public void onApiRequestError(int status, String response, int code) {
@@ -102,5 +101,29 @@ public class Login extends Activity implements OnClickListener, ApiRequestListen
 			Log.e(TAG, "an API error occured with httpStatus: "+
 					Integer.toString(status));
 		}
+	}
+
+	public void onDataUpdate(int code, String response) {
+		if (loadingDialog != null) loadingDialog.dismiss();
+		if (code == FETCH){
+			SharedPreferences data = DataManager.getCache(this);
+	        SharedPreferences.Editor dataEditor = data.edit(); 
+	        dataEditor.putString("user", 
+	        		new UserManager(this, this, username).getUser().serialize());
+	        dataEditor.commit();
+	        
+	        //start the notification service
+	        Intent i = new Intent();
+			i.setAction("com.connectsy.START_NOTIFICATIONS");
+			startService(i);
+
+	        setResult(RESULT_OK);
+	        this.finish();
+		}
+	}
+
+	public void onRemoteError(int httpStatus, String response, int code) {
+		if (loadingDialog != null) loadingDialog.dismiss();
+		// TODO Auto-generated method stub
 	}
 }

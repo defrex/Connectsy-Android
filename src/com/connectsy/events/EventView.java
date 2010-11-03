@@ -30,6 +30,8 @@ import com.connectsy.events.comments.CommentManager;
 import com.connectsy.events.comments.CommentManager.Comment;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.ActionBarHandler;
+import com.connectsy.users.UserManager;
+import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.Utils;
 
 public class EventView extends Activity implements DataUpdateListener,
@@ -88,19 +90,22 @@ public class EventView extends Activity implements DataUpdateListener,
 		event = getEventManager().getEvent(eventRev);
 		if (event != null) {
 			setTabSelected(null);
-			String curUser = DataManager.getCache(this).getString("username",
-					null);
-			if (!event.creator.equals(curUser)) {
+			User curUser = UserManager.currentUser(this);
+			if (!event.creator.equals(curUser.username)) {
 				findViewById(R.id.event_view_ab_in).setVisibility(View.VISIBLE);
 				findViewById(R.id.event_view_ab_in_seperator).setVisibility(
 						View.VISIBLE);
 
 				ImageView in = (ImageView) findViewById(R.id.event_view_ab_in);
 				in.setOnClickListener(this);
-				if (getAttManager().isUserAttending(curUser)) {
+				if (getAttManager().isUserAttending(curUser.id)) {
 					in.setSelected(true);
+					in.setImageDrawable(getResources().getDrawable(
+							R.drawable.icon_check_selected));
 				} else {
 					in.setSelected(false);
+					in.setImageDrawable(getResources().getDrawable(
+							R.drawable.icon_check));
 				}
 			}
 		}
