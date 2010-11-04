@@ -47,9 +47,9 @@ public class Dashboard extends MapActivity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
 
-        ActionBarHandler abHandler = new ActionBarHandler(this);
-        ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
-        abNewEvent.setOnClickListener(abHandler);
+//        ActionBarHandler abHandler = new ActionBarHandler(this);
+//        ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
+//        abNewEvent.setOnClickListener(abHandler);
         
         Button events_nearby = (Button)findViewById(R.id.dashboard_events_nearby);
         events_nearby.setOnClickListener(this);

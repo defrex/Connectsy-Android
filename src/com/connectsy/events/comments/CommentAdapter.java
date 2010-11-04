@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.events.comments.CommentManager.Comment;
+import com.connectsy.utils.DateUtils;
 
 public class CommentAdapter extends ArrayAdapter<Comment> {
 	@SuppressWarnings("unused")
@@ -48,10 +48,8 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         if (comment.getUsername() != null){
 	        username.setText(comment.getUsername());
 	        username.setOnClickListener(userClick);
-	        Log.d(TAG, "displaying username");
         }else if (comment.getDisplayName() != null){
 	        username.setText(comment.getDisplayName());
-	        Log.d(TAG, "displaying displayName");
         }
 
         if (comment.getUsername() != null){
@@ -62,6 +60,9 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         
         TextView body = (TextView)view.findViewById(R.id.comment_text);
         body.setText(comment.getComment());
+        
+        TextView created = (TextView)view.findViewById(R.id.comment_created);
+        created.setText(DateUtils.formatTimestamp(comment.getCreated()));
 
 		return view;
 	}

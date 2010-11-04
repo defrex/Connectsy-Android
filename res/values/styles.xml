@@ -32,6 +32,10 @@
     <style name="Text" parent="WrapAll">
         <item name="android:textColor">@color/text_grey</item>
     </style>
+	    <style name="DeemphisizedText" parent="Text">
+	        <item name="android:textSize">12sp</item>
+	        <item name="android:textColor">@color/text_light_grey</item>
+	    </style>
     
     <style name="FormElementTitle" parent="Text">
     	<item name="android:textSize">18dp</item>

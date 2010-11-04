@@ -16,6 +16,9 @@
 	        
 	    <TextView style="@style/Text" 
 	        android:id="@+id/comment_text" />
+        
+	    <TextView style="@style/DeemphisizedText" 
+	        android:id="@+id/comment_created" />
 	    
     </LinearLayout>
 </LinearLayout>

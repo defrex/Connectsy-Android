@@ -28,14 +28,14 @@ public class CommentManager extends DataManager {
 		String userID;
 		String username;
 		String displayName;
-		long timestamp;
+		long created;
 		
 		public Comment(String json) throws JSONException {
 			Log.d(TAG, "comment json: "+json);
 			JSONObject obj = new JSONObject(json);
 			id = obj.getString("id");
 			nonce = obj.getString("nonce");
-			timestamp = obj.getLong("timestamp");
+			created = obj.getLong("created");
 			comment = obj.getString("comment");
 			userID = obj.getString("user");
 
@@ -63,8 +63,8 @@ public class CommentManager extends DataManager {
 		public String getComment() {
 			return comment;
 		}
-		public long getTimestamp() {
-			return timestamp;
+		public long getCreated() {
+			return created;
 		}
 		
 		public static ArrayList<Comment> deserializeList(String json) throws JSONException{

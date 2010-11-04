@@ -70,6 +70,7 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 	private Long streamLength;
 	private List<NameValuePair> getArgs = new ArrayList<NameValuePair>();
 	private List<NameValuePair> headers = new ArrayList<NameValuePair>();
+	private boolean silent = false;
 	
 	public static enum Method { GET, PUT, POST, DELETE }
 	
@@ -149,6 +150,10 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 		streamLength = file.getLength();
 	}
 	
+	public void setSilent(boolean silent){
+		this.silent = silent;
+	}
+	
 	public String getCached(){
 		prepRequest();
 		return data.getString(url, null);
@@ -181,10 +186,12 @@ public class ApiRequest extends AsyncTask<Void, Void, HttpResponse> {
 
 	protected void onPostExecute(HttpResponse response) {
 		if (response == null){
-			Toast t = Toast.makeText(context, "Please confirm"
-					+" you're connected to the internet.", 5000);
-			t.setGravity(Gravity.TOP, 0, 20);
-			t.show();
+			if (!silent){
+				Toast t = Toast.makeText(context, "Please confirm"
+						+" you're connected to the internet.", 5000);
+				t.setGravity(Gravity.TOP, 0, 20);
+				t.show();
+			}
 			if (apiListener != null) apiListener.onApiRequestError(0, null, retCode);
 			return;
 		}

@@ -108,6 +108,7 @@ public class NotificationListener implements ApiRequestListener {
 		request.setBodyString(String.format(
 				"{\"client_type\":\"%s\", \"client_id\":\"%s\"}",
 				"generic_poll", clientId));
+		request.setSilent(true);
 		request.execute();
 	}
 
@@ -130,6 +131,7 @@ public class NotificationListener implements ApiRequestListener {
 									String.valueOf(loc.getLongitude()));
 						}
 					}
+					request.setSilent(true);
 					//fire it off
 					request.execute();
 				}

@@ -8,11 +8,12 @@
 	        <ImageView style="@style/ActionBarLogo" />
 	        
 	        <View style="@style/Spring" />
-	        
+	        <!-- 
 	        <ImageView style="@style/ActionBarSeparator" />
 	        <ImageView style="@style/ActionBarAction"
 	            android:id="@+id/ab_new_event"
 	            android:src="@drawable/icon_plus" />
+             -->
 	    </LinearLayout>
     </FrameLayout>
     
@@ -62,7 +63,7 @@
             style="@style/DashboardExtraMap"
             android:id="@+id/dashboard_map"
             android:clickable="true"
-            android:apiKey="0rr3ewYP3KKCfD9Jpfj0BE3nmtQ-objio0PRAuA" />
+            android:apiKey="0rr3ewYP3KKB_YCjDIHFBtI0AwGhwcY--yrfq_w" />
          
     </FrameLayout>
     
