@@ -44,7 +44,7 @@
         <ImageView style="@style/UserViewBefriend"
             android:id="@+id/user_view_befriend"
             android:src="@drawable/icon_friend_plus"
-            android:visibility="invisible" />
+            android:visibility="gone" />
         
         <ImageView style="@style/UserViewBefriend"
             android:id="@+id/user_view_unfriend"

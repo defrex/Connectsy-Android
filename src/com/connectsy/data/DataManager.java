@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.connectsy.Launcher;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.settings.Settings;
+import com.connectsy.users.Logout;
 
 public abstract class DataManager implements ApiRequestListener {
 	@SuppressWarnings("unused")
@@ -46,12 +46,7 @@ public abstract class DataManager implements ApiRequestListener {
 	
 	public void onApiRequestError(int httpStatus, String response, int code) {
 		if (httpStatus == 401){
-            SharedPreferences.Editor dataEditor = context
-            		.getSharedPreferences(Settings.PREFS_NAME, 
-        					Context.MODE_PRIVATE).edit(); 
-            dataEditor.putBoolean("authed", false);
-            dataEditor.commit();
-        	context.startActivity(new Intent(context, Launcher.class));
+            context.startActivity(new Intent(context, Logout.class));
         	((Activity) context).finish();
 		}
 		listener.onRemoteError(httpStatus, response, returnCode);
