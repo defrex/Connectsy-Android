@@ -27,8 +27,7 @@ public class LocManager implements LocationListener {
         criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         lm = (LocationManager)c.getSystemService(Context.LOCATION_SERVICE);
-        
-		setUpdater();
+        provider = lm.getBestProvider(criteria, true);
 		loc = lm.getLastKnownLocation(provider);
 	}
 
@@ -67,11 +66,6 @@ public class LocManager implements LocationListener {
 		return distance+" "+direction;
 	}
 	
-	private void setUpdater(){
-        provider = lm.getBestProvider(criteria, true);
-        lm.requestLocationUpdates(lm.getBestProvider(criteria, true), 0, 0, this);
-	}
-	
 	public void onLocationChanged(Location location) {
 		loc = location;
 		if (listener != null)
@@ -79,7 +73,7 @@ public class LocManager implements LocationListener {
 	}
 
 	public void onProviderDisabled(String provider) {
-		setUpdater();
+        provider = lm.getBestProvider(criteria, true);
 	}
 	
 	public Location getLocation(){
@@ -87,6 +81,7 @@ public class LocManager implements LocationListener {
 	}
 	
 	public void requestUpdates(LocListener l){
+        lm.requestLocationUpdates(provider, 0, 0, this);
 		listener = l;
 	}
 	

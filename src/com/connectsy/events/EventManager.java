@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
@@ -17,6 +18,7 @@ import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
 import com.connectsy.events.attendants.AttendantManager.Attendant;
 import com.connectsy.users.UserManager;
+import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 
 public class EventManager extends DataManager {
@@ -59,16 +61,21 @@ public class EventManager extends DataManager {
 			created = event.getLong("created");
 			creator = event.getString("creator");
 			what = event.getString("what");
-			where = event.getString("where");
-			when = event.getLong("when");
-			category = event.getString("category");
 			broadcast = event.getBoolean("broadcast");
-			posted_from[0] = (float) event.getJSONArray("posted_from").getDouble(0);
-			posted_from[1] = (float) event.getJSONArray("posted_from").getDouble(1);
+			if (event.has("where"))
+				where = event.getString("where");
+			if (event.has("when"))
+				when = event.getLong("when");
+			if (event.has("category"))
+				category = event.getString("category");
 			if (event.has("location"))
 				location = event.getString("location");
 			if (response.has("attendants"))
 				attendants = Attendant.deserializeList(response.getString("attendants"));
+			if (event.has("posted_from")){
+				posted_from[0] = (float) event.getJSONArray("posted_from").getDouble(0);
+				posted_from[1] = (float) event.getJSONArray("posted_from").getDouble(1);
+			}
 		}
 	}
 
@@ -99,6 +106,8 @@ public class EventManager extends DataManager {
 			args.add(new BasicNameValuePair("lat", Double.toString(loc.getLatitude())));
 			args.add(new BasicNameValuePair("lng", Double.toString(loc.getLongitude())));
 		}
+		
+		args.add(new BasicNameValuePair("sort", "created"));
 		
 		ApiRequest request = new ApiRequest(this, context, Method.GET, 
 				"/events/", true, GET_EVENTS);
@@ -180,24 +189,20 @@ public class EventManager extends DataManager {
 	}
 	
 	public void refreshEvent(String revision, int passedReturnCode){
-		ApiRequest eventRequest = getEventRequest(revision);
-		String eventString = eventRequest.getCached();
-		if (eventString == null){
-			returnCode = passedReturnCode;
-			eventRequest.execute();
-		}
+		getEventRequest(revision).execute();
 	}
 
-	public void createEvent(Event event, int returnCode) {
+	public void createEvent(Event event, ArrayList<User> users, 
+				ArrayList<Contact> contacts, int returnCode) {
 		this.returnCode = returnCode;
 		
 		JSONObject json = new JSONObject();
 		try {
+			json.put("what", event.what);
+			json.put("broadcast", event.broadcast);
 			json.put("where", event.where);
 			json.put("when", event.when);
-			json.put("what", event.what);
 			json.put("category", event.category);
-			json.put("broadcast", event.broadcast);
 			json.put("client", "Connectsy for Android");
 			Location loc = locManager.getLocation();
 			if (loc != null){
@@ -205,6 +210,25 @@ public class EventManager extends DataManager {
 				jLoc.put(loc.getLatitude());
 				jLoc.put(loc.getLongitude());
 				json.put("posted_from", jLoc);
+			}
+
+			if (users != null && !event.broadcast){
+				if (users.size() > 0){
+					JSONArray usersJSON = new JSONArray();
+					for (int i=0;i<users.size();i++)
+						usersJSON.put(users.get(i).username);
+					json.put("users", usersJSON);
+				}
+			}
+			if (contacts != null && contacts.size() > 0){
+				JSONArray jsonContacts = new JSONArray();
+				for (int i=0;i<contacts.size();i++){
+					JSONObject c = new JSONObject();
+					c.put("number", contacts.get(i).normalizedNumber());
+					c.put("name", contacts.get(i).displayName);
+					jsonContacts.put(c);
+				}
+				json.put("contacts", jsonContacts);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

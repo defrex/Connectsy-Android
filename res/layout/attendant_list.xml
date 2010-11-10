@@ -20,21 +20,15 @@
 	            android:id="@+id/ab_refresh_spinner"
 	            android:src="@drawable/icon_refresh"
 	            android:visibility="gone" />
-            
-            <ImageView style="@style/ActionBarSeparator" />
-            <ImageView style="@style/ActionBarAction"
-                android:id="@+id/ab_new_event"
-                android:src="@drawable/icon_plus" />
         </LinearLayout>
     </FrameLayout>
 	
     <LinearLayout style="@style/Heading">
         <TextView style="@style/HeadingText"
-            android:text="Nects" />
+            android:text="Who's In" />
         <ImageView style="@style/HeadingBorder" />
     </LinearLayout>
-	
-	<ListView android:id="@+id/events_list"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" />
+    
+	<ListView style="@style/FillAll"
+	   android:id="@+id/attendants_list"/>
 </LinearLayout>

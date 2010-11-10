@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/FillAll"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:minWidth="300dp">
+    
+    
+    <LinearLayout style="@style/Toggle"
+        android:layout_marginBottom="7dp">
+        <Button style="@style/ToggleLeft"
+            android:text="Today"
+            android:id="@+id/time_picker_today"/>
+        <Button style="@style/ToggleRight"
+            android:text="Tomorrow"
+            android:id="@+id/time_picker_tomorrow" />
+    </LinearLayout>
+    
+    <TimePicker style="@style/FullWidth"
+        android:id="@+id/time_picker_picker"/>
+    
+</LinearLayout>

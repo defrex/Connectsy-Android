@@ -44,7 +44,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 		
 		public Attendant(JSONObject jsonAttendant) throws JSONException{
 			status = jsonAttendant.getInt("status");
-			userID = jsonAttendant.getString("user_id");
+			userID = jsonAttendant.getString("user");
 
 			if (jsonAttendant.has("username"))
 				username = jsonAttendant.getString("username");
@@ -52,7 +52,8 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 				display_name = jsonAttendant.getString("display_name");
 		}
 		
-		public static ArrayList<Attendant> deserializeList(String attsString) throws JSONException{
+		public static ArrayList<Attendant> deserializeList(String attsString) 
+				throws JSONException{
 			ArrayList<Attendant> atts = new ArrayList<Attendant>();
 			JSONArray attsJSON = new JSONArray(attsString);
 			for (int i=0;i<attsJSON.length();i++)

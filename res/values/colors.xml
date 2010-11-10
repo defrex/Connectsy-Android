@@ -11,6 +11,6 @@
     
     <color name="actionbar_separator">#40ffffff</color>
     
-    <color name="button_text">#ffffffff</color>
+    <color name="button_text">#444444</color>
     <color name="highlight_button_text">#ff000000</color>
 </resources>

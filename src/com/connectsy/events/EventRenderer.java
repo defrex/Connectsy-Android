@@ -3,18 +3,17 @@ package com.connectsy.events;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.connectsy.LocManager;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.utils.DateUtils;
-import com.connectsy.utils.Utils;
 
 public class EventRenderer implements DataUpdateListener {
 	@SuppressWarnings("unused")
@@ -51,8 +50,7 @@ public class EventRenderer implements DataUpdateListener {
 		};
 
 		View loading = view.findViewById(R.id.event_loading);
-		if (loading != null)
-			loading.setVisibility(View.GONE);
+		if (loading != null) loading.setVisibility(View.GONE);
 		
 		ImageView avatar = (ImageView) view.findViewById(R.id.event_avatar);
 		avatar.setOnClickListener(userClick);
@@ -62,42 +60,31 @@ public class EventRenderer implements DataUpdateListener {
 		username.setText(event.creator);
 		username.setOnClickListener(userClick);
 
-		if (event.category != null && !event.category.equals("")) {
-			view.findViewById(R.id.event_pipe).setVisibility(View.VISIBLE);
-			TextView category = (TextView) view
-					.findViewById(R.id.event_category);
-			category.setVisibility(View.VISIBLE);
-			category.setText(event.category);
-			category.setOnClickListener(new TextView.OnClickListener() {
-				public void onClick(View v) {
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setType("vnd.android.cursor.dir/vnd.connectsy.event");
-					i.putExtra("filter", EventManager.Filter.PUBLIC);
-					i.putExtra("category", event.category);
-					context.startActivity(i);
-				}
-			});
-		}
-
-		TextView where = (TextView) view.findViewById(R.id.event_where);
-		where.setText(Html.fromHtml("<b>where:</b> "
-				+ Utils.maybeTruncate(event.where, 25, truncate)));
 		TextView what = (TextView) view.findViewById(R.id.event_what);
-		what.setText(Html.fromHtml("<b>what:</b> "
-				+ Utils.maybeTruncate(event.what, 25, truncate)));
-		TextView when = (TextView) view.findViewById(R.id.event_when);
-		when.setText(Html.fromHtml("<b>when:</b> "
-				+ DateUtils.formatTimestamp(event.when)));
-
-		TextView distance = (TextView) view.findViewById(R.id.event_distance);
-		String distanceText = new LocManager(context).distanceFrom(
-				event.posted_from[0], event.posted_from[1]);
-		if (distanceText != null)
-			distance.setText(distanceText);
+		if (event.what == null)
+			Log.d(TAG, "event.what null");
+		else if (what == null)
+			Log.d(TAG, "wat textview null");
 		else
-			distance.setVisibility(View.VISIBLE);
+			what.setText(event.what);
+		
+		if (!truncate){
+			TextView where = (TextView) view.findViewById(R.id.event_where);
+			TextView when = (TextView) view.findViewById(R.id.event_when);
+			if (event.where != null)
+				where.setText(Html.fromHtml("<b>where:</b> "+ event.where));
+//				where.setText("where: "+ event.where);
+			else
+				where.setVisibility(TextView.GONE);
+			if (event.when != 0)
+//				when.setText("when: "+ DateUtils.formatTimestamp(event.when));
+				when.setText(Html.fromHtml("<b>when:</b> "
+						+ DateUtils.formatTimestamp(event.when)));
+			else
+				when.setVisibility(TextView.GONE);
+		}
 		TextView created = (TextView) view.findViewById(R.id.event_created);
-		created.setText("created " + DateUtils.formatTimestamp(event.created));
+		created.setText("Created " + DateUtils.formatTimestamp(event.created));
 	}
 
 	public void onDataUpdate(int code, String response) {

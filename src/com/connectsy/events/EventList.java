@@ -9,15 +9,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.ActionBarHandler;
@@ -50,9 +47,9 @@ public class EventList extends Activity implements DataUpdateListener,
         findViewById(R.id.ab_new_event).setOnClickListener(
         		new ActionBarHandler(this));
         findViewById(R.id.ab_refresh).setOnClickListener(this);
-        findViewById(R.id.event_list_tab_invited).setOnClickListener(this);
-        findViewById(R.id.event_list_tab_created).setOnClickListener(this);
-        findViewById(R.id.event_list_tab_public).setOnClickListener(this);
+//        findViewById(R.id.event_list_tab_invited).setOnClickListener(this);
+//        findViewById(R.id.event_list_tab_created).setOnClickListener(this);
+//        findViewById(R.id.event_list_tab_public).setOnClickListener(this);
         
         Bundle b = getIntent().getExtras();
         if (b != null && b.containsKey("filter")){
@@ -90,27 +87,24 @@ public class EventList extends Activity implements DataUpdateListener,
 	}
 
 	public void onClick(View v) {
-		Filter newFilter = null;
-		Log.d(TAG, "onClick");
-    	if (v.getId() == R.id.ab_refresh){ 
-    		refresh();
-    	}else if (v.getId() == R.id.event_list_tab_invited){
-    		newFilter = Filter.INVITED;
-    	}else if (v.getId() == R.id.event_list_tab_created){
-    		newFilter = Filter.CREATED;
-    	}else if (v.getId() == R.id.event_list_tab_public){
-    		newFilter = Filter.PUBLIC;
-    	}else if (v.getId() == R.id.event_list_heading){
-    		Intent i = new Intent(Intent.ACTION_CHOOSER);
-    		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
-    		startActivityForResult(i, SELECT_CATEGORY);
-    	}
-    	
-    	if (newFilter != null && filter != newFilter){
-    		filter = newFilter;
-    		updateData();
-    		refresh();
-    	}
+    	if (v.getId() == R.id.ab_refresh) refresh();
+//		Filter newFilter = null;
+//    	}else if (v.getId() == R.id.event_list_tab_invited){
+//    		newFilter = Filter.INVITED;
+//    	}else if (v.getId() == R.id.event_list_tab_created){
+//    		newFilter = Filter.CREATED;
+//    	}else if (v.getId() == R.id.event_list_tab_public){
+//    		newFilter = Filter.PUBLIC;
+//    	}else if (v.getId() == R.id.event_list_heading){
+//    		Intent i = new Intent(Intent.ACTION_CHOOSER);
+//    		i.setType("vnd.android.cursor.item/vnd.connectsy.category");
+//    		startActivityForResult(i, SELECT_CATEGORY);
+//    	}
+//    	if (newFilter != null && filter != newFilter){
+//    		filter = newFilter;
+//    		updateData();
+//    		refresh();
+//    	}
     	
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -131,35 +125,35 @@ public class EventList extends Activity implements DataUpdateListener,
 	private void updateData(){
         
         //TextView heading = (TextView)findViewById(R.id.event_list_heading_text);
-        if (filter == Filter.INVITED){
-			findViewById(R.id.event_list_tab_invited).setSelected(true);
-			findViewById(R.id.event_list_tab_created).setSelected(false);
-			findViewById(R.id.event_list_tab_public).setSelected(false);
-        	findViewById(R.id.event_list_heading_wrapper)
-					.setVisibility(View.GONE);
-        	//heading.setText("All Events");
-        }if (filter == Filter.CREATED){
-			findViewById(R.id.event_list_tab_invited).setSelected(false);
-			findViewById(R.id.event_list_tab_created).setSelected(true);
-			findViewById(R.id.event_list_tab_public).setSelected(false);
-        	findViewById(R.id.event_list_heading_wrapper)
-					.setVisibility(View.GONE);
-        	//heading.setText("My Events");
-        }if (filter == Filter.PUBLIC){
-			findViewById(R.id.event_list_tab_invited).setSelected(false);
-			findViewById(R.id.event_list_tab_created).setSelected(false);
-			findViewById(R.id.event_list_tab_public).setSelected(true);
-        	findViewById(R.id.event_list_heading_wrapper)
-					.setVisibility(View.VISIBLE);
-			LinearLayout cat = (LinearLayout)findViewById(R.id.event_list_heading);
-			cat.setClickable(true);
-			cat.setOnClickListener(this);
-			String heading = category;
-			if (heading == null)
-				heading = "Select a Category";
-			((TextView)findViewById(R.id.event_list_heading_text))
-					.setText(heading);
-        }
+//        if (filter == Filter.INVITED){
+//			findViewById(R.id.event_list_tab_invited).setSelected(true);
+//			findViewById(R.id.event_list_tab_created).setSelected(false);
+//			findViewById(R.id.event_list_tab_public).setSelected(false);
+//        	findViewById(R.id.event_list_heading_wrapper)
+//					.setVisibility(View.GONE);
+//        	//heading.setText("All Events");
+//        }if (filter == Filter.CREATED){
+//			findViewById(R.id.event_list_tab_invited).setSelected(false);
+//			findViewById(R.id.event_list_tab_created).setSelected(true);
+//			findViewById(R.id.event_list_tab_public).setSelected(false);
+//        	findViewById(R.id.event_list_heading_wrapper)
+//					.setVisibility(View.GONE);
+//        	//heading.setText("My Events");
+//        }if (filter == Filter.PUBLIC){
+//			findViewById(R.id.event_list_tab_invited).setSelected(false);
+//			findViewById(R.id.event_list_tab_created).setSelected(false);
+//			findViewById(R.id.event_list_tab_public).setSelected(true);
+//        	findViewById(R.id.event_list_heading_wrapper)
+//					.setVisibility(View.VISIBLE);
+//			LinearLayout cat = (LinearLayout)findViewById(R.id.event_list_heading);
+//			cat.setClickable(true);
+//			cat.setOnClickListener(this);
+//			String heading = category;
+//			if (heading == null)
+//				heading = "Select a Category";
+//			((TextView)findViewById(R.id.event_list_heading_text))
+//					.setText(heading);
+//        }
         
         eventManager = new EventManager(this, this, filter, category);
         ArrayList<String> revs = eventManager.getRevisions();

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/FullWidth"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/event">
     <FrameLayout style="@style/ActionBarFrame">
         <ImageView style="@style/ActionBarBackground" />
         <LinearLayout style="@style/ActionBar" >
@@ -10,10 +11,10 @@
             
             <View style="@style/Spring" />
             
-            <ImageView style="@style/ActionBarSeparator" />
-            <ImageView style="@style/ActionBarAction"
-                android:id="@+id/ab_refresh"
-                android:src="@drawable/icon_refresh" />
+<!--            <ImageView style="@style/ActionBarSeparator" />-->
+<!--            <ImageView style="@style/ActionBarAction"-->
+<!--                android:id="@+id/ab_refresh"-->
+<!--                android:src="@drawable/icon_refresh" />-->
             <ProgressBar style="@style/ActionBarAction"
                 android:id="@+id/ab_refresh_spinner"
                 android:src="@drawable/icon_refresh"
@@ -29,65 +30,80 @@
         </LinearLayout>
     </FrameLayout>
 	
-	<LinearLayout style="@style/Event"
-	    android:id="@+id/event">
-	
+	<LinearLayout style="@style/FullWidth"
+	    android:orientation="horizontal"
+	    android:padding="5dp"
+	    android:gravity="center_vertical">
 	    <ImageView style="@style/Avatar"
 	        android:src="@drawable/avatar_default"
 	        android:id="@+id/event_avatar" />
 	        
-        
-	    <LinearLayout style="@style/EventTextSection" >
-	        <LinearLayout style="@style/FullWidth"
-	            android:orientation="horizontal">
-	            <TextView style="@style/Link"
-	                android:id="@+id/event_username"
-	                android:clickable="true" />
-	            
-	            <TextView style="@style/Text"
-	                android:visibility="gone"
-	                android:id="@+id/event_pipe"
-	                android:text=" | " />
-	        
-	            <TextView style="@style/Link"
-	                android:visibility="gone"
-	                android:id="@+id/event_category"
-	                android:clickable="true" />
-	        </LinearLayout>
-	                
-	        <TextView style="@style/EventWh"
-	            android:id="@+id/event_what" />
-	    
-	        <TextView style="@style/EventWh"
-	            android:id="@+id/event_where" />
-	    
-	        <TextView style="@style/EventWh"
-	            android:id="@+id/event_when" />
-                
-            <TextView style="@style/EventDeEm"
-                android:id="@+id/event_created" />
-	    
-	        <TextView style="@style/EventDeEm"
-	            android:id="@+id/event_distance" />
-	        
-	    </LinearLayout>
+        <TextView style="@style/Link"
+            android:id="@+id/event_username"
+            android:clickable="true"
+            android:textSize="24sp"/>
     </LinearLayout>
-	
-	<LinearLayout style="@style/TabBar">
-        <Button style="@style/TabBarButtonLeft"
-            android:id="@+id/event_view_tab_comments"
+    
+    <View style="@style/ListTitleBorderTop"/>
+            
+    <TextView style="@style/EventWh"
+        android:id="@+id/event_what"
+        android:padding="10dp"
+        android:textSize="18sp"/>
+    
+    <TextView style="@style/EventWh"
+        android:id="@+id/event_where"/>
+
+    <TextView style="@style/EventWh"
+        android:id="@+id/event_when" />
+    
+    <TextView style="@style/EventDeEm"
+        android:id="@+id/event_created"
+        android:layout_marginBottom="5dp"/>
+    
+    <View style="@style/ListTitleBorderTop"/>
+    
+    <LinearLayout style="@style/EventViewMenu"
+        android:id="@+id/event_view_comments">
+        <TextView style="@style/EventViewMenuText"
             android:text="Comments"/>
-        <Button style="@style/TabBarButtonRight"
-            android:id="@+id/event_view_tab_atts"
+        <View style="@style/Spring"/>
+        <ImageView
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:background="@drawable/icon_right_arrow_grey"/>
+    </LinearLayout>
+    
+    <View style="@style/ListTitleBorderTop"/>
+    
+    <LinearLayout style="@style/EventViewMenu"
+        android:id="@+id/event_view_attendants">
+        <TextView style="@style/EventViewMenuText"
             android:text="Who's In"/>
-	</LinearLayout>
+        <View style="@style/Spring"/>
+        <ImageView
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:background="@drawable/icon_right_arrow_grey"/>
+    </LinearLayout>
+    
+    <View style="@style/ListTitleBorderTop"/>
 	
-    <ListView android:id="@+id/attendants_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
-        
-    <ListView android:id="@+id/comments_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+<!--	<LinearLayout style="@style/TabBar">-->
+<!--        <Button style="@style/TabBarButtonLeft"-->
+<!--            android:id="@+id/event_view_tab_comments"-->
+<!--            android:text="Comments"/>-->
+<!--        <Button style="@style/TabBarButtonRight"-->
+<!--            android:id="@+id/event_view_tab_atts"-->
+<!--            android:text="Who's In"/>-->
+<!--	</LinearLayout>-->
+<!--	-->
+<!--    <ListView android:id="@+id/attendants_list"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="fill_parent"/>-->
+<!--        -->
+<!--    <ListView android:id="@+id/comments_list"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="fill_parent"/>-->
         
 </LinearLayout>

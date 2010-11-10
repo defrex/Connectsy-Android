@@ -35,11 +35,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".events.comments.CommentList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.connectsy.event.comment" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".events.comments.CommentNew"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.INSERT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.connectsy.event.comment" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".events.attendants.AttendantList">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.connectsy.event.attendant" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

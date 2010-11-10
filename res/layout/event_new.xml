@@ -11,6 +11,14 @@
             <ImageView style="@style/ActionBarLogo"
                 android:id="@+id/ab_logo" />
             <View style="@style/Spring" />
+            <TextView style="@style/ActionBarAction"
+                android:id="@+id/ab_char_counter"
+                android:textColor="#ffffffff"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_width="100dp"
+                android:gravity="right|center_vertical"
+                android:focusable="false"/>
         </LinearLayout>
     </FrameLayout>
     
@@ -21,153 +29,104 @@
 	<LinearLayout style="@style/EventNew"
 		android:orientation="vertical" >
         
-        <LinearLayout style="@style/EventNewTitle" >
-            <View style="@style/EventNewTitleBorderTop" />
-            <LinearLayout style="@style/FullWidth"
-                android:orientation="horizontal"
-                android:background="#66eeeeee">
-                <TextView style="@style/EventNewTitleText"
-                    android:background="@null"
-                    android:text="@string/events_new_title_what" />
-                <View style="@style/Spring" />
-                <TextView style="@style/Text"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/events_new_chars_what" />
-                
-            </LinearLayout>
-            <View style="@style/EventNewTitleBorder" />
-        </LinearLayout>
-        <EditText style="@style/EventNewEditText"
-            android:hint="@string/events_new_desc"
+        <EditText style="@style/EventNewOptionInput"
+            android:hint="@string/events_new_what"
             android:maxLength="150"
-            android:id="@+id/events_new_what" />
-	    
-		<LinearLayout style="@style/EventNewTitle"
-			android:paddingTop="0dp" >
-            <View style="@style/EventNewTitleBorderTop" />
+            android:id="@+id/events_new_what"
+            android:layout_height="100dp"/>
+        
+        <View style="@style/ListTitleBorderTop"/>
+        
+	    <LinearLayout style="@style/EventNewOption">
+			<EditText style="@style/EventNewOptionInput"
+			   android:id="@+id/events_new_where"
+               android:maxLength="25"
+               android:hint="Where (optional)"/>
+	    </LinearLayout>
+        
+        <View style="@style/ListTitleBorderTop"/>
+        
+		<LinearLayout style="@style/EventNewOption">
+            <TextView style="@style/EventNewOptionInput"
+	           android:id="@+id/events_new_when"
+               android:hint="When (optional)"/>
+        </LinearLayout>
+        
+        <View style="@style/ListTitleBorderTop"/>
+        
+        <LinearLayout style="@style/EventNewOption">
             <LinearLayout style="@style/FullWidth"
+                android:id="@+id/events_new_public"
+                android:layout_weight="1"
                 android:orientation="horizontal"
-                android:background="#66eeeeee">
-                <TextView style="@style/EventNewTitleText"
-                    android:text="@string/events_new_title_where"
-                    android:background="@null"/>
-                <View style="@style/Spring" />
-                <TextView style="@style/Text"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/events_new_chars_where" />
-                
-            </LinearLayout>
-			<View style="@style/EventNewTitleBorder" />
-		</LinearLayout>
-		<EditText style="@style/EventNewEditText"
-		    android:hint="@string/events_new_where"
-            android:maxLength="25"
-		    android:id="@+id/events_new_where" />
-		
-		<LinearLayout style="@style/EventNewTitle">
-            <View style="@style/EventNewTitleBorderTop" />
-			<TextView style="@style/EventNewTitleText"
-                android:background="#66eeeeee"
-                android:layout_width="fill_parent"
-				android:text="@string/events_new_title_when" />
-			<View style="@style/EventNewTitleBorder" />
-		</LinearLayout>
-		
-			<LinearLayout style="@style/EventNewField"
-			    android:layout_height="wrap_content" >
-				<TextView style="@style/FormElementTitle"
-					android:text="@string/events_new_date_title" />
-				<TextView style="@style/FormElementValue"
-					android:text="@string/events_new_date_default"
-					android:id="@+id/events_new_date" />
-				<Button style="@style/Button"
-					android:text="@string/events_new_button_change"
-					android:id="@+id/events_new_date_change" />
-			</LinearLayout>
-			
-			<LinearLayout style="@style/EventNewField"
-			    android:layout_height="wrap_content" >
-				<TextView style="@style/FormElementTitle"
-					android:text="@string/events_new_time_title" />
-				<TextView style="@style/FormElementValue"
-					android:text="@string/events_new_time_default"
-					android:id="@+id/events_new_time" />
-				<Button style="@style/Button"
-					android:text="@string/events_new_button_change"
-					android:id="@+id/events_new_time_change" />
-			</LinearLayout>
-		
-		
-		<LinearLayout style="@style/EventNewTitle">
-            <View style="@style/EventNewTitleBorderTop" />
-			<TextView style="@style/EventNewTitleText"
-                android:background="#66eeeeee"
-                android:layout_width="fill_parent"
-				android:text="@string/events_new_title_who" />
-			<View style="@style/EventNewTitleBorder" />
-		</LinearLayout>
-        
-        <LinearLayout style="@style/EventNewWho">
-            <Button style="@style/EventNewWhoFriends"
-                android:text="Everyone"
-                android:id="@+id/events_new_who_everyone"/>
-            <Button style="@style/EventNewWhoEveryone"
-                android:text="Friends"
-                android:id="@+id/events_new_who_friends"/>
-            <Button style="@style/EventNewWhoChoose"
-                android:text="Select"
-                android:id="@+id/events_new_who_choose" />
-        </LinearLayout>
-        
-        <LinearLayout style="@style/EventNewCategory"
-            android:clickable="true" 
-            android:visibility="gone"
-            android:id="@+id/events_new_cat"
-            android:focusable="true">
-            <View style="@style/EventNewTitleBorder" />
-            <LinearLayout style="@style/FullWidth"
                 android:gravity="center_vertical"
-                android:padding="5dp"
-                android:orientation="horizontal">
-	            <TextView style="@style/FormElementTitle"
-	                 android:id="@+id/events_new_category_title"
-	                 android:text="Select a Category" />
-                <View style="@style/Spring" />
-                <ImageView style="@style/EventListHeadingChange"
-                    android:src="@drawable/icon_right_arrow"/>
+                android:padding="10dp"
+                android:background="@drawable/event_new_option"
+                android:focusable="true">
+	            <View style="@style/RadioButton"
+	                android:id="@+id/events_new_radio_public"/>
+	            <TextView style="@style/WrapAll"
+	                android:id="@+id/events_new_public"
+		            android:textSize="18sp"
+		            android:textColor="#888888"
+	                android:text="Public"/>
             </LinearLayout>
-            <View style="@style/EventNewTitleBorder" />
+            <LinearLayout style="@style/FullWidth"
+                android:id="@+id/events_new_private"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:background="@drawable/event_new_option"
+                android:focusable="true">
+	            <View style="@style/RadioButton"
+	                android:id="@+id/events_new_radio_private"/>
+	            <TextView style="@style/WrapAll"
+	                android:id="@+id/events_new_private"
+	                android:textSize="18sp"
+	                android:textColor="#888888"
+	                android:text="Private"/>
+            </LinearLayout>
         </LinearLayout>
         
-        <LinearLayout style="@style/EventNewCategory"
-            android:clickable="true" 
-            android:visibility="gone"
+        <LinearLayout style="@style/EventNewOption"
             android:id="@+id/events_new_friends_selected"
-            android:focusable="true">
-            <View style="@style/EventNewTitleBorder" />
-            <LinearLayout style="@style/FullWidth"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:orientation="horizontal">
-	            <TextView style="@style/FormElementTitle"
-	                 android:id="@+id/events_new_friends_selected_text"
-	                 android:text="No Friends Selected" />
-	            <View style="@style/Spring" />
-	            <ImageView style="@style/EventListHeadingChange"
-	                android:src="@drawable/icon_right_arrow"/>
-            </LinearLayout>
-            <View style="@style/EventNewTitleBorder" />
+            android:clickable="true" 
+            android:visibility="gone"
+            android:focusable="true"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TextView style="@style/FormElementTitle"
+                 android:id="@+id/events_new_friends_selected_text"
+                 android:text="No Friends Selected" />
+            <View style="@style/Spring" />
+            <ImageView style="@style/WrapAll"
+                android:src="@drawable/icon_right_arrow_grey"/>
         </LinearLayout>
     
+        <View style="@style/ListTitleBorderTop"/>
+        
+    </LinearLayout>
+    </ScrollView>
+    
+    <LinearLayout style="@style/FullWidth"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/events_new_submit_wrapper"
+        android:orientation="vertical"
+        android:background="#ffffff">
+        <View style="@style/ListTitleBorderTop"/>
 	    <LinearLayout style="@style/FullWidth"
-	        android:layout_alignParentBottom="true"
-	        android:id="@+id/events_new_submit_wrapper"
 	        android:orientation="horizontal">
+            <Button style="@style/Button"
+                android:text="SMS"
+                android:id="@+id/events_new_sms"
+                android:visibility="gone"/>
 	        <View style="@style/Spring" />
 	        <Button style="@style/Button"
 	            android:text="@string/events_new_button_submit"
 	            android:id="@+id/events_new_submit" />
 	    </LinearLayout>
     </LinearLayout>
-    </ScrollView>
+    
 </RelativeLayout>

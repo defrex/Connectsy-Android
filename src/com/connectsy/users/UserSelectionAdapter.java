@@ -45,7 +45,7 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	
 	public UserSelectionAdapter(Activity activity, ArrayList<User> friends){
 		this.context = activity;
-		this.contactsCursor = new ContactCursor(activity);
+//		this.contactsCursor = new ContactCursor(activity);
 		update(friends);
 	}
 
@@ -55,12 +55,15 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 		// Nothing in 0 since it'll be "select all friends".
 		objects.add(null);
 		objects.addAll(friends);
-		if (contactsCursor.getCount() > 0)
+		if (contactsCursor != null && contactsCursor.getCount() > 0)
 			objects.add("Select From Contacts");
 	}
 	
 	public int getCount() {
-		return objects.size()+contactsCursor.getCount();
+		int c = objects.size();
+		if (contactsCursor != null)
+			c += contactsCursor.getCount();
+		return c;
 	}
 
 	public Object getItem(int position) {

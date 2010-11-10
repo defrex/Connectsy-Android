@@ -26,16 +26,17 @@
     <string name="events_new_title_when">When</string>
     <string name="events_new_title_who">Who</string>
     
+    <string name="events_new_what">What are you doing later?</string>
+    <string name="events_new_where">Where? (optional)</string>
+    <string name="events_new_when">When? (optional)</string>
     <string name="events_new_button_change">Change</string>
-    <string name="events_new_where">Where are you going?</string>
-    <string name="events_new_desc">What are you doing?</string>
     <string name="events_new_date_title">Date:</string>
     <string name="events_new_date_default">Today</string>
     <string name="events_new_time_title">Time:</string>
     <string name="events_new_time_default">2pm</string>
     <string name="events_new_broadcast">Broadcast:</string>
     <string name="events_new_cat">Category</string>
-    <string name="events_new_button_submit">Create Event</string>
+    <string name="events_new_button_submit">Share</string>
     
     <string name="event_view_attend">Attend!</string>
     <string name="attendant_status_0">Invited</string>

@@ -17,16 +17,6 @@
 			    android:id="@+id/event_username"
 			    android:clickable="true" />
 			
-			<TextView style="@style/Text"
-			    android:visibility="gone"
-                android:id="@+id/event_pipe"
-				android:text=" | " />
-		
-            <TextView style="@style/Link"
-                android:visibility="gone"
-                android:id="@+id/event_category"
-                android:clickable="true" />
-            
             <View style="@style/Spring"/>
             <ImageView
                 android:layout_height="20dp"
@@ -35,19 +25,12 @@
 		</LinearLayout>
         
         <TextView style="@style/EventWh"
-            android:id="@+id/event_what" />
-    
-        <TextView style="@style/EventWh"
-            android:id="@+id/event_where" />
-    
-        <TextView style="@style/EventWh"
-            android:id="@+id/event_when" />
-            
-        <TextView style="@style/EventDeEm"
-            android:id="@+id/event_created" />
+            android:id="@+id/event_what"
+            android:padding="0dp"/>
     
         <TextView style="@style/EventDeEm"
-            android:id="@+id/event_distance" />
+            android:id="@+id/event_created"
+            android:padding="0dp"/>
 		    
 	</LinearLayout>
 	
