@@ -20,9 +20,9 @@
     <LinearLayout style="@style/Dashboard">
         <LinearLayout style="@style/DashboardRow">
             <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_events_nearby"
-                android:text="@string/dashboard_events_nearby"
-                android:drawableTop="@drawable/dashboard_events_nearby"/>
+                android:id="@+id/dashboard_connections"
+                android:text="@string/dashboard_connections"
+                android:drawableTop="@drawable/dashboard_connections"/>
                 
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_new_event"
@@ -58,12 +58,13 @@
     
     
     <FrameLayout style="@style/DashboardExtra">
-        <!-- -->
-        <com.google.android.maps.MapView 
-            style="@style/DashboardExtraMap"
-            android:id="@+id/dashboard_map"
-            android:clickable="true"
-            android:apiKey="0rr3ewYP3KKB_YCjDIHFBtI0AwGhwcY--yrfq_w" />
+        <View style="@style/DashboardExtraMap"
+            android:background="@drawable/green_texture"/>
+<!--        <com.google.android.maps.MapView -->
+<!--            style="@style/DashboardExtraMap"-->
+<!--            android:id="@+id/dashboard_map"-->
+<!--            android:clickable="true"-->
+<!--            android:apiKey="" />-->
          
     </FrameLayout>
     

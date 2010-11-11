@@ -12,7 +12,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -30,7 +28,6 @@ import android.widget.Toast;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
-import com.connectsy.categories.CategoryManager.Category;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager;
@@ -44,10 +41,10 @@ import com.connectsy.utils.TimePickerDialog.OnTimeSetListener;
 
 public class EventNew extends Activity implements OnClickListener, 
 		DataUpdateListener, OnTimeSetListener {
+	@SuppressWarnings("unused")
 	private final String TAG = "NewEvent";
 	private ProgressDialog loadingDialog;
     private EventManager eventManager;
-    private Category category;
     private ArrayList<User> chosenUsers;
     private ArrayList<Contact> chosenContacts;
     private JSONObject eventJSON;
