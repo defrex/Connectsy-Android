@@ -12,6 +12,12 @@
         <item name="android:layout_weight">1</item>
     </style>
     
+    <style name="VerticalSpring">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    
     <style name="FullWidth">
     	<item name="android:layout_width">fill_parent</item>
     	<item name="android:layout_height">wrap_content</item>
@@ -219,17 +225,17 @@
 	            <item name="android:src">@drawable/actionbar_seperator</item>
 		    </style>
     
-    <style name="Dashboard" parent="FullWidth">
+    <style name="Dashboard">
         <item name="android:orientation">vertical</item>
-        <item name="android:layout_height">400dp</item>
-        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:padding">2dp</item>
     </style>
 	    <style name="DashboardRow" parent="FullWidth">
 	        <item name="android:orientation">horizontal</item>
 	        <item name="android:layout_weight">1</item>
-	        <item name="android:padding">6dp</item>
 	    </style>
 		    <style name="DashboardButton">
 		        <item name="android:layout_gravity">center_vertical</item>
@@ -242,6 +248,8 @@
                 <item name="android:textStyle">normal</item>
                 <item name="android:textColor">@color/text_grey</item>
 		        <item name="android:background">@drawable/dashboard_bg</item>
+                <item name="android:paddingTop">20dp</item>
+                <item name="android:paddingBottom">20dp</item>
 		    </style>
         <style name="DashboardExtra" parent="FullWidth">
             <item name="android:layout_weight">1</item>

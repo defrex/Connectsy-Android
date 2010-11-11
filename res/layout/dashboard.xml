@@ -6,14 +6,7 @@
         <ImageView style="@style/ActionBarBackground" />
 	    <LinearLayout style="@style/ActionBar" >
 	        <ImageView style="@style/ActionBarLogo" />
-	        
 	        <View style="@style/Spring" />
-	        <!-- 
-	        <ImageView style="@style/ActionBarSeparator" />
-	        <ImageView style="@style/ActionBarAction"
-	            android:id="@+id/ab_new_event"
-	            android:src="@drawable/icon_plus" />
-             -->
 	    </LinearLayout>
     </FrameLayout>
     
@@ -41,31 +34,19 @@
                 android:text="@string/dashboard_profile"
                 android:drawableTop="@drawable/dashboard_profile"/>
         </LinearLayout>
-<!-- 
-        <LinearLayout style="@style/DashboardRow">
-            <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_events_category"
-                android:text="@string/dashboard_events_category"
-                android:drawableTop="@drawable/dashboard_events_category"/>
-                
-            <Button style="@style/DashboardButton"
-                android:id="@+id/dashboard_events_friends"
-                android:text="@string/dashboard_events_friends"
-                android:drawableTop="@drawable/dashboard_events_friends"/>
-        </LinearLayout>
- -->
     </LinearLayout>
     
+    <View style="@style/VerticalSpring" />
     
-    <FrameLayout style="@style/DashboardExtra">
-        <View style="@style/DashboardExtraMap"
-            android:background="@drawable/green_texture"/>
+<!--    <FrameLayout style="@style/DashboardExtra">-->
+<!--        <View style="@style/DashboardExtraMap"-->
+<!--            android:background="@drawable/green_texture"/>-->
 <!--        <com.google.android.maps.MapView -->
 <!--            style="@style/DashboardExtraMap"-->
 <!--            android:id="@+id/dashboard_map"-->
 <!--            android:clickable="true"-->
 <!--            android:apiKey="" />-->
-         
-    </FrameLayout>
+<!--         -->
+<!--    </FrameLayout>-->
     
 </LinearLayout>
