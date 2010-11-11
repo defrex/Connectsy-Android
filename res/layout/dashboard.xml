@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/FullWidth"
-    android:orientation="vertical" >
+    style="@style/Main"
+    android:orientation="vertical">
     <FrameLayout style="@style/ActionBarFrame">
         <ImageView style="@style/ActionBarBackground" />
 	    <LinearLayout style="@style/ActionBar" >
@@ -27,7 +27,7 @@
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_new_event"
                 android:text="@string/dashboard_new_event"
-                android:drawableTop="@drawable/dashboard_new_event"/>
+                android:drawableTop="@drawable/dashboard_connect"/>
         </LinearLayout>
 
         <LinearLayout style="@style/DashboardRow">

@@ -29,6 +29,10 @@
     	<item name="android:layout_height">fill_parent</item>
     </style>
     
+    <style name="Main" parent="FillAll">
+        <item name="android:background">#ffffff</item>
+    </style>
+    
     <style name="Text" parent="WrapAll">
         <item name="android:textColor">@color/text_grey</item>
     </style>
