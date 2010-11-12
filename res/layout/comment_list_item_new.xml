@@ -4,13 +4,13 @@
     android:id="@+id/comment_list_item_new">
     <LinearLayout style="@style/FullWidth"
         android:gravity="center_vertical"
-        android:padding="5dp"
+        android:padding="10dp"
         android:orientation="horizontal">
         <TextView style="@style/Text"
             android:textSize="16sp"
             android:text="New Comment" />
         <View style="@style/Spring" />
-        <ImageView style="@style/WrapAll"
-            android:src="@drawable/icon_comment"/>
+<!--        <ImageView style="@style/WrapAll"-->
+<!--            android:src="@drawable/icon_comment"/>-->
     </LinearLayout>
 </LinearLayout>
