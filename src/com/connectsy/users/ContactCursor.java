@@ -35,6 +35,8 @@ public class ContactCursor {
 				if (Character.isDigit(c))
 					cleanNumber += c;
 			}
+			if (cleanNumber.length() == 10)
+				cleanNumber = "1"+cleanNumber;
 			return cleanNumber;
 		}
 		

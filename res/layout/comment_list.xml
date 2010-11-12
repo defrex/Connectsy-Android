@@ -25,7 +25,7 @@
     <LinearLayout style="@style/Heading">
         <TextView style="@style/HeadingText"
             android:text="Comments" />
-        <ImageView style="@style/HeadingBorder" />
+<!--        <ImageView style="@style/HeadingBorder" />-->
     </LinearLayout>
     
 	<ListView style="@style/FillAll"
