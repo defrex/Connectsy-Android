@@ -137,14 +137,8 @@ public class EventNew extends Activity implements OnClickListener,
 				Bundle e = data.getExtras();
 				chosenUsers = User.deserializeList(
 						e.getString("com.connectsy.users"));
-				chosenContacts = Contact.deserializeList(
-						e.getString("com.connectsy.contacts"));
-				String display = chosenUsers.size()+" friends";
-				if (chosenContacts.size() > 0)
-					display += ", "+chosenContacts.size()+" contacts";
-				display += " selected.";
 				((TextView)findViewById(R.id.events_new_friends_selected_text))
-					.setText(display);
+					.setText(chosenUsers.size()+" friends selected.");
 			}else if (resultCode == RESULT_OK && requestCode == SELECT_CONTACTS){
 				Bundle e = data.getExtras();
 				chosenContacts = Contact.deserializeList(
@@ -235,22 +229,14 @@ public class EventNew extends Activity implements OnClickListener,
 
 	public void onDataUpdate(int code, String response) {
 		try {
-			if (code == CREATE_EVENT)
-				eventJSON = new JSONObject(response);
-			if (code == CREATE_EVENT && 
-					(findViewById(R.id.events_new_private).isSelected() ||
-					 chosenContacts != null)){
-				new AttendantManager(this, this, eventJSON.getString("id"))
-						.bulkInvite(chosenUsers, chosenContacts, 0);
-			}else{
-				loadingDialog.dismiss();
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-				i.putExtra("com.connectsy.events.revision", 
-						eventJSON.getString("revision"));
-				startActivity(i);
-				finish();
-			}
+			eventJSON = new JSONObject(response);
+			loadingDialog.dismiss();
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+			i.putExtra("com.connectsy.events.revision", 
+					eventJSON.getString("revision"));
+			startActivity(i);
+			finish();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

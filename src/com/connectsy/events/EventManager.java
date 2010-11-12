@@ -14,10 +14,9 @@ import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
-import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager;
+import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.events.attendants.AttendantManager.Attendant;
-import com.connectsy.users.UserManager;
 import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 
@@ -103,8 +102,10 @@ public class EventManager extends DataManager {
 		
 		Location loc = locManager.getLocation();
 		if (loc != null){
-			args.add(new BasicNameValuePair("lat", Double.toString(loc.getLatitude())));
-			args.add(new BasicNameValuePair("lng", Double.toString(loc.getLongitude())));
+			args.add(new BasicNameValuePair("lat", 
+					Double.toString(loc.getLatitude())));
+			args.add(new BasicNameValuePair("lng", 
+					Double.toString(loc.getLongitude())));
 		}
 		
 		args.add(new BasicNameValuePair("sort", "created"));
@@ -233,7 +234,7 @@ public class EventManager extends DataManager {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+		Log.d(TAG, "requesting "+ json.toString());
 		ApiRequest r = new ApiRequest(this, context, Method.POST, 
 				"/events/", true, CREATE_EVENT);
 		r.setBodyString(json.toString());
