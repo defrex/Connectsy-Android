@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".events.EventNew"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".events.EventView">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -83,6 +83,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.CHOOSER" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.connectsy.user" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".users.ContactSelector">
+            <intent-filter>
+                <action android:name="android.intent.action.CHOOSER" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.connectsy.contact" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

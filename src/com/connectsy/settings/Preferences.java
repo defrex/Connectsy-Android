@@ -3,11 +3,14 @@ package com.connectsy.settings;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 
@@ -21,6 +24,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	private static final String TAG = "Preferances";
 	private static final int SELECT_AVATAR = 0;
 	private static final int UPLOAD_AVATAR = 1;
+	private ProgressDialog loadingDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +35,22 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, 
 			Preference preference){
-		if (preference.getKey().equals("avatar"))
+		boolean ret = super.onPreferenceTreeClick(preferenceScreen, preference);
+		if (preference.getKey().equals("avatar")){
 			startActivityForResult(new Intent(Intent.ACTION_PICK, 
 					Images.Media.INTERNAL_CONTENT_URI), SELECT_AVATAR);
-		
-		return super.onPreferenceTreeClick(preferenceScreen, preference);
+		}else if (preference.getKey().equals("preference_notifications")){
+			Context c = getBaseContext();
+			Intent i = new Intent();
+			i.setAction("com.connectsy.START_NOTIFICATIONS");
+			if (PreferenceManager.getDefaultSharedPreferences(c)
+					.getBoolean("preference_notifications", true)){
+				c.startService(i);
+			}else{
+				c.stopService(i);
+			}
+		}
+		return ret;
 	}
 
 	@Override
@@ -45,6 +60,8 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 			try {
 				new UserManager(this, this, UserManager.currentUsername(this))
 						.uploadAvatar(selectedImage, UPLOAD_AVATAR);
+				loadingDialog = ProgressDialog.show(this, "", 
+						"Uploading Avatar...", true);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -53,12 +70,10 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	}
 
 	public void onDataUpdate(int code, String response) {
-		// TODO Auto-generated method stub
-		
+		if (loadingDialog != null) loadingDialog.dismiss();
 	}
 
 	public void onRemoteError(int httpStatus, String response, int code) {
-		// TODO Auto-generated method stub
-		
+		if (loadingDialog != null) loadingDialog.dismiss();
 	}
 }

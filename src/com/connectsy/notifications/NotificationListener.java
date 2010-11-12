@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -39,9 +40,6 @@ public class NotificationListener implements ApiRequestListener {
 		return instance;
 	}
 
-	/**
-	 * How long to wait in between polls
-	 */
 	static final String TAG = "NotificationListener";
 	static final int REGISTER = 0;
 	static final int POLL = 1;
@@ -74,7 +72,10 @@ public class NotificationListener implements ApiRequestListener {
 	public void start(Context c) {
 		// if we're running, shut down
 		stop();
-
+		if (!PreferenceManager.getDefaultSharedPreferences(c)
+				.getBoolean("preference_notifications", true))
+			return;
+		
 		// update context
 		context = c;
 		

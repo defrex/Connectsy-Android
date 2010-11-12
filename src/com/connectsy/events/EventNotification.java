@@ -3,6 +3,8 @@ package com.connectsy.events;
 import org.json.JSONException;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
@@ -29,6 +31,14 @@ public class EventNotification extends NotificationHandlerBase implements DataUp
 				eventManager.refreshEvent(rev, GET_EVENT);
 				return;
 			}
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			if (!prefs.getBoolean("preference_notifications_public", true) &&
+					event.broadcast)
+				return;
+			if (!prefs.getBoolean("preference_notifications_private", true) &&
+					!event.broadcast)
+				return;
 			title = "New Event";
 			body = event.creator + " is going to " + event.where + ".";
 			i = new Intent(Intent.ACTION_VIEW);

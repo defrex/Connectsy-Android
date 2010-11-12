@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/preferences_user">
-    
-		<PreferenceScreen android:title="@string/preference_avatar"
+    <PreferenceCategory android:title="@string/preference_category_user">
+		<Preference 
 		    android:key="avatar"
-			android:id="@+id/preferances_avatar_button">
-        </PreferenceScreen>
+		    android:title="@string/preference_avatar">
+        </Preference>
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/preference_category_notifications">
+        <CheckBoxPreference
+            android:key="notifications"
+            android:defaultValue="true"
+            android:title="@string/preference_notifications"/>
+            
+        <CheckBoxPreference
+            android:key="notifications_public"
+            android:dependency="notifications"
+            android:defaultValue="true"
+            android:title="@string/preference_notifications_public"/>
+        
+        <CheckBoxPreference
+            android:key="notifications_private"
+            android:dependency="notifications"
+            android:defaultValue="true"
+            android:title="@string/preference_notifications_private"/>
+        
+        <CheckBoxPreference
+            android:key="notifications_comment"
+            android:dependency="notifications"
+            android:defaultValue="true"
+            android:title="@string/preference_notifications_comment"/>
+        
+        <CheckBoxPreference
+            android:key="notifications_attend"
+            android:dependency="notifications"
+            android:defaultValue="true"
+            android:title="@string/preference_notifications_attend"/>
+        
+        <CheckBoxPreference
+            android:key="notifications_follow"
+            android:dependency="notifications"
+            android:defaultValue="true"
+            android:title="@string/preference_notifications_follow"/>
         
     </PreferenceCategory>
 </PreferenceScreen>

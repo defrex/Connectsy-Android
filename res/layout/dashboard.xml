@@ -15,12 +15,12 @@
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_connections"
                 android:text="@string/dashboard_connections"
-                android:drawableTop="@drawable/dashboard_connections"/>
+                android:drawableTop="@drawable/dashboard_plans"/>
                 
             <Button style="@style/DashboardButton"
                 android:id="@+id/dashboard_new_event"
                 android:text="@string/dashboard_new_event"
-                android:drawableTop="@drawable/dashboard_connect"/>
+                android:drawableTop="@drawable/dashboard_share_plan"/>
         </LinearLayout>
 
         <LinearLayout style="@style/DashboardRow">

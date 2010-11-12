@@ -3,7 +3,9 @@ package com.connectsy.events.attendants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventList;
@@ -18,6 +20,15 @@ public class AttendantNotification extends NotificationHandlerBase implements
 	private static final String TAG = "AttendantNotification";
 	private static final int GET_EVENT = 0;
 	protected String tickerText = "Someone new is in on Connectsy";
+	
+	@Override
+	public void send(Context context) throws JSONException {
+		if (!PreferenceManager.getDefaultSharedPreferences(context)
+				.getBoolean("preference_notifications_attend", true))
+			return;
+		else
+			super.send(context);
+	}
 	
 	@Override
 	protected void prepareNotification() throws JSONException {

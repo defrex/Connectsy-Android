@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,11 +48,10 @@ public class EventNew extends Activity implements OnClickListener,
     private ArrayList<Contact> chosenContacts;
     private JSONObject eventJSON;
 	
-    static final int TIME_DIALOG_ID = 0;
-    static final int SELECT_CATEGORY = 2;
-    static final int SELECT_FRIENDS = 3;
-    static final int CREATE_EVENT = 4;
-    static final int INVITE_USERS = 5;
+    private static final int TIME_DIALOG_ID = 0;
+	private static final int SELECT_CONTACTS = 1;
+	private static final int SELECT_FRIENDS = 3;
+	private static final int CREATE_EVENT = 4;
     
     private Long timestamp;
     
@@ -95,6 +93,7 @@ public class EventNew extends Activity implements OnClickListener,
         findViewById(R.id.events_new_friends_selected).setOnClickListener(this);
         findViewById(R.id.events_new_submit).setOnClickListener(this);
         findViewById(R.id.events_new_when).setOnClickListener(this);
+        findViewById(R.id.events_new_sms).setOnClickListener(this);
     }
 
 	public void onClick(View v) {
@@ -103,29 +102,33 @@ public class EventNew extends Activity implements OnClickListener,
         	showDialog(TIME_DIALOG_ID);
 	    }else if (id == R.id.events_new_friends_selected){
         	selectFriends();
+	    }else if (id == R.id.events_new_sms){
+        	selectContacts();
 	    }else if (id == R.id.events_new_submit){
         	submitData();
 	    }else if (id == R.id.events_new_public){
         	setWho("public");
 	    }else if (id == R.id.events_new_private){
         	setWho("private");
-	    }else{
-	    	Log.d("events", "bad view is for button");
 	    }
 	}
 	
 	private void selectFriends(){
 		Intent i = new Intent(Intent.ACTION_CHOOSER);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-		
 		if (chosenUsers != null)
 			i.putExtra("com.connectsy.users", 
 					User.serializeList(chosenUsers));
+		startActivityForResult(i, SELECT_FRIENDS);
+	}
+	
+	private void selectContacts(){
+		Intent i = new Intent(Intent.ACTION_CHOOSER);
+		i.setType("vnd.android.cursor.item/vnd.connectsy.contact");
 		if (chosenContacts != null)
 			i.putExtra("com.connectsy.contacts", 
 					Contact.serializeList(chosenContacts));
-		
-		startActivityForResult(i, SELECT_FRIENDS);
+		startActivityForResult(i, SELECT_CONTACTS);
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -141,6 +144,13 @@ public class EventNew extends Activity implements OnClickListener,
 					display += ", "+chosenContacts.size()+" contacts";
 				display += " selected.";
 				((TextView)findViewById(R.id.events_new_friends_selected_text))
+					.setText(display);
+			}else if (resultCode == RESULT_OK && requestCode == SELECT_CONTACTS){
+				Bundle e = data.getExtras();
+				chosenContacts = Contact.deserializeList(
+						e.getString("com.connectsy.contacts"));
+				String display = chosenContacts.size()+" contacts selected.";
+				((TextView)findViewById(R.id.events_new_sms))
 					.setText(display);
 			}
 		} catch (JSONException e) {
@@ -228,7 +238,8 @@ public class EventNew extends Activity implements OnClickListener,
 			if (code == CREATE_EVENT)
 				eventJSON = new JSONObject(response);
 			if (code == CREATE_EVENT && 
-					findViewById(R.id.events_new_private).isSelected()){
+					(findViewById(R.id.events_new_private).isSelected() ||
+					 chosenContacts != null)){
 				new AttendantManager(this, this, eventJSON.getString("id"))
 						.bulkInvite(chosenUsers, chosenContacts, 0);
 			}else{

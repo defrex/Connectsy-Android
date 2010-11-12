@@ -1,15 +1,12 @@
 package com.connectsy.users;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
-import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.events.EventList;
-import com.connectsy.events.EventManager;
-import com.connectsy.events.EventManager.Event;
 import com.connectsy.notifications.NotificationHandlerBase;
 
 public class FriendNotification extends NotificationHandlerBase {
@@ -17,6 +14,15 @@ public class FriendNotification extends NotificationHandlerBase {
 	@SuppressWarnings("unused")
 	private static final String TAG = "FriendNotification";
 	protected String tickerText = "New friend request on Connectsy";
+	
+	@Override
+	public void send(Context context) throws JSONException {
+		if (!PreferenceManager.getDefaultSharedPreferences(context)
+				.getBoolean("preference_notifications_follow", true))
+			return;
+		else
+			super.send(context);
+	}
 	
 	@Override
 	protected void prepareNotification() throws JSONException {

@@ -21,12 +21,28 @@
         </LinearLayout>
     </FrameLayout>
     
-	<ScrollView style="@style/FullWidth"
+    <LinearLayout style="@style/FullWidth"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/events_new_submit_wrapper"
+        android:orientation="vertical"
+        android:background="#ffffff">
+        <View style="@style/ListTitleBorderTop"/>
+        <LinearLayout style="@style/FullWidth"
+            android:orientation="horizontal">
+            <View style="@style/Spring" />
+            <Button style="@style/Button"
+                android:text="@string/events_new_button_submit"
+                android:id="@+id/events_new_submit" />
+        </LinearLayout>
+    </LinearLayout>
+    
+	<ScrollView style="@style/FillAll"
         android:layout_below="@id/events_new"
+        android:layout_above="@id/events_new_submit_wrapper"
         android:layout_marginTop="@dimen/actionbar_height"
         android:id="@+id/events_new_scroller">
 	<LinearLayout style="@style/EventNew"
-		android:orientation="vertical" >
+		android:orientation="vertical">
         
         <EditText style="@style/EventNewOptionInput"
             android:hint="@string/events_new_what"
@@ -106,26 +122,15 @@
     
         <View style="@style/ListTitleBorderTop"/>
         
+        <LinearLayout style="@style/EventNewOption">
+            <TextView style="@style/EventNewOptionInput"
+               android:id="@+id/events_new_sms"
+               android:hint="Share with SMS"/>
+        </LinearLayout>
+        
+        <View style="@style/ListTitleBorderTop"/>
+        
     </LinearLayout>
     </ScrollView>
-    
-    <LinearLayout style="@style/FullWidth"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/events_new_submit_wrapper"
-        android:orientation="vertical"
-        android:background="#ffffff">
-        <View style="@style/ListTitleBorderTop"/>
-	    <LinearLayout style="@style/FullWidth"
-	        android:orientation="horizontal">
-            <Button style="@style/Button"
-                android:text="SMS"
-                android:id="@+id/events_new_sms"
-                android:visibility="gone"/>
-	        <View style="@style/Spring" />
-	        <Button style="@style/Button"
-	            android:text="@string/events_new_button_submit"
-	            android:id="@+id/events_new_submit" />
-	    </LinearLayout>
-    </LinearLayout>
     
 </RelativeLayout>
