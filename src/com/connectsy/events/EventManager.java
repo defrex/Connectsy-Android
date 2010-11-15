@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
@@ -30,7 +29,6 @@ public class EventManager extends DataManager {
 	
 	private String extra;
 	private Filter filter;
-	private ArrayList<Event> events;
 	private LocManager locManager;
 	
 	public enum Filter{INVITED, CREATED, PUBLIC}
@@ -114,40 +112,6 @@ public class EventManager extends DataManager {
 				"/events/", true, GET_EVENTS);
 		request.setGetArgs(args);
 		return request;
-	}
-	
-	public ArrayList<Event> getEvents(){
-		events = new ArrayList<Event>();
-		String eventsCache = getEventsRequest().getCached();
-		if (eventsCache == null) 
-			return events;
-		try {
-			JSONArray revisions = new JSONObject(eventsCache)
-					.getJSONArray("events");
-			for(int i=0;i<revisions.length();i++){
-				Event event = getEvent(revisions.getString(i));
-				if (event != null) events.add(event);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return events;
-	}
-	
-	public void refreshEvents(int sentReturnCode){
-		returnCode = sentReturnCode;
-		getEventsRequest().execute();
-	}
-	
-	private void refreshEventsReturn(String response){
-		try {
-			JSONArray revisions = new JSONObject(response)
-					.getJSONArray("events");
-			for(int i=0;i<revisions.length();i++)
-				refreshEvent(revisions.getString(i), returnCode);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public ArrayList<String> getRevisions(){
@@ -234,7 +198,6 @@ public class EventManager extends DataManager {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(TAG, "requesting "+ json.toString());
 		ApiRequest r = new ApiRequest(this, context, Method.POST, 
 				"/events/", true, CREATE_EVENT);
 		r.setBodyString(json.toString());
@@ -243,9 +206,6 @@ public class EventManager extends DataManager {
 	
 	@Override
 	public void onApiRequestFinish(int status, String response, int code) {
-		if (code == GET_EVENTS){
-			refreshEventsReturn(response);
-		}
 		listener.onDataUpdate(returnCode, response);
 	}
 }

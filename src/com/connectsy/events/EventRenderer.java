@@ -32,10 +32,11 @@ public class EventRenderer implements DataUpdateListener {
 		this.rev = rev;
 		this.truncate = truncate;
 		event = evMan.getEvent(rev);
-		if (event == null)
+		if (event == null){
 			evMan.refreshEvent(rev, 0);
-		else
+		}else{
 			render();
+		}
 	}
 	
 	private void render(){

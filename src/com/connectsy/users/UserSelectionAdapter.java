@@ -26,14 +26,13 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
 import com.connectsy.users.ContactCursor.Contact;
-import com.connectsy.users.UserManager.User;
 
 public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 
 	private static String TAG = "UserSelectionAdapter";
 	private Activity context;
 	private ArrayList<Object> objects = new ArrayList<Object>();
-	private ArrayList<User> friends;
+	private ArrayList<String> friends;
 	private HashMap<String, Boolean> friendsSelected = new HashMap<String, Boolean>();
 
 	private ContactCursor contactsCursor;
@@ -43,14 +42,15 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	public static final int FRIENDS = 1;
 	public static final int CONTACTS = 1;
 	
-	public UserSelectionAdapter(Activity activity, ArrayList<User> friends){
+	public UserSelectionAdapter(Activity activity, ArrayList<String> users){
 		this.context = activity;
 //		this.contactsCursor = new ContactCursor(activity);
-		update(friends);
+		update(users);
 	}
 
-	public void update(ArrayList<User> friends) {
+	public void update(ArrayList<String> friends) {
 		this.friends = friends;
+		
 		objects.clear();
 		// Nothing in 0 since it'll be "select all friends".
 		objects.add(null);
@@ -88,32 +88,31 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 				if (selected == friends.size())
 					return true;
 			}
-		}else if (type == CONTACTS){
 		}
 		return false;
 	}
 	
 	public void selectAll(int type){
 		if (type == FRIENDS){
-			for (User user: friends)
-				friendsSelected.put(user.username, true);
+			for (String user: friends)
+				friendsSelected.put(user, true);
 			this.notifyDataSetChanged();
 		}
 	}
 	
 	public void deselectAll(int type){
 		if (type == FRIENDS){
-			for (User user: friends)
-				friendsSelected.put(user.username, false);
+			for (String user: friends)
+				friendsSelected.put(user, false);
 			this.notifyDataSetChanged();
 		}
 	}
 	
-	public ArrayList<User> getSelectedFriends(){
-		ArrayList<User> users = new ArrayList<User>();
-		for (User u: friends)
-			if (friendsSelected.containsKey(u.username) 
-					&& friendsSelected.get(u.username))
+	public ArrayList<String> getSelectedFriends(){
+		ArrayList<String> users = new ArrayList<String>();
+		for (String u: friends)
+			if (friendsSelected.containsKey(u) 
+					&& friendsSelected.get(u))
 				users.add(u);
 		return users;
 	}
@@ -125,9 +124,9 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 		return selContacts;
 	}
 	
-	public void setSelectedFriends(ArrayList<User> friends){
-		for (User u: friends)
-			friendsSelected.put(u.username, true);
+	public void setSelectedFriends(ArrayList<String> friends){
+		for (String u: friends)
+			friendsSelected.put(u, true);
 	}
 	
 	public void setSelectedContacts(ArrayList<Contact> contacts){
@@ -163,16 +162,50 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	        view.findViewById(R.id.user_list_item_avatar).setVisibility(View.GONE);
 	        
 			return view;
+//		}else if (obj instanceof String){
+//			String header = (String) obj;
+//			View view;
+//			if (convertView != null && convertView.getId() == R.layout.user_list_header)
+//				view = convertView;
+//			else
+//				view = inflater.inflate(R.layout.user_list_header, parent, false);
+//			((TextView)view.findViewById(R.id.user_list_header_text))
+//					.setText(header);
+//			return view;
 		}else if (obj instanceof String){
-			String header = (String) obj;
+			final String user = (String) obj;
 			View view;
-			if (convertView != null && convertView.getId() == R.layout.user_list_header)
+			if (convertView != null && convertView.getId() == R.layout.user_list_item)
 				view = convertView;
 			else
-				view = inflater.inflate(R.layout.user_list_header, parent, false);
-			((TextView)view.findViewById(R.id.user_list_header_text))
-					.setText(header);
-			return view;
+				view = inflater.inflate(R.layout.user_list_item, parent, false);
+			
+			CheckBox sel = (CheckBox)view.findViewById(R.id.user_list_item_select);
+			sel.setVisibility(CheckBox.VISIBLE);
+			sel.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+			    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+			    	friendsSelected.put(user, isChecked);
+			    	notifyDataSetChanged();
+			    }
+			});
+			if (friendsSelected.containsKey(user))
+				sel.setChecked(friendsSelected.get(user));
+			
+	        TextView username = (TextView)view.findViewById(R.id.user_list_item_username);
+	        username.setText(user);
+	        username.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+					i.putExtra("com.connectsy.user.username", user);
+		    		context.startActivity(i);
+				}
+	        });
+	        
+	        ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
+	        new AvatarFetcher(user, avatar, false);
+
+	        return view;
 		}else if (obj instanceof Contact){
 			final Contact contact = (Contact) obj;
 			
@@ -214,40 +247,6 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 	        InputStream input = Contacts.openContactPhotoInputStream(cr, uri);
 	        if (input != null) 
 	             avatar.setImageBitmap(BitmapFactory.decodeStream(input));
-
-	        return view;
-		}else if (obj instanceof User){
-			final User user = (User) obj;
-			View view;
-			if (convertView != null && convertView.getId() == R.layout.user_list_item)
-				view = convertView;
-			else
-				view = inflater.inflate(R.layout.user_list_item, parent, false);
-			
-			CheckBox sel = (CheckBox)view.findViewById(R.id.user_list_item_select);
-			sel.setVisibility(CheckBox.VISIBLE);
-			sel.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-			    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-			    	friendsSelected.put(user.username, isChecked);
-			    	notifyDataSetChanged();
-			    }
-			});
-			if (friendsSelected.containsKey(user.username))
-				sel.setChecked(friendsSelected.get(user.username));
-			
-	        TextView username = (TextView)view.findViewById(R.id.user_list_item_username);
-	        username.setText(user.username);
-	        username.setOnClickListener(new TextView.OnClickListener(){
-				public void onClick(View v) {
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-					i.putExtra("com.connectsy.user.username", user.username);
-		    		context.startActivity(i);
-				}
-	        });
-	        
-	        ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
-	        new AvatarFetcher(user.username, avatar, false);
 
 	        return view;
 		}else{

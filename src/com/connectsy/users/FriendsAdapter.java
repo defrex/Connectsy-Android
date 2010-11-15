@@ -74,17 +74,6 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
         new AvatarFetcher(user.username, avatar, false);
         
-        if (user.friendStatusPending){
-        	Button confirm = (Button)view.findViewById(R.id.user_list_item_confirm);
-        	confirm.setVisibility(Button.VISIBLE);
-        	confirm.setOnClickListener(new Button.OnClickListener(){
-    			public void onClick(View v) {
-    				UserManager manager = new UserManager(context, listener, user.username);
-    				manager.befriend(returnCode);
-    			}
-            });
-        }
-        
         return view;
 	}
 

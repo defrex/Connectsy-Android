@@ -42,12 +42,12 @@
 		<View style="@style/Spring" />
         
         <ImageView style="@style/UserViewBefriend"
-            android:id="@+id/user_view_befriend"
+            android:id="@+id/user_view_follow"
             android:src="@drawable/icon_friend_plus"
             android:visibility="gone" />
         
         <ImageView style="@style/UserViewBefriend"
-            android:id="@+id/user_view_unfriend"
+            android:id="@+id/user_view_unfollow"
             android:src="@drawable/icon_friend_minus"
             android:visibility="gone" />
 			
@@ -57,19 +57,24 @@
         <Button style="@style/TabBarButtonLeft"
             android:id="@+id/user_view_events_button"
             android:text="Events"/>
+        <Button style="@style/TabBarButtonMiddle"
+            android:id="@+id/user_view_followers_button"
+            android:text="Followers"/>
         <Button style="@style/TabBarButtonRight"
-            android:id="@+id/user_view_friends_button"
-            android:text="Friends"/>
+            android:id="@+id/user_view_following_button"
+            android:text="Following"/>
     </LinearLayout>
-	
-	<ListView
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:id="@+id/user_view_events"/>
-	
-	<ListView 
-	    android:id="@+id/user_view_friends"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" />
+    
+    <ListView style="@style/FullWidth"
+        android:visibility="gone"
+        android:id="@+id/user_view_events"/>
+    
+    <ListView style="@style/FullWidth"
+        android:visibility="gone"
+        android:id="@+id/user_view_following"/>
+    
+    <ListView style="@style/FullWidth"
+        android:visibility="gone"
+        android:id="@+id/user_view_followers"/>
 	        
 </LinearLayout>

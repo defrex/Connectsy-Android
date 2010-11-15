@@ -4,17 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,11 +21,10 @@ import android.widget.TextView;
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
-import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager;
-import com.connectsy.events.EventManager.Filter;
 import com.connectsy.events.EventsAdapter;
+import com.connectsy.events.EventManager.Filter;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.Utils;
@@ -41,13 +38,16 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     private String username;
     private String tabSelected = "events";
     private int operationsPending = 0;
+	private UserAdapter followerAdapter;
+	private EventsAdapter eventsAdapter;
+	private UserAdapter followingAdapter;
+	private ProgressDialog loadingDialog;
     private static final int REFRESH_USER = 0;
     private static final int SELECT_AVATAR = 1;
-    private static final int BEFRIEND = 2;
-    private static final int REFRESH_FRIENDS = 3;
-    private static final int REFRESH_PENDING_FRIENDS = 4;
-	private static final int REFRESH_CUR_PENDING_FRIENDS = 5;
-	private static final int CONFIRM_USER = 6;
+    private static final int FOLLOW = 2;
+	private static final int UNFOLLOW = 9;
+    private static final int REFRESH_FOLLOWERS = 3;
+    private static final int REFRESH_FOLLOWING = 4;
 	private static final int UPLOAD_AVATAR = 7;
 	private static final int REFRESH_EVENTS = 8;
     
@@ -68,18 +68,21 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
         curUsername = UserManager.currentUsername(this);
 
         findViewById(R.id.user_view_events_button).setOnClickListener(this);
-        findViewById(R.id.user_view_friends_button).setOnClickListener(this);
-        ListView events = (ListView)findViewById(R.id.user_view_events);
-        events.setOnItemClickListener(new OnItemClickListener(){
-			public void onItemClick(AdapterView<?> eventsView, View eventView, 
-					int position, long id) {
-				String rev = (String) eventsView.getAdapter().getItem(position);
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-				i.putExtra("com.connectsy.events.revision", rev);
-				startActivity(i);
-			}
-        });
+        findViewById(R.id.user_view_followers_button).setOnClickListener(this);
+        findViewById(R.id.user_view_following_button).setOnClickListener(this);
+        findViewById(R.id.user_view_follow).setOnClickListener(this);
+        findViewById(R.id.user_view_unfollow).setOnClickListener(this);
+//        ListView events = (ListView)findViewById(R.id.user_view_list);
+//        events.setOnItemClickListener(new OnItemClickListener(){
+//			public void onItemClick(AdapterView<?> eventsView, View eventView, 
+//					int position, long id) {
+//				String rev = (String) eventsView.getAdapter().getItem(position);
+//				Intent i = new Intent(Intent.ACTION_VIEW);
+//				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+//				i.putExtra("com.connectsy.events.revision", rev);
+//				startActivity(i);
+//			}
+//        });
 
 		user = getUserManager().getUser();
 		updateUser();
@@ -90,89 +93,100 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     private void updateUser(){
         TextView uname = (TextView)findViewById(R.id.user_view_username);
         uname.setText(username);
+        
+        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
+        new AvatarFetcher(username, avatar, false);
+        if (username.equals(curUsername)){
+        	avatar.setClickable(true);
+        	avatar.setOnClickListener(this);
+        }
 		
-        if (user != null){
-	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-	        new AvatarFetcher(user.username, avatar, false);
-	        if (username.equals(DataManager.getCache(this).getString("username", null))){
-	        	avatar.setClickable(true);
-	        	avatar.setOnClickListener(this);
-	        }
+        if (user != null && !username.equals(curUsername)){
+    		ImageView f = (ImageView)findViewById(R.id.user_view_follow);
+    		ImageView unf = (ImageView)findViewById(R.id.user_view_unfollow);
+        	if (user.following){
+        		unf.setVisibility(Button.VISIBLE);
+        		f.setVisibility(Button.GONE);
+        	}else{
+        		f.setVisibility(Button.VISIBLE);
+        		unf.setVisibility(Button.GONE);
+        	}
         }
     }
     
-    private void updateFriends(){
-		ArrayList<User> friends = getUserManager().getFriends(false);
-		ArrayList<User> pendingFriends = null;
-		ArrayList<Object> inView = new ArrayList<Object>();
-		
-        if (!username.equals(curUsername)){
-        	boolean isFriend = false;
-        	for (User f: friends)
-        		if (f.username.equals(curUsername))
-        			isFriend = true;
-    		ImageView f = (ImageView)findViewById(R.id.user_view_befriend);
-    		ImageView unf = (ImageView)findViewById(R.id.user_view_unfriend);
-        	if (!isFriend){
-        		f.setOnClickListener(this);
-        		f.setVisibility(Button.VISIBLE);
-        		unf.setVisibility(Button.GONE);
-        	}else{
-        		unf.setOnClickListener(this);
-        		unf.setVisibility(Button.VISIBLE);
-        		f.setVisibility(Button.GONE);
-        	}
-        }else{
-			pendingFriends = getUserManager().getFriends(true);
-			if (pendingFriends.size() != 0){
-				inView.add("Pending Friends");
-				inView.addAll(pendingFriends);
-    			inView.add("Friends");
-			}
-		}
+    private void updateFollowers(){
+		ArrayList<String> followers = getUserManager().getFollowers();
+		if (followers == null) return;
         
-		inView.addAll(friends);
-        ListView lv = (ListView) findViewById(R.id.user_view_friends);
-        FriendsAdapter adapter = (FriendsAdapter)lv.getAdapter();
-        if (adapter != null){
-        	adapter.update(inView);
-        	adapter.notifyDataSetChanged();
+        if (followerAdapter != null){
+        	followerAdapter.update(followers);
         }else{
-	        lv.setAdapter(new FriendsAdapter(this, this, inView, CONFIRM_USER));
+	        followerAdapter = new UserAdapter(this, followers);
+	        ((ListView) findViewById(R.id.user_view_followers))
+	        		.setAdapter(followerAdapter);
         }
-		Utils.setFooterView(this, lv);
+		//Utils.setFooterView(this, lv);
+    }
+    
+    private void updateFollowing(){
+		ArrayList<String> following = getUserManager().getFollowers();
+		if (following == null) return;
+        
+        if (followingAdapter != null){
+        	followingAdapter.update(following);
+        }else{
+	        followingAdapter = new UserAdapter(this, following);
+	        ((ListView) findViewById(R.id.user_view_following))
+    		.setAdapter(followingAdapter);
+        }
+		//Utils.setFooterView(this, lv);
     }
     
     private void updateEvents(){
 		ArrayList<String> revs = new EventManager(this, this, Filter.CREATED, 
 				username).getRevisions();
-
-        ListView lv = (ListView) findViewById(R.id.user_view_events);
-        EventsAdapter adapter = (EventsAdapter) lv.getAdapter();
-        if (adapter != null){
-        	adapter.clear();
-        	for (int n = 0;n < revs.size();n++)
-        		adapter.add(revs.get(n));
-        	adapter.notifyDataSetChanged();
+		if (revs == null) return;
+		
+        if (eventsAdapter != null){
+        	eventsAdapter.clear();
+        	for (String rev: revs)
+        		eventsAdapter.add(rev);
+        	eventsAdapter.notifyDataSetChanged();
         }else{
-        	lv.setAdapter(new EventsAdapter(this, R.layout.event_list_item, 
-        			revs));
+        	eventsAdapter = new EventsAdapter(this, 
+        			R.layout.event_list_item, revs);
+	        ((ListView) findViewById(R.id.user_view_events))
+    		.setAdapter(eventsAdapter);
         }
-		Utils.setFooterView(this, lv);
+		//Utils.setFooterView(this, lv);
     }
     
     private void updateTab(String tab){
     	if (tab != null) tabSelected = tab;
     	if (tabSelected.equals("events")){
-    		findViewById(R.id.user_view_friends).setVisibility(View.GONE);
-    		findViewById(R.id.user_view_events).setVisibility(View.VISIBLE);
 			findViewById(R.id.user_view_events_button).setSelected(true);
-			findViewById(R.id.user_view_friends_button).setSelected(false);
-    	}else if (tabSelected.equals("friends")){
-    		findViewById(R.id.user_view_events).setVisibility(View.GONE);
-    		findViewById(R.id.user_view_friends).setVisibility(View.VISIBLE);
+			findViewById(R.id.user_view_followers_button).setSelected(false);
+			findViewById(R.id.user_view_following_button).setSelected(false);
+
+			findViewById(R.id.user_view_events).setVisibility(View.VISIBLE);
+	        findViewById(R.id.user_view_followers).setVisibility(View.GONE);
+	        findViewById(R.id.user_view_following).setVisibility(View.GONE);
+    	}else if (tabSelected.equals("followers")){
 			findViewById(R.id.user_view_events_button).setSelected(false);
-			findViewById(R.id.user_view_friends_button).setSelected(true);
+			findViewById(R.id.user_view_followers_button).setSelected(true);
+			findViewById(R.id.user_view_following_button).setSelected(false);
+
+			findViewById(R.id.user_view_events).setVisibility(View.GONE);
+	        findViewById(R.id.user_view_followers).setVisibility(View.VISIBLE);
+	        findViewById(R.id.user_view_following).setVisibility(View.GONE);
+    	}else if (tabSelected.equals("following")){
+			findViewById(R.id.user_view_events_button).setSelected(false);
+			findViewById(R.id.user_view_followers_button).setSelected(false);
+			findViewById(R.id.user_view_following_button).setSelected(true);
+
+			findViewById(R.id.user_view_events).setVisibility(View.GONE);
+	        findViewById(R.id.user_view_followers).setVisibility(View.GONE);
+	        findViewById(R.id.user_view_following).setVisibility(View.VISIBLE);
     	}
     }
     
@@ -181,14 +195,16 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 				Images.Media.INTERNAL_CONTENT_URI), SELECT_AVATAR);
 	}
 	
-	private void befriend(){
-		getUserManager(true).befriend(BEFRIEND);
+	private void follow(){
+		getUserManager(true).follow(FOLLOW);
+        loadingDialog = ProgressDialog.show(this, "", "Following...", true);
 		operationsPending++;
 		setRefreshing(true);
 	}
 	
-	private void unfriend(){
-		getUserManager(true).unfriend(BEFRIEND);
+	private void unfollow(){
+		getUserManager(true).unfollow(UNFOLLOW);
+        loadingDialog = ProgressDialog.show(this, "", "Unfollowing...", true);
 		operationsPending++;
 		setRefreshing(true);
 	}
@@ -218,25 +234,29 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 
 	public void onClick(View v) {
     	if (v.getId() == R.id.ab_refresh) refresh();
-    	else if (v.getId() == R.id.ab_user_search) startActivity(
-    			new Intent(this, UserSearch.class));
-    	else if (v.getId() == R.id.user_view_avatar) changeAvatar();
-    	else if (v.getId() == R.id.user_view_befriend) befriend();
-    	else if (v.getId() == R.id.user_view_unfriend) unfriend();
-    	else if (v.getId() == R.id.user_view_friends_button) updateTab("friends");
-    	else if (v.getId() == R.id.user_view_events_button) updateTab("events");
+    	else if (v.getId() == R.id.ab_user_search) 
+    		startActivity(new Intent(this, UserSearch.class));
+    	else if (v.getId() == R.id.user_view_avatar) 
+    		changeAvatar();
+    	else if (v.getId() == R.id.user_view_follow) 
+    		follow();
+    	else if (v.getId() == R.id.user_view_unfollow) 
+    		unfollow();
+    	else if (v.getId() == R.id.user_view_events_button) 
+    		updateTab("events");
+    	else if (v.getId() == R.id.user_view_followers_button) 
+    		updateTab("followers");
+    	else if (v.getId() == R.id.user_view_following_button) 
+    		updateTab("following");
 	}
 	
 	private void refresh(){
 		getUserManager(true).refreshUser(REFRESH_USER);
-		getUserManager(true).refreshFriends(false, REFRESH_FRIENDS);
-		if (username.equals(curUsername)){
-			getUserManager(true).refreshFriends(true, REFRESH_PENDING_FRIENDS);
-			operationsPending++;
-		}
+		getUserManager(true).refreshFollowers(REFRESH_FOLLOWERS);
+		getUserManager(true).refreshFollowing(REFRESH_FOLLOWING);
 		new EventManager(this, this, Filter.CREATED, username)
 				.refreshRevisions(REFRESH_EVENTS);
-		operationsPending += 3;
+		operationsPending += 4;
 		setRefreshing(true);
 	}
 
@@ -244,29 +264,33 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 		if (code == REFRESH_USER){
 			user = getUserManager().getUser();
 			updateUser();
-		}else if (code == REFRESH_FRIENDS || code == REFRESH_PENDING_FRIENDS){
-			updateFriends();
 		}else if (code == REFRESH_EVENTS){
 			updateEvents();
-		}else if (code == BEFRIEND){
-			findViewById(R.id.user_view_befriend).setVisibility(View.GONE);
+		}else if (code == REFRESH_FOLLOWERS){
+			updateFollowers();
+		}else if (code == REFRESH_FOLLOWING){
+			updateFollowing();
+		}else if (code == FOLLOW){
+			findViewById(R.id.user_view_follow).setVisibility(View.GONE);
+			loadingDialog.dismiss();
+			getUserManager(true).refreshUser(REFRESH_USER);
+			operationsPending++;
+		}else if (code == UNFOLLOW){
+			findViewById(R.id.user_view_unfollow).setVisibility(View.GONE);
+			loadingDialog.dismiss();
+			getUserManager(true).refreshUser(REFRESH_USER);
+			operationsPending++;
 		}else if (code == UPLOAD_AVATAR){
 			updateUser();
-		}else if (code == CONFIRM_USER){
-			new UserManager(this, this, curUsername).refreshFriends(true, 
-					REFRESH_PENDING_FRIENDS);
-			operationsPending++;
 		}
 		operationsPending--;
-		if (operationsPending <= 0){
-			// refresh friends can return from more then one request 
-			// if the friends aren't cached.
-			operationsPending = 0;
+		if (operationsPending == 0){
 			setRefreshing(false);
 		}
 	}
 
 	public void onRemoteError(int httpStatus, String response, int code) {
+		if (loadingDialog != null) loadingDialog.dismiss();
 		operationsPending--;
 		if (operationsPending == 0)
 			setRefreshing(false);

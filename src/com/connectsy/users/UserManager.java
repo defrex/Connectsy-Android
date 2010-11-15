@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.DataManager;
@@ -22,8 +21,9 @@ public class UserManager extends DataManager {
 
 	private static final int GET_USER = 0;
 	private static final int UPLOAD_AVATAR = 1;
-	private static final int BEFRIEND = 2;
-	private static final int UNFRIEND = 3;
+	private static final int GET_FOLLOWING = 2;
+	private static final int GET_FOLLOWERS = 3;
+	private static final int FOLLOW = 4;
 	
 	private String username;
 	
@@ -31,9 +31,9 @@ public class UserManager extends DataManager {
 		public String username;
 		public String display_name;
 		public String id;
-		public Integer friendStatus;
 		public Integer created;
-		public Boolean friendStatusPending = false;
+		public Boolean following;
+		public Boolean follower;
 		
 		public User(){}
 		
@@ -45,10 +45,10 @@ public class UserManager extends DataManager {
 				username = user.getString("username");
 			if (user.has("display_name"))
 				display_name = user.getString("display_name");
-			if (user.has("friend_status"))
-				friendStatus = user.getInt("friend_status");
-			if (user.has("friend_status_pending"))
-				friendStatusPending = user.getBoolean("friend_status_pending");
+			if (user.has("following"))
+				following = user.getBoolean("following");
+			if (user.has("follower"))
+				follower = user.getBoolean("follower");
 			if (user.has("created"))
 				created = user.getInt("created");
 		}
@@ -66,10 +66,10 @@ public class UserManager extends DataManager {
 					ret.put("display_name", display_name);
 				if (created != null)
 					ret.put("created", created);
-				if (friendStatusPending != null)
-					ret.put("friendStatusPending", friendStatusPending);
-				if (friendStatus != null)
-					ret.put("friendStatus", friendStatus);
+				if (following != null)
+					ret.put("following", following);
+				if (follower != null)
+					ret.put("follower", follower);
 				if (id != null)
 					ret.put("id", id);
 			} catch (JSONException e) {
@@ -78,7 +78,8 @@ public class UserManager extends DataManager {
 			return ret.toString();
 		}
 		
-		public static ArrayList<User> deserializeList(String usersStr) throws JSONException{
+		public static ArrayList<User> deserializeList(String usersStr) 
+				throws JSONException{
 			JSONArray usersJSON = new JSONArray(usersStr);
 			ArrayList<User> users = new ArrayList<User>();
 			for(int i=0;i<usersJSON.length();i++)
@@ -94,10 +95,11 @@ public class UserManager extends DataManager {
 		}
 	}
 	
-	public UserManager(Context c, DataUpdateListener passedListener, String pUsername) {
+	public UserManager(Context c, DataUpdateListener passedListener, 
+			String username) {
 		super(c, passedListener);
-		if (pUsername != null){
-			username = pUsername;
+		if (username != null){
+			this.username = username;
 		}else{
 			username = UserManager.currentUsername(c);
 		}
@@ -117,64 +119,79 @@ public class UserManager extends DataManager {
 	
 	public void refreshUser(int sentReturnCode){
 		returnCode = sentReturnCode;
-		Log.d(TAG, "refreshUser");
 		new ApiRequest(this, context, Method.GET, 
 				"/users/"+username+"/", true, GET_USER).execute();
 	}
 	
-	private ApiRequest getFriendsRequest(boolean pending){
+	private ApiRequest getFollowingRequest(){
 		ApiRequest r = new ApiRequest(this, context, Method.GET, 
-				"/users/"+username+"/friends/", true, GET_USER);
-		if (pending) r.addGetArg("pending", "true");
+				"/users/"+username+"/following/", true, GET_FOLLOWING);
 		return r;
 	}
 
-	public ArrayList<User> getFriends(boolean pending){
-		return getFriends(pending, false);
-	}
-	public ArrayList<User> getFriends(boolean pending, boolean returnNull){
-		String friendString = getFriendsRequest(pending).getCached();
-		ArrayList<User> friends = new ArrayList<User>();
-		if (friendString != null){
-			try {
-				JSONArray jsonFriends = new JSONObject(friendString).getJSONArray("friends");
-				for (int i=0;i<jsonFriends.length();i++){
-					ApiRequest r = new ApiRequest(this, context, Method.GET, 
-							"/users/"+jsonFriends.getString(i)+"/", true, GET_USER);
-					String uString = r.getCached();
-					if (uString != null){
-						JSONObject userJSON = new JSONObject(uString);
-						userJSON.put("friend_status_pending", pending);
-						friends.add(new User(userJSON.toString()));
-					}else{
-						r.execute();
-					}
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}else if (returnNull){
+	public ArrayList<String> getFollowing(){
+		String followingString = getFollowingRequest().getCached();
+		if (followingString == null)
 			return null;
+		ArrayList<String> following = new ArrayList<String>();
+		try {
+			JSONArray jsonFollowing = new JSONArray(followingString);
+			for (int i=0;i<jsonFollowing.length();i++){
+				following.add(jsonFollowing.getString(i));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		return friends;
+		return following;
 	}
 	
-	public void refreshFriends(boolean pending, int sentReturnCode){
-		returnCode = sentReturnCode;
-		getFriendsRequest(pending).execute();
-	}
-	
-	public void befriend(int sentReturnCode){
-		returnCode = sentReturnCode;
-		new ApiRequest(this, context, Method.POST, 
-				"/users/"+username+"/friends/", true, BEFRIEND).execute();
-	}
-	
-	public void unfriend(int returnCode){
+	public void refreshFollowing(int returnCode){
 		this.returnCode = returnCode;
-		new ApiRequest(this, context, Method.DELETE, 
-				"/users/"+currentUsername(context)+"/friends/"+username+"/", 
-				true, UNFRIEND).execute();
+		getFollowingRequest().execute();
+	}
+	
+	private ApiRequest getFollowersRequest(){
+		ApiRequest r = new ApiRequest(this, context, Method.GET, 
+				"/users/"+username+"/followers/", true, GET_FOLLOWERS);
+		return r;
+	}
+
+	public ArrayList<String> getFollowers(){
+		String followersString = getFollowersRequest().getCached();
+		if (followersString == null)
+			return null;
+		ArrayList<String> followers = new ArrayList<String>();
+		try {
+			JSONArray jsonFollowers = new JSONArray(followersString);
+			for (int i=0;i<jsonFollowers.length();i++){
+				followers.add(jsonFollowers.getJSONObject(i)
+						.getString("username"));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return followers;
+	}
+	
+	public void refreshFollowers(int returnCode){
+		this.returnCode = returnCode;
+		getFollowersRequest().execute();
+	}
+	
+	public void follow(int returnCode){
+		this.returnCode = returnCode;
+		ApiRequest r = new ApiRequest(this, context, Method.POST, 
+				"/users/"+username+"/followers/", true, FOLLOW);
+		r.setBodyString("{\"follow\": true}");
+		r.execute();
+	}
+	
+	public void unfollow(int returnCode){
+		this.returnCode = returnCode;
+		ApiRequest r = new ApiRequest(this, context, Method.POST, 
+				"/users/"+username+"/following/", true, FOLLOW);
+		r.setBodyString("{\"follow\": false}");
+		r.execute();
 	}
 	
 	public void uploadAvatar(Uri avatar, int returnCode) throws IOException{

@@ -1,7 +1,6 @@
 package com.connectsy.users;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,99 +8,58 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.connectsy.R;
 import com.connectsy.data.AvatarFetcher;
-import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.users.UserManager.User;
 
-public class UserAdapter extends ArrayAdapter<User> {
-	private boolean multi;
-	private DataUpdateListener listener;
-	private int returnCode;
-	private HashMap<Integer, Boolean> selected = new HashMap<Integer, Boolean>();
-
-	public UserAdapter(Context context, DataUpdateListener listener, int viewResourceId,
-			ArrayList<User> users, boolean selectMultiple, int returnCode) {
-		super(context, viewResourceId, users);
-		multi = selectMultiple;
-		this.listener = listener;
-		this.returnCode = returnCode;
+public class UserAdapter extends ArrayAdapter<String> {
+	private int viewId;
+	
+	public UserAdapter(Context context, ArrayList<String> usernames) {
+		super(context, R.layout.user_list_item, usernames);
+		viewId = R.layout.user_list_item;
 	}
 
-	public UserAdapter(Context context, int viewResourceId,
-			ArrayList<User> users, boolean selectMultiple) {
-		super(context, viewResourceId, users);
-		multi = selectMultiple;
+	public UserAdapter(Context context, int textViewResourceId, 
+			ArrayList<String> usernames) {
+		super(context, textViewResourceId, usernames);
+		viewId = textViewResourceId;
 	}
 	
-	public ArrayList<User> getSelected(){
-		ArrayList<User> users = new ArrayList<User>();
-		for (HashMap.Entry<Integer, Boolean> entry : selected.entrySet()) {
-			if (entry.getValue()){
-				users.add(getItem(entry.getKey()));
-			}
-		}
-		return users;
+	public void update(ArrayList<String> usernames){
+		setNotifyOnChange(false);
+		clear();
+		for (String username: usernames) 
+			add(username);
+		notifyDataSetChanged();
 	}
 	
 	@Override
-	public View getView (final int position, View convertView, ViewGroup parent) {
+	public View getView (final int position, View view, ViewGroup parent) {
 		final Context context = getContext();
-		final User user = getItem(position);
+		final String username = getItem(position);
 		
-		LayoutInflater inflater = LayoutInflater.from(context);
-		final View view = inflater.inflate(R.layout.user_list_item, parent, false);
-        
-		if (multi){
-			CheckBox sel = (CheckBox)view.findViewById(R.id.user_list_item_select);
-			sel.setVisibility(CheckBox.VISIBLE);
-			sel.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-			    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-			    	selected.put(position, isChecked);
-			    }
-			});
+		if (view == null){
+			LayoutInflater inflater = LayoutInflater.from(context);
+			view = inflater.inflate(viewId, parent, false);
 		}
 		
-        TextView username = (TextView)view.findViewById(R.id.user_list_item_username);
-        username.setText(user.username);
-        username.setOnClickListener(new TextView.OnClickListener(){
+        TextView usernameField = (TextView)view.findViewById(
+        		R.id.user_list_item_username);
+        usernameField.setText(username);
+        usernameField.setOnClickListener(new TextView.OnClickListener(){
 			public void onClick(View v) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-				i.putExtra("com.connectsy.user.username", user.username);
+				i.putExtra("com.connectsy.user.username", username);
 	    		context.startActivity(i);
 			}
         });
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
-        new AvatarFetcher(user.username, avatar, false);
-        
-        if (user.friendStatusPending){
-        	Button confirm = (Button)view.findViewById(R.id.user_list_item_confirm);
-        	confirm.setVisibility(Button.VISIBLE);
-        	confirm.setOnClickListener(new Button.OnClickListener(){
-    			public void onClick(View v) {
-    				UserManager manager = new UserManager(context, new DataUpdateListener(){
-						public void onDataUpdate(int code, String response) {
-							listener.onDataUpdate(code, response);
-							view.findViewById(R.id.user_list_item_confirm)
-								.setVisibility(View.GONE);
-						}
-						public void onRemoteError(int httpStatus, String response, int code) {
-							listener.onRemoteError(httpStatus, response, code);
-						}
-    				}, user.username);
-    				manager.befriend(returnCode);
-    			}
-            });
-        }
+        new AvatarFetcher(username, avatar, false);
         
         return view;
 	}
