@@ -36,7 +36,7 @@
     </style>
     
     <style name="Main" parent="FillAll">
-        <item name="android:background">#ffffff</item>
+        <item name="android:background">@color/main_background</item>
     </style>
     
     <style name="Text" parent="WrapAll">
@@ -103,20 +103,21 @@
     <style name="TabBar" parent="FullWidth">
         <item name="android:orientation">horizontal</item>
     </style>
-        <style name="TabBarButton" parent="Button">
+        <style name="TabBarButton" parent="FullWidth">
             <item name="android:layout_margin">0dp</item>
-            <item name="android:layout_width">fill_parent</item>
             <item name="android:layout_weight">1</item>
-            <item name="android:textColor">@color/text_grey</item>
-            <item name="android:shadowRadius">0</item>
+	        <item name="android:textColor">@color/text_grey</item>
+	        <item name="android:textStyle">bold</item>
+	        <item name="android:textSize">16sp</item>
+            <item name="android:gravity">center</item>
+            <item name="android:padding">10dp</item>
+            <item name="android:background">@color/main_background</item>
         </style>
         <style name="TabBarButtonLeft" parent="TabBarButton">
             <item name="android:background">@drawable/tabbar_button_left</item>
-            <item name="android:layout_marginRight">5dp</item>
         </style>
         <style name="TabBarButtonMiddle" parent="TabBarButton">
             <item name="android:background">@drawable/tabbar_button_middle</item>
-            <item name="android:layout_marginRight">5dp</item>
         </style>
         <style name="TabBarButtonRight" parent="TabBarButton">
             <item name="android:background">@drawable/tabbar_button_right</item>
@@ -222,7 +223,7 @@
 		    <style name="ActionBarSeparator">
 		        <item name="android:layout_width">2px</item>
 		        <item name="android:layout_height">@dimen/actionbar_height</item>
-	            <item name="android:src">@drawable/actionbar_seperator</item>
+	            <item name="android:background">@drawable/actionbar_seperator</item>
 		    </style>
     
     <style name="Dashboard">
@@ -352,6 +353,7 @@
                 <item name="android:padding">10dp</item>
                 <item name="android:clickable">true</item>
                 <item name="android:focusable">true</item>
+                <item name="android:inputType">textCapSentences|textAutoCorrect</item>
             </style>
 		<style name="EventNewWho" parent="Toggle">
             <item name="android:layout_width">fill_parent</item>

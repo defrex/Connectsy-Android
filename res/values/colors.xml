@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="consy_green">#ff35a09f</color>
-    <color name="consy_dark_green">#ff246e6d</color>
-    <color name="consy_lime">#ffccf8a4</color>
-    <color name="text_green">#ff25706f</color>
-    <color name="text_grey">#ff444444</color>
-    <color name="text_light_grey">#ff666666</color>
-    <color name="link_blue">#ff2671A8</color>
-    <color name="light_grey">#ff444444</color>
+    <color name="consy_green">#35a09f</color>
+    <color name="consy_dark_green">#246e6d</color>
+    <color name="consy_lime">#ccf8a4</color>
+    <color name="text_green">#25706f</color>
+    <color name="text_grey">#444444</color>
+    <color name="text_light_grey">#666666</color>
+    <color name="link_blue">#2671A8</color>
+    <color name="light_grey">#444444</color>
     
-    <color name="actionbar_separator">#40ffffff</color>
+    <color name="main_background">#fff</color>
     
     <color name="button_text">#444444</color>
     <color name="highlight_button_text">#ff000000</color>
