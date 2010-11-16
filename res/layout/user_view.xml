@@ -56,7 +56,7 @@
     <LinearLayout style="@style/TabBar">
         <Button style="@style/TabBarButtonLeft"
             android:id="@+id/user_view_events_button"
-            android:text="Events"/>
+            android:text="Plans"/>
         <Button style="@style/TabBarButtonMiddle"
             android:id="@+id/user_view_followers_button"
             android:text="Followers"/>

@@ -189,7 +189,7 @@ public class UserManager extends DataManager {
 	public void unfollow(int returnCode){
 		this.returnCode = returnCode;
 		ApiRequest r = new ApiRequest(this, context, Method.POST, 
-				"/users/"+username+"/following/", true, FOLLOW);
+				"/users/"+username+"/followers/", true, FOLLOW);
 		r.setBodyString("{\"follow\": false}");
 		r.execute();
 	}

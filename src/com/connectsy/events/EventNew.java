@@ -71,7 +71,7 @@ public class EventNew extends Activity implements OnClickListener,
         			public void onTextChanged(CharSequence s, int start, 
         					int before, int count) {
         				((TextView)findViewById(R.id.ab_char_counter))
-        						.setText(Integer.toString(150-s.length()));
+        						.setText(Integer.toString(140-s.length()));
         			}
                 });
         ((TextView) findViewById(R.id.events_new_where))

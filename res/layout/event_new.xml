@@ -46,7 +46,7 @@
         
         <EditText style="@style/EventNewOptionInput"
             android:hint="@string/events_new_what"
-            android:maxLength="150"
+            android:maxLength="140"
             android:id="@+id/events_new_what"
             android:layout_height="100dp"/>
         

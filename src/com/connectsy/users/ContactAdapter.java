@@ -63,12 +63,13 @@ public class ContactAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Contact contact = getItem(position);
-		LayoutInflater inflater = LayoutInflater.from(activity);
 		View view;
-		if (convertView != null)
+		if (convertView != null){
 			view = convertView;
-		else
-			view = inflater.inflate(R.layout.user_list_item, parent, false);
+		}else{
+			view = LayoutInflater.from(activity).inflate(
+					R.layout.user_list_item, parent, false);
+		}
 		
 		CheckBox sel = (CheckBox)view.findViewById(R.id.user_list_item_select);
 		sel.setVisibility(CheckBox.VISIBLE);
@@ -80,6 +81,8 @@ public class ContactAdapter extends BaseAdapter {
 		});
 		if (contactsSelected.containsKey(contact.number))
 			sel.setChecked(contactsSelected.get(contact.number).first);
+		else
+			sel.setChecked(false);
 		
         TextView name = (TextView)view.findViewById(R.id.user_list_item_username);
         name.setText(contact.displayName);
@@ -88,6 +91,9 @@ public class ContactAdapter extends BaseAdapter {
         if (contact.starred)
         	view.findViewById(R.id.user_list_item_star)
         			.setVisibility(View.VISIBLE);
+        else
+        	view.findViewById(R.id.user_list_item_star)
+			.setVisibility(View.GONE);
     	
         TextView number = (TextView)view.findViewById(R.id.user_list_item_detail);
         number.setText(contact.displayType +": "+ contact.displayNumber);
@@ -97,11 +103,12 @@ public class ContactAdapter extends BaseAdapter {
         ContentResolver cr = activity.getContentResolver();
         Uri lookupUri = Uri.withAppendedPath(Contacts.CONTENT_LOOKUP_URI, 
         		contact.lookupKey);
-        Log.d(TAG, "lookup uri:"+lookupUri);
         Uri uri = Contacts.lookupContact(cr, lookupUri);
         InputStream input = Contacts.openContactPhotoInputStream(cr, uri);
         if (input != null) 
              avatar.setImageBitmap(BitmapFactory.decodeStream(input));
+        else
+        	avatar.setImageResource(R.drawable.avatar_default);
 
         return view;
 	}
