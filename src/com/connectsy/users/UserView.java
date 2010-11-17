@@ -84,6 +84,21 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 				startActivity(i);
 			}
         });
+        
+        OnItemClickListener userClickListener = new OnItemClickListener(){
+			public void onItemClick(AdapterView<?> view, View itemView, 
+					int position, long id) {
+				String username = (String) view.getAdapter().getItem(position);
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+				i.putExtra("com.connectsy.user.username", username);
+				startActivity(i);
+			}
+        };
+        ((ListView) findViewById(R.id.user_view_followers))
+				.setOnItemClickListener(userClickListener);
+        ((ListView) findViewById(R.id.user_view_following))
+				.setOnItemClickListener(userClickListener);
 
 		user = getUserManager().getUser();
 		updateUser();

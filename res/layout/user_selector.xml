@@ -27,7 +27,7 @@
         <LinearLayout style="@style/UserSelectorDone" >
             <View style="@style/Spring" />
             <Button style="@style/Button"
-                android:text="Select Friends"
+                android:text="Select Followers"
                 android:id="@+id/user_select_done" />
         </LinearLayout>
     </LinearLayout>

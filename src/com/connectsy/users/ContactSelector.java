@@ -28,6 +28,7 @@ public class ContactSelector extends Activity implements OnClickListener {
         
         Button done = (Button)findViewById(R.id.user_select_done);
         done.setOnClickListener(this);
+        done.setText("Select Contacts");
         
         Bundle e = getIntent().getExtras();
         if (e != null){

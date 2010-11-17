@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.R;
 import com.connectsy.data.DataManager.DataUpdateListener;
@@ -40,6 +42,18 @@ public class AttendantList extends Activity implements OnClickListener,
         
         ListView lv = (ListView)findViewById(R.id.attendants_list);
         lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView<?> view, View itemView, 
+					int position, long id) {
+				Attendant att = (Attendant) view.getAdapter().getItem(position);
+				if (att.username != null){
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+					i.putExtra("com.connectsy.user.username", att.username);
+					startActivity(i);
+				}
+			}
+        });
         refresh();
     }
 
