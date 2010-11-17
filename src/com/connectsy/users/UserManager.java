@@ -207,14 +207,8 @@ public class UserManager extends DataManager {
 	}
 	
 	public static User currentUser(Context context){
-		String userJSON = UserManager.getCache(context).getString("user", null);
-		if (userJSON != null)
-			try {
-				return new User(userJSON);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		return null;
+		return new UserManager(context, null, 
+				UserManager.currentUsername(context)).getUser();
 	}
 	
 	@Override

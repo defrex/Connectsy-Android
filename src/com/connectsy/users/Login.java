@@ -18,9 +18,10 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
+import com.connectsy.data.DataManager.DataUpdateListener;
 
 public class Login extends Activity implements OnClickListener, 
-		ApiRequestListener {
+		ApiRequestListener, DataUpdateListener {
 	private ProgressDialog loadingDialog;
 	static final int ACTIVITY_REGISTER = 0;
 	private static final String TAG = "Login";
@@ -82,7 +83,6 @@ public class Login extends Activity implements OnClickListener,
     }
     
 	public void onApiRequestFinish(int status, String strResponse, int code){
-		if (loadingDialog != null) loadingDialog.dismiss();
 		if (code == LOGIN){
 			SharedPreferences data = DataManager.getCache(this);
 	        SharedPreferences.Editor dataEditor = data.edit(); 
@@ -90,8 +90,7 @@ public class Login extends Activity implements OnClickListener,
 	        dataEditor.putString("username", username);
 	        dataEditor.commit();
 
-			startActivity(new Intent(this, Dashboard.class));
-    		this.finish();
+	        new UserManager(this, this, username).refreshUser(0);
 		}
 	}
 
@@ -110,5 +109,15 @@ public class Login extends Activity implements OnClickListener,
 			Log.e(TAG, "an API error occured with httpStatus: "+
 					Integer.toString(status));
 		}
+	}
+
+	public void onDataUpdate(int code, String response) {
+		if (loadingDialog != null) loadingDialog.dismiss();
+		startActivity(new Intent(this, Dashboard.class));
+		this.finish();
+	}
+
+	public void onRemoteError(int httpStatus, String response, int code) {
+		if (loadingDialog != null) loadingDialog.dismiss();
 	}
 }
