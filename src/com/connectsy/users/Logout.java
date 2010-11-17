@@ -3,9 +3,7 @@ package com.connectsy.users;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.connectsy.Launcher;
 import com.connectsy.data.DataManager;
 
 public class Logout extends Activity {
@@ -19,8 +17,7 @@ public class Logout extends Activity {
 		i.setAction("com.connectsy.STOP_NOTIFICATIONS");
 		stopService(i);
         
-        Log.d("auth", "logged out, starting Launcher");
-        startActivity(new Intent(this, Launcher.class));
+        startActivity(new Intent(this, Login.class));
         this.finish();
     }
 }
