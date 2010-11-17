@@ -39,14 +39,14 @@ public class EventNotification extends NotificationHandlerBase implements DataUp
 			if (!prefs.getBoolean("preference_notifications_private", true) &&
 					!event.broadcast)
 				return;
-			title = "New Event";
-			body = event.creator + " is going to " + event.where + ".";
+			title = event.creator + " shared a plan";
+			body = event.what;
 			i = new Intent(Intent.ACTION_VIEW);
 			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
 			i.putExtra("com.connectsy.events.revision", event.revision);
 		} else {
-			title = "New Events";
-			body = notifications.size() + " new events by your friends.";
+			title = notifications.size()+" plans shared";
+			body = "";
 			i = new Intent(context, EventList.class);
 			i.putExtra("filter", EventManager.Filter.INVITED);
 		}

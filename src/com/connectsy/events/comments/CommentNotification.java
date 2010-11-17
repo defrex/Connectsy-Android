@@ -50,20 +50,20 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 				return;
 			}
 			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+			i.setType("vnd.android.cursor.dir/vnd.connectsy.comments");
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
 			if (notifications.size() == 1) {
 				String commenter = notifications.get(0).getString("commenter");
-				title = "New Connectsy Comment";
-				body = commenter + " commented on " + event.where + ".";
+				title = commenter+" posted a comment";
+				body = notifications.get(0).getString("comment");
 			} else {
-				title = "New Connectsy Comments";
-				body = notifications.size() + " new comments on " + event.where + ".";
+				title = notifications.size()+" comments";
+				body = "";
 			}
 		}else{
-			title = "New Connectsy Comments";
-			body = notifications.size() + " new comments on events you're attending.";
+			title = notifications.size()+" comments";
+			body = "";
 			i = new Intent(context, EventList.class);
 			i.putExtra("filter", EventManager.Filter.INVITED);
 		}

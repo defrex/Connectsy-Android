@@ -51,20 +51,20 @@ public class AttendantNotification extends NotificationHandlerBase implements
 				return;
 			}
 			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+			i.setType("vnd.android.cursor.dir/vnd.connectsy.attendant");
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
 			if (notifications.size() == 1) {
 				String att = notifications.get(0).getString("attendant");
-				title = att+" is in on Connectsy";
-				body = att + " will come to " + event.where + ".";
+				title = att+" is in";
+				body = "plan: "+event.what;
 			} else {
-				title = "New people in on Connectsy";
-				body = notifications.size() + " new people are coming to " + event.where + ".";
+				title = notifications.size()+" users are in";
+				body = "";
 			}
 		}else{
-			title = "New people in on Connectsy";
-			body = notifications.size() + " new are in on Connectsy.";
+			title = notifications.size()+" users are in";
+			body = "";
 			i = new Intent(context, EventList.class);
 			i.putExtra("filter", EventManager.Filter.INVITED);
 		}
