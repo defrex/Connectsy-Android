@@ -21,7 +21,7 @@ import com.connectsy.data.ApiRequest.Method;
 import com.connectsy.data.DataManager.DataUpdateListener;
 
 public class UserSearch extends Activity implements OnClickListener, 
-		ApiRequestListener, DataUpdateListener{
+		ApiRequestListener{
 	@SuppressWarnings("unused")
 	private static final String TAG = "UserSearch";
 	private static final int SEARCH_USERS = 2;
@@ -35,37 +35,7 @@ public class UserSearch extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_search);
         
-        ImageView search = (ImageView)findViewById(R.id.ab_user_search);
-        search.setOnClickListener(this);
-
-//		ListView resultList = (ListView)findViewById(R.id.user_search_results);
-//		resultList.setOnItemClickListener(new OnItemClickListener(){
-//			public void onItemClick(AdapterView<?> listView, View userView, 
-//					int position, long id) {
-//				User user = (User) listView.getAdapter().getItem(position);
-//				Intent i = new Intent(Intent.ACTION_VIEW);
-//				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-//				i.putExtra("com.connectsy.user.username", user.username);
-//				startActivity(i);
-//			}
-//        });
-//        EditText box = (EditText) findViewById(R.id.user_search_box);
-//        box.addTextChangedListener(new TextWatcher(){
-//			public void afterTextChanged(Editable s) {
-//				if (canRequest){
-//					if (!requestPending) doSearch();
-//					canRequest = false;
-//					new Handler().postDelayed(new Runnable() {
-//						public void run() {
-//							Log.d(TAG, "setting canRequest");
-//							canRequest = true;
-//						}
-//					}, 500);
-//				}
-//			}
-//			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//			public void onTextChanged(CharSequence s, int start, int before, int count) {}
-//        });
+        findViewById(R.id.ab_user_search).setOnClickListener(this);
     }
 
     private void updateDisplay(String response){
@@ -94,6 +64,7 @@ public class UserSearch extends Activity implements OnClickListener,
         String q = search.getText().toString();
         if (!q.equals("")){
 			requestPending = true;
+			setRefreshing(true);
 			ApiRequest r = new ApiRequest(this, this, Method.GET, "/users/", 
 					true, SEARCH_USERS);
 			r.addGetArg("q", q);
@@ -104,20 +75,22 @@ public class UserSearch extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		doSearch();
 	}
+	
+    private void setRefreshing(boolean on) {
+    	if (on){
+	        findViewById(R.id.ab_user_search).setVisibility(View.GONE);
+	        findViewById(R.id.ab_refresh_spinner).setVisibility(View.VISIBLE);
+    	}else{
+	        findViewById(R.id.ab_user_search).setVisibility(View.VISIBLE);
+	        findViewById(R.id.ab_refresh_spinner).setVisibility(View.GONE);
+    	}
+    }
 
 	public void onApiRequestFinish(int status, String response, int code) {
 		requestPending = false;
+		setRefreshing(false);
 		updateDisplay(response);
 	}
-
-	public void onDataUpdate(int code, String response) {
-		updateDisplay(null);
-	}
-
-	private UserManager manager(String username){
-		return new UserManager(this, this, username);
-	}
-
+	
 	public void onApiRequestError(int httpStatus, String response, int retCode) {}
-	public void onRemoteError(int httpStatus, String response, int code) {}
 }

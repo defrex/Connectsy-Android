@@ -16,6 +16,10 @@
             <ImageView style="@style/ActionBarAction"
                 android:id="@+id/ab_user_search"
                 android:src="@drawable/icon_search" />
+            <ProgressBar style="@style/ActionBarAction"
+                android:id="@+id/ab_refresh_spinner"
+                android:src="@drawable/icon_refresh"
+                android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
     
