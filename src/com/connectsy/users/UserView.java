@@ -13,10 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
@@ -27,7 +29,6 @@ import com.connectsy.events.EventsAdapter;
 import com.connectsy.events.EventManager.Filter;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager.User;
-import com.connectsy.utils.Utils;
 
 public class UserView extends Activity implements OnClickListener, DataUpdateListener {
 	@SuppressWarnings("unused")
@@ -72,17 +73,17 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
         findViewById(R.id.user_view_following_button).setOnClickListener(this);
         findViewById(R.id.user_view_follow).setOnClickListener(this);
         findViewById(R.id.user_view_unfollow).setOnClickListener(this);
-//        ListView events = (ListView)findViewById(R.id.user_view_list);
-//        events.setOnItemClickListener(new OnItemClickListener(){
-//			public void onItemClick(AdapterView<?> eventsView, View eventView, 
-//					int position, long id) {
-//				String rev = (String) eventsView.getAdapter().getItem(position);
-//				Intent i = new Intent(Intent.ACTION_VIEW);
-//				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-//				i.putExtra("com.connectsy.events.revision", rev);
-//				startActivity(i);
-//			}
-//        });
+        ListView events = (ListView)findViewById(R.id.user_view_events);
+        events.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView<?> eventsView, View eventView, 
+					int position, long id) {
+				String rev = (String) eventsView.getAdapter().getItem(position);
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+				i.putExtra("com.connectsy.events.revision", rev);
+				startActivity(i);
+			}
+        });
 
 		user = getUserManager().getUser();
 		updateUser();
@@ -129,7 +130,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     }
     
     private void updateFollowing(){
-		ArrayList<String> following = getUserManager().getFollowers();
+		ArrayList<String> following = getUserManager().getFollowing();
 		if (following == null) return;
         
         if (followingAdapter != null){
@@ -137,7 +138,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
         }else{
 	        followingAdapter = new UserAdapter(this, following);
 	        ((ListView) findViewById(R.id.user_view_following))
-    		.setAdapter(followingAdapter);
+    			.setAdapter(followingAdapter);
         }
 		//Utils.setFooterView(this, lv);
     }
@@ -274,12 +275,14 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 			findViewById(R.id.user_view_follow).setVisibility(View.GONE);
 			loadingDialog.dismiss();
 			getUserManager(true).refreshUser(REFRESH_USER);
-			operationsPending++;
+			getUserManager(true).refreshFollowers(REFRESH_FOLLOWERS);
+			operationsPending += 2;
 		}else if (code == UNFOLLOW){
 			findViewById(R.id.user_view_unfollow).setVisibility(View.GONE);
 			loadingDialog.dismiss();
 			getUserManager(true).refreshUser(REFRESH_USER);
-			operationsPending++;
+			getUserManager(true).refreshFollowers(REFRESH_FOLLOWERS);
+			operationsPending += 2;
 		}else if (code == UPLOAD_AVATAR){
 			updateUser();
 		}

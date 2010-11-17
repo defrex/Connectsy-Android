@@ -136,9 +136,8 @@ public class UserManager extends DataManager {
 		ArrayList<String> following = new ArrayList<String>();
 		try {
 			JSONArray jsonFollowing = new JSONArray(followingString);
-			for (int i=0;i<jsonFollowing.length();i++){
+			for (int i=0;i<jsonFollowing.length();i++)
 				following.add(jsonFollowing.getString(i));
-			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -163,10 +162,8 @@ public class UserManager extends DataManager {
 		ArrayList<String> followers = new ArrayList<String>();
 		try {
 			JSONArray jsonFollowers = new JSONArray(followersString);
-			for (int i=0;i<jsonFollowers.length();i++){
-				followers.add(jsonFollowers.getJSONObject(i)
-						.getString("username"));
-			}
+			for (int i=0;i<jsonFollowers.length();i++)
+				followers.add(jsonFollowers.getString(i));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
