@@ -53,8 +53,12 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
         mCallback = callBack;
         
         cal = Calendar.getInstance();
-        if (timestamp != null)
+        if (timestamp != null){
         	cal.setTime(new Date(timestamp));
+        }else{
+        	cal.add(cal.get(Calendar.HOUR_OF_DAY), 1);
+        	cal.set(Calendar.MINUTE, 0);
+        }
         
         setButton("OK", this);
         setButton2("Cancel", (OnClickListener) null);

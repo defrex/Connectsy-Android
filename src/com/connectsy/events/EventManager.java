@@ -157,7 +157,7 @@ public class EventManager extends DataManager {
 		getEventRequest(revision).execute();
 	}
 
-	public void createEvent(Event event, ArrayList<User> users, 
+	public void createEvent(Event event, ArrayList<String> usernames, 
 				ArrayList<Contact> contacts, int returnCode) {
 		this.returnCode = returnCode;
 		
@@ -177,13 +177,8 @@ public class EventManager extends DataManager {
 				json.put("posted_from", jLoc);
 			}
 
-			if (users != null && !event.broadcast){
-				if (users.size() > 0){
-					JSONArray usersJSON = new JSONArray();
-					for (int i=0;i<users.size();i++)
-						usersJSON.put(users.get(i).username);
-					json.put("users", usersJSON);
-				}
+			if (usernames != null && !event.broadcast){
+				json.put("users", new JSONArray(usernames));
 			}
 			if (contacts != null && contacts.size() > 0){
 				JSONArray jsonContacts = new JSONArray();

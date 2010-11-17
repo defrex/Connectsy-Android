@@ -29,9 +29,9 @@ import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
-import com.connectsy.events.attendants.AttendantManager;
 import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager;
+import com.connectsy.users.UserSelector;
 import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
@@ -44,7 +44,7 @@ public class EventNew extends Activity implements OnClickListener,
 	private final String TAG = "NewEvent";
 	private ProgressDialog loadingDialog;
     private EventManager eventManager;
-    private ArrayList<User> chosenUsers;
+    private ArrayList<String> chosenUsers;
     private ArrayList<Contact> chosenContacts;
     private JSONObject eventJSON;
 	
@@ -116,9 +116,10 @@ public class EventNew extends Activity implements OnClickListener,
 	private void selectFriends(){
 		Intent i = new Intent(Intent.ACTION_CHOOSER);
 		i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-		if (chosenUsers != null)
+		if (chosenUsers != null){
 			i.putExtra("com.connectsy.users", 
-					User.serializeList(chosenUsers));
+					UserSelector.serializeUsers(chosenUsers));
+		}
 		startActivityForResult(i, SELECT_FRIENDS);
 	}
 	
@@ -135,17 +136,27 @@ public class EventNew extends Activity implements OnClickListener,
 		try {
 			if (resultCode == RESULT_OK && requestCode == SELECT_FRIENDS){
 				Bundle e = data.getExtras();
-				chosenUsers = User.deserializeList(
+				chosenUsers = UserSelector.deserializeUsers(
 						e.getString("com.connectsy.users"));
+				
+				String display = chosenUsers.size()+" follower";
+				if (chosenUsers.size() != 1)
+					display += "s";
+				display += " selected";
+				
 				((TextView)findViewById(R.id.events_new_friends_selected_text))
-					.setText(chosenUsers.size()+" friends selected.");
+					.setText(display);
 			}else if (resultCode == RESULT_OK && requestCode == SELECT_CONTACTS){
 				Bundle e = data.getExtras();
 				chosenContacts = Contact.deserializeList(
 						e.getString("com.connectsy.contacts"));
-				String display = chosenContacts.size()+" contacts selected.";
-				((TextView)findViewById(R.id.events_new_sms))
-					.setText(display);
+				
+				String display = chosenContacts.size()+" contact";
+				if (chosenContacts.size() != 1)
+					display += "s";
+				display += " selected";
+				
+				((TextView)findViewById(R.id.events_new_sms)).setText(display);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

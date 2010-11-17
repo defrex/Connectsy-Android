@@ -114,7 +114,7 @@
             android:paddingRight="10dp">
             <TextView style="@style/FormElementTitle"
                  android:id="@+id/events_new_friends_selected_text"
-                 android:text="No Friends Selected" />
+                 android:text="No Followers Selected" />
             <View style="@style/Spring" />
             <ImageView style="@style/WrapAll"
                 android:src="@drawable/icon_right_arrow_grey"/>

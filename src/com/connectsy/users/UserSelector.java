@@ -43,11 +43,8 @@ public class UserSelector extends Activity implements OnItemClickListener,
         if (e != null){
 			try {
 				if (e.containsKey("com.connectsy.users")){
-					JSONArray json = new JSONArray(
+					chosenUsers = deserializeUsers(
 							e.getString("com.connectsy.users"));
-					chosenUsers = new ArrayList<String>();
-					for (int i=0;i<json.length();i++)
-						chosenUsers.add(json.getString(i));
 				}if (e.containsKey("com.connectsy.contacts")){
 					chosenContacts = Contact.deserializeList(
 							e.getString("com.connectsy.contacts"));
@@ -83,7 +80,7 @@ public class UserSelector extends Activity implements OnItemClickListener,
 	
 	public void onClick(View v) {
 		if (v.getId() == R.id.user_select_done){
-			String users = new JSONArray(adapter.getSelectedFriends()).toString();
+			String users = serializeUsers(adapter.getSelectedFriends());
 			String contacts = Contact.serializeList(adapter.getSelectedContacts());
 			Intent i = new Intent();
 			i.putExtra("com.connectsy.users", users);
@@ -107,4 +104,21 @@ public class UserSelector extends Activity implements OnItemClickListener,
 	}
 
 	public void onRemoteError(int httpStatus, String response, int code) {}
+	
+	public static String serializeUsers(ArrayList<String> usernames){
+		return new JSONArray(usernames).toString();
+	}
+	
+	public static ArrayList<String> deserializeUsers(String usernames){
+		JSONArray json;
+		ArrayList<String> ret = new ArrayList<String>();
+		try {
+			json = new JSONArray(usernames);
+			for (int i=0;i<json.length();i++)
+				ret.add(json.getString(i));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
 }

@@ -156,7 +156,7 @@ public class UserSelectionAdapter extends BaseAdapter implements ListAdapter {
 			check.setChecked(isAllSelected(FRIENDS));
 			
 	        TextView name = (TextView)view.findViewById(R.id.user_list_item_username);
-	        name.setText("All Friends");
+	        name.setText("All Followers");
 	        name.setTextColor(context.getResources().getColor(R.color.text_grey));
 
 	        view.findViewById(R.id.user_list_item_avatar).setVisibility(View.GONE);

@@ -27,8 +27,9 @@ public class CommentList extends Activity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comment_list);
-        
+
         findViewById(R.id.ab_refresh).setOnClickListener(this);
+        findViewById(R.id.ab_new_comment).setOnClickListener(this);
         
         Intent i = getIntent();
 		eventRev = i.getExtras().getString("com.connectsy.events.revision");
@@ -45,13 +46,13 @@ public class CommentList extends Activity implements OnClickListener,
 	private void updateData() {
 		ListView comments = (ListView) findViewById(R.id.comments_list);
 
-		if (findViewById(R.id.comment_list_item_new) == null) {
-			LayoutInflater inflater = LayoutInflater.from(this);
-			View add_comment = inflater.inflate(
-					R.layout.comment_list_item_new, comments, false);
-			comments.addHeaderView(add_comment);
-			add_comment.setOnClickListener(this);
-		}
+//		if (findViewById(R.id.comment_list_item_new) == null) {
+//			LayoutInflater inflater = LayoutInflater.from(this);
+//			View add_comment = inflater.inflate(
+//					R.layout.comment_list_item_new, comments, false);
+//			comments.addHeaderView(add_comment);
+//			add_comment.setOnClickListener(this);
+//		}
 
 		if (adapter == null) {
 			adapter = new CommentAdapter(this, R.layout.comment_list_item, 
@@ -67,7 +68,7 @@ public class CommentList extends Activity implements OnClickListener,
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.ab_refresh) refresh();
-		else if (v.getId() == R.id.comment_list_item_new) {
+		else if (v.getId() == R.id.ab_new_comment) {
 			Intent i = new Intent(Intent.ACTION_INSERT);
 			i.setType("vnd.android.cursor.item/vnd.connectsy.event.comment");
 			startActivityForResult(i, NEW_COMMENT);
