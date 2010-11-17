@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventList;
@@ -19,7 +20,6 @@ public class AttendantNotification extends NotificationHandlerBase implements
 	@SuppressWarnings("unused")
 	private static final String TAG = "AttendantNotification";
 	private static final int GET_EVENT = 0;
-	protected String tickerText = "Someone new is in on Connectsy";
 	
 	@Override
 	public void send(Context context) throws JSONException {
@@ -51,6 +51,8 @@ public class AttendantNotification extends NotificationHandlerBase implements
 				return;
 			}
 			i = new Intent(Intent.ACTION_VIEW);
+			Log.d(TAG, "settings not intent to vnd.android.cursor.dir/vnd.connectsy.event.attendant");
+			
 			i.setType("vnd.android.cursor.dir/vnd.connectsy.event.attendant");
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
@@ -80,5 +82,15 @@ public class AttendantNotification extends NotificationHandlerBase implements
 		}
 	}
 	public void onRemoteError(int httpStatus, String response, int code) {}
+
+	@Override
+	protected int getNotificationID() {
+		return 10;
+	}
+
+	@Override
+	protected String getTickerText() {
+		return "Someone new is in on Connectsy";
+	}
 
 }

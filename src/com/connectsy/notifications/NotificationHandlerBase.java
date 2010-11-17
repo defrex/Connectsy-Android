@@ -19,17 +19,17 @@ public abstract class NotificationHandlerBase implements NotificationHandler {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "NotificationHandlerBase";
-	private static final int NOTIFICATION_ID = 0;
 	private boolean pending = false;
 	private Notification notification;
 	protected Context context;
 	protected ArrayList<JSONObject> notifications;
-	protected String tickerText = "";
 	
 	public NotificationHandlerBase(){
 		notifications = new ArrayList<JSONObject>();
 	}
-	
+
+	protected abstract int getNotificationID();
+	protected abstract String getTickerText();
 	protected abstract void prepareNotification() throws JSONException;
 	
 	public void add(JSONObject notification){
@@ -51,14 +51,14 @@ public abstract class NotificationHandlerBase implements NotificationHandler {
 		n.setLatestEventInfo(context, title, body, pi);
 		NotificationManager notManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		notManager.notify(NOTIFICATION_ID, n);
+		notManager.notify(getNotificationID(), n);
 		notification = null;
 	}
 
 	private Notification getNotification() {
 		if (notification == null) {
 			notification = new Notification(R.drawable.notification,
-					tickerText, System.currentTimeMillis());
+					getTickerText(), System.currentTimeMillis());
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			
 			notification.ledARGB = 0xff00ff00;

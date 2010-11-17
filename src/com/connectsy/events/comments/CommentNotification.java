@@ -18,7 +18,6 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 	@SuppressWarnings("unused")
 	private static final String TAG = "CommentNotification";
 	private static final int GET_EVENT = 0;
-	protected String tickerText = "New Connectsy Comment";
 	
 	@Override
 	public void send(Context context) throws JSONException {
@@ -32,7 +31,7 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 	@Override
 	protected void prepareNotification() throws JSONException {
 		String title;
-		String body;
+		String body = null;
 		Intent i;
 		Event event = null;
 		
@@ -59,11 +58,17 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 				body = notifications.get(0).getString("comment");
 			} else {
 				title = notifications.size()+" comments";
-				body = "";
+				body = "By";
+				for (JSONObject notice: notifications)
+					body += " "+notice.getString("commenter")+",";
+				body = body.substring(0, body.length()-1);
 			}
 		}else{
 			title = notifications.size()+" comments";
-			body = "";
+			body = "By";
+			for (JSONObject notice: notifications)
+				body += " "+notice.getString("commenter")+",";
+			body = body.substring(0, body.length()-1);
 			i = new Intent(context, EventList.class);
 		}
 		sendNotification(title, body, i, "comment");
@@ -80,4 +85,14 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 	}
 
 	public void onRemoteError(int httpStatus, String response, int code) {}
+
+	@Override
+	protected int getNotificationID() {
+		return 20;
+	}
+
+	@Override
+	protected String getTickerText() {
+		return "New Connectsy Comment";
+	}
 }

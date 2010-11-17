@@ -13,7 +13,6 @@ public class FriendNotification extends NotificationHandlerBase {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "FriendNotification";
-	protected String tickerText = "New friend request on Connectsy";
 	
 	@Override
 	public void send(Context context) throws JSONException {
@@ -45,5 +44,15 @@ public class FriendNotification extends NotificationHandlerBase {
 		}
 		
 		sendNotification(title, body, i, "friend");
+	}
+
+	@Override
+	protected int getNotificationID() {
+		return 30;
+	}
+
+	@Override
+	protected String getTickerText() {
+		return "New Connectsy Follower";
 	}
 }

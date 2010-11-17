@@ -15,7 +15,6 @@ public class EventNotification extends NotificationHandlerBase implements DataUp
 	@SuppressWarnings("unused")
 	private static final String TAG = "EventNotification";
 	private static final int GET_EVENT = 0;
-	protected String tickerText = "New Connectsy Event";
 	
 	@Override
 	protected void prepareNotification() throws JSONException {
@@ -65,4 +64,13 @@ public class EventNotification extends NotificationHandlerBase implements DataUp
 
 	public void onRemoteError(int httpStatus, String response, int code) {}
 
+	@Override
+	protected int getNotificationID() {
+		return 50;
+	}
+
+	@Override
+	protected String getTickerText() {
+		return "New Connectsy Event";
+	}
 }
