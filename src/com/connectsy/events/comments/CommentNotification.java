@@ -50,7 +50,7 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 				return;
 			}
 			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.dir/vnd.connectsy.comments");
+			i.setType("vnd.android.cursor.dir/vnd.connectsy.event.comment");
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
 			if (notifications.size() == 1) {
@@ -65,7 +65,6 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 			title = notifications.size()+" comments";
 			body = "";
 			i = new Intent(context, EventList.class);
-			i.putExtra("filter", EventManager.Filter.INVITED);
 		}
 		sendNotification(title, body, i, "comment");
 	}

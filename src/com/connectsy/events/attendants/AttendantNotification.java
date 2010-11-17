@@ -51,7 +51,7 @@ public class AttendantNotification extends NotificationHandlerBase implements
 				return;
 			}
 			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.dir/vnd.connectsy.attendant");
+			i.setType("vnd.android.cursor.dir/vnd.connectsy.event.attendant");
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
 			if (notifications.size() == 1) {
@@ -66,7 +66,6 @@ public class AttendantNotification extends NotificationHandlerBase implements
 			title = notifications.size()+" users are in";
 			body = "";
 			i = new Intent(context, EventList.class);
-			i.putExtra("filter", EventManager.Filter.INVITED);
 		}
 		sendNotification(title, body, i, "attendant");
 	}
