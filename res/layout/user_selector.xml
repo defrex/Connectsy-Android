@@ -32,10 +32,9 @@
         </LinearLayout>
     </LinearLayout>
     
-    <ListView 
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+    <ListView style="@style/FillAll"
         android:layout_below="@id/actionbar"
         android:layout_above="@id/user_select_done_bar"
-        android:id="@+id/user_list" />
+        android:id="@+id/user_list"
+        android:choiceMode="multipleChoice"/>
 </RelativeLayout>

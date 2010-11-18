@@ -19,6 +19,14 @@
 	            android:id="@+id/ab_refresh_spinner"
 	            android:src="@drawable/icon_refresh"
 	            android:visibility="gone" />
+            
+            <ImageView style="@style/ActionBarSeparator"
+                android:id="@+id/event_view_ab_in_seperator"
+                android:visibility="gone" />
+            <ImageView style="@style/ActionBarAction"
+                android:id="@+id/event_view_ab_in"
+                android:visibility="gone"
+                android:src="@drawable/icon_check" />
         </LinearLayout>
     </FrameLayout>
 	

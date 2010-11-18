@@ -12,23 +12,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.R;
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.users.ContactCursor.Contact;
 
-public class UserSelector extends Activity implements OnItemClickListener, 
-		OnClickListener, DataUpdateListener {
+public class UserSelector extends Activity implements OnClickListener, 
+		DataUpdateListener {
 	@SuppressWarnings("unused")
 	private static String TAG = "UserSelector";
-	UserSelectionAdapter adapter;
-	UserManager manager;
-    private ArrayList<String> chosenUsers;
-    private ArrayList<Contact> chosenContacts;
+	private UserSelectionAdapter adapter;
+	private UserManager manager;
+	private ArrayList<String> selected;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,55 +31,35 @@ public class UserSelector extends Activity implements OnItemClickListener,
         setContentView(R.layout.user_selector);
         
         manager = new UserManager(this, this, UserManager.currentUsername(this));
-        Button done = (Button)findViewById(R.id.user_select_done);
-        done.setOnClickListener(this);
+        findViewById(R.id.user_select_done).setOnClickListener(this);
         
         Bundle e = getIntent().getExtras();
-        if (e != null){
-			try {
-				if (e.containsKey("com.connectsy.users")){
-					chosenUsers = deserializeUsers(
-							e.getString("com.connectsy.users"));
-				}if (e.containsKey("com.connectsy.contacts")){
-					chosenContacts = Contact.deserializeList(
-							e.getString("com.connectsy.contacts"));
-				}
-		        
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-			}
-        }
+        if (e != null && e.containsKey("com.connectsy.users"))
+			selected = deserializeUsers(e.getString("com.connectsy.users"));
 		
         update();
     }
 
-	public void onItemClick(AdapterView<?> adapterView, View itemView, 
-			int position, long id) {}
-
 	private void update(){
         ArrayList<String> users = manager.getFollowers();
         if (users != null){
-            adapter = new UserSelectionAdapter(this, users);
-            if (chosenUsers != null)
-            	adapter.setSelectedFriends(chosenUsers);
-            if (chosenContacts != null)
-            	adapter.setSelectedContacts(chosenContacts);
+            adapter = new UserSelectionAdapter(this, R.layout.user_list_item, 
+            		users);
+            if (selected != null)
+            	adapter.setSelected(selected);
             ListView lv = (ListView)findViewById(R.id.user_list);
-            lv.setOnItemClickListener(this);
             lv.setAdapter(adapter);
         }else{ 
         	manager.refreshFollowers(0);
         	findViewById(R.id.ab_refresh_spinner).setVisibility(View.VISIBLE);
         }
 	}
-	
+
 	public void onClick(View v) {
 		if (v.getId() == R.id.user_select_done){
-			String users = serializeUsers(adapter.getSelectedFriends());
-			String contacts = Contact.serializeList(adapter.getSelectedContacts());
 			Intent i = new Intent();
+			String users = serializeUsers(adapter.getSelected());
 			i.putExtra("com.connectsy.users", users);
-			i.putExtra("com.connectsy.contacts",contacts);
 			setResult(RESULT_OK, i);
 			finish();
 		}

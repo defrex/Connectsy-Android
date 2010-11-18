@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -16,15 +17,20 @@ import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager;
 import com.connectsy.events.EventManager.Event;
 import com.connectsy.events.attendants.AttendantManager.Attendant;
+import com.connectsy.events.attendants.AttendantManager.Status;
+import com.connectsy.users.UserManager;
+import com.connectsy.users.UserManager.User;
 
 public class AttendantList extends Activity implements OnClickListener, 
 		DataUpdateListener {
+	private String TAG = "AttendantList";
     private String eventRev;
     private Event event;
 	private AttendantsAdapter adapter;
 	private AttendantManager manager;
 	private int pendingOperations = 0;
 	private static final int REFRESH_ATTS = 1;
+	private static final int ATT_SET = 2;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,15 @@ public class AttendantList extends Activity implements OnClickListener,
 		eventRev = i.getExtras().getString("com.connectsy.events.revision");
 		// Event should always be cached when this Activity is loaded.
 		event = new EventManager(this, null, null, null).getEvent(eventRev);
-        
+
+		if (!event.creator.equals(UserManager.currentUsername(this))) {
+			findViewById(R.id.event_view_ab_in).setVisibility(View.VISIBLE);
+			findViewById(R.id.event_view_ab_in_seperator).setVisibility(
+					View.VISIBLE);
+			findViewById(R.id.event_view_ab_in).setOnClickListener(this);
+			updateUserStatus();
+		}
+		
         updateData();
         
         ListView lv = (ListView)findViewById(R.id.attendants_list);
@@ -73,16 +87,50 @@ public class AttendantList extends Activity implements OnClickListener,
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.ab_refresh) refresh();
+		else if (v.getId() == R.id.event_view_ab_in) {
+			ImageView in = (ImageView) findViewById(R.id.event_view_ab_in);
+			if (in.isSelected())
+				setUserStatus(Status.NOT_ATTENDING);
+			else
+				setUserStatus(Status.ATTENDING);
+		}
+	}
+
+	private void updateUserStatus(){
+		User curUser = UserManager.currentUser(this);
+		ImageView in = (ImageView) findViewById(R.id.event_view_ab_in);
+		if (getAttManager().isUserAttending(curUser.id)) {
+			in.setSelected(true);
+			in.setImageDrawable(getResources().getDrawable(
+					R.drawable.icon_check_selected));
+		} else {
+			in.setSelected(false);
+			in.setImageDrawable(getResources().getDrawable(
+					R.drawable.icon_check));
+		}
 	}
 	
+	private void setUserStatus(Integer status) {
+		getAttManager().setStatus(status, ATT_SET);
+		pendingOperations++;
+		setRefreshing(true);
+	}
+
 	private void refresh(){
-		getAttManager().refreshAttendants(REFRESH_ATTS );
+		getAttManager().refreshAttendants(REFRESH_ATTS);
 		setRefreshing(true);
 		pendingOperations++;
 	}
 
 	public void onDataUpdate(int code, String response) {
-		updateData();
+		if (code == REFRESH_ATTS){
+			updateData();
+			if (!event.creator.equals(UserManager.currentUsername(this)))
+				updateUserStatus();
+		}else if (code == ATT_SET){
+			refresh();
+		}
+		
 		pendingOperations--;
 		if (pendingOperations == 0)
 			setRefreshing(false);

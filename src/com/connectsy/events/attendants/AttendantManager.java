@@ -15,6 +15,7 @@ import com.connectsy.data.ApiRequest;
 import com.connectsy.data.DataManager;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
+import com.connectsy.users.UserManager;
 import com.connectsy.users.ContactCursor.Contact;
 import com.connectsy.users.UserManager.User;
 
@@ -98,7 +99,7 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 	public Integer getCurrentUserStatus(){
 		return getCurrentUserStatus(false);}
 	public Integer getCurrentUserStatus(boolean force){
-		String username = DataManager.getCache(context).getString("username", null);
+		String username = UserManager.currentUsername(context);
 		getAttendants(force);
 		for (Attendant a: attendants)
 			if (a.username != null && a.username.equals(username)) 
