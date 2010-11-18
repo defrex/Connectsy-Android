@@ -72,7 +72,7 @@ public class FriendsAdapter extends BaseAdapter implements ListAdapter {
         });
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
-        new AvatarFetcher(user.username, avatar, false);
+        AvatarFetcher.download(user.username, avatar, false);
         
         return view;
 	}

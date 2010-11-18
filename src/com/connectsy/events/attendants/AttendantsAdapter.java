@@ -61,7 +61,7 @@ public class AttendantsAdapter extends ArrayAdapter<Attendant> {
         if (att.username != null){
 	        ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
 	        avatar.setOnClickListener(userClick);
-	        new AvatarFetcher(att.username, avatar, false);
+	        AvatarFetcher.download(att.username, avatar, false);
         }
 		return view;
 	}

@@ -55,7 +55,7 @@ public class EventRenderer implements DataUpdateListener {
 		
 		ImageView avatar = (ImageView) view.findViewById(R.id.event_avatar);
 		avatar.setOnClickListener(userClick);
-		new AvatarFetcher(event.creator, avatar, false);
+		AvatarFetcher.download(event.creator, avatar, false);
 
 		TextView username = (TextView) view.findViewById(R.id.event_username);
 		username.setText(event.creator);

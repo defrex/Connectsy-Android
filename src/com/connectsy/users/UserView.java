@@ -111,7 +111,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
         uname.setText(username);
         
         ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
-        new AvatarFetcher(username, avatar, false);
+        AvatarFetcher.download(username, avatar, false);
         if (username.equals(curUsername)){
         	avatar.setClickable(true);
         	avatar.setOnClickListener(this);
@@ -299,7 +299,11 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 			getUserManager(true).refreshFollowers(REFRESH_FOLLOWERS);
 			operationsPending += 2;
 		}else if (code == UPLOAD_AVATAR){
-			updateUser();
+	        ImageView avatar = (ImageView)findViewById(R.id.user_view_avatar);
+	        AvatarFetcher.download(username, avatar, true);
+			new EventManager(this, this, Filter.CREATED, username)
+					.refreshRevisions(REFRESH_EVENTS);
+			operationsPending++;
 		}
 		operationsPending--;
 		if (operationsPending == 0){

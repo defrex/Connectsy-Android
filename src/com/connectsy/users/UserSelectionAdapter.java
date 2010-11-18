@@ -69,7 +69,7 @@ public class UserSelectionAdapter extends ArrayAdapter<String> {
         
         ImageView avatar = (ImageView)view.findViewById(
         		R.id.user_list_item_avatar);
-        new AvatarFetcher(user, avatar, false);
+        AvatarFetcher.download(user, avatar, false);
 
         return view;
 	}

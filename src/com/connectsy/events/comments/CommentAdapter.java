@@ -55,7 +55,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         if (comment.getUsername() != null){
 	        ImageView avatar = (ImageView)view.findViewById(R.id.comment_avatar);
 	        avatar.setOnClickListener(userClick);
-	        new AvatarFetcher(comment.getUsername(), avatar, false);
+	        AvatarFetcher.download(comment.getUsername(), avatar, false);
         }
         
         TextView body = (TextView)view.findViewById(R.id.comment_text);

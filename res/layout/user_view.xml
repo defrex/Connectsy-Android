@@ -65,15 +65,15 @@
             android:text="Following"/>
     </LinearLayout>
     
-    <ListView style="@style/FullWidth"
+    <ListView style="@style/FillAll"
         android:visibility="gone"
         android:id="@+id/user_view_events"/>
     
-    <ListView style="@style/FullWidth"
+    <ListView style="@style/FillAll"
         android:visibility="gone"
         android:id="@+id/user_view_following"/>
     
-    <ListView style="@style/FullWidth"
+    <ListView style="@style/FillAll"
         android:visibility="gone"
         android:id="@+id/user_view_followers"/>
 	        
