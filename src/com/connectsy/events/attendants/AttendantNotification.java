@@ -51,9 +51,8 @@ public class AttendantNotification extends NotificationHandlerBase implements
 				return;
 			}
 			i = new Intent(Intent.ACTION_VIEW);
-			Log.d(TAG, "settings not intent to vnd.android.cursor.dir/vnd.connectsy.event.attendant");
-			
-			i.setType("vnd.android.cursor.dir/vnd.connectsy.event.attendant");
+			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+			i.putExtra("com.connectsy.events.attendants", true);
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
 			if (notifications.size() == 1) {

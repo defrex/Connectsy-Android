@@ -59,7 +59,7 @@ public class NotificationListener implements ApiRequestListener {
 		notificationHandlers.put("invite", new EventNotification());
 		notificationHandlers.put("comment", new CommentNotification());
 		notificationHandlers.put("attendant", new AttendantNotification());
-		notificationHandlers.put("friend", new FriendNotification());
+		notificationHandlers.put("follow", new FriendNotification());
 	}
 
 	public boolean isRunning() {

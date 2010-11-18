@@ -59,6 +59,7 @@ public class UserAdapter extends ArrayAdapter<String> {
         });
         
         ImageView avatar = (ImageView)view.findViewById(R.id.user_list_item_avatar);
+        avatar.setImageResource(R.drawable.avatar_default);
         AvatarFetcher.download(username, avatar, false);
         
         return view;

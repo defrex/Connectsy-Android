@@ -15,6 +15,7 @@ import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
 
 import com.connectsy.R;
+import com.connectsy.data.AvatarFetcher;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.users.UserManager;
 
@@ -70,6 +71,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	}
 
 	public void onDataUpdate(int code, String response) {
+        AvatarFetcher.download(UserManager.currentUsername(this), null, true);
 		if (loadingDialog != null) loadingDialog.dismiss();
 	}
 

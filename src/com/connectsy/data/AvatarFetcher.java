@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.connectsy.R;
@@ -53,8 +54,10 @@ public class AvatarFetcher{
 		if ((f.exists() && 
 				(new Date().getTime() - f.lastModified()) < instance.expiry) 
 				&& !force){
+			Log.d(TAG, username+" loading cached");
 			instance.useFile(username, view);
 		}else{
+			Log.d(TAG, username+" qed up");
 			if (!instance.q.containsKey(username))
 				instance.q.put(username, new ArrayList<ImageView>());
 			instance.q.get(username).add(view);
@@ -70,6 +73,7 @@ public class AvatarFetcher{
 		}
 
 		public void run() {
+			Log.d(TAG, username+" downloading");
 			try {
 				
 				URL url = new URL(
@@ -137,6 +141,7 @@ public class AvatarFetcher{
 	}
 
 	private void onDownloadFinish(String username) {
+		Log.d(TAG, username+" dl finished");
 		if (q.containsKey(username)){
 			for (ImageView v: q.get(username)){
 				useFile(username, v);
@@ -148,6 +153,7 @@ public class AvatarFetcher{
 	}
 
 	private void on404(String username) {
+		Log.d(TAG, username+" 404");
 		if (q.containsKey(username)){
 			for (ImageView v: q.get(username)){
 				v.setImageResource(R.drawable.avatar_default);
@@ -159,7 +165,10 @@ public class AvatarFetcher{
 	}
 	
 	private void useFile(String username, ImageView v){
-		Bitmap b = BitmapFactory.decodeFile(avatarPath+username+".png");
-		v.setImageDrawable(new BitmapDrawable(b));
+		if (v != null){
+			Log.d(TAG, username+" loading into view");
+			Bitmap b = BitmapFactory.decodeFile(avatarPath+username+".png");
+			v.setImageDrawable(new BitmapDrawable(b));
+		}
 	}
 }

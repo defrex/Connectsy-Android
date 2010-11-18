@@ -49,11 +49,23 @@ public class EventView extends Activity implements DataUpdateListener,
 		findViewById(R.id.event_view_comments).setOnClickListener(this);
 		findViewById(R.id.event_view_attendants).setOnClickListener(this);
 
-		Intent i = getIntent();
-		eventRev = i.getExtras().getString("com.connectsy.events.revision");
+		Bundle e = getIntent().getExtras();
+		eventRev = e.getString("com.connectsy.events.revision");
 		event = getEventManager().getEvent(eventRev);
 		update();
 		refresh();
+		
+		if (e.containsKey("com.connectsy.events.comments")){
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setType("vnd.android.cursor.dir/vnd.connectsy.event.comment");
+			i.putExtra("com.connectsy.events.revision", eventRev);
+			startActivity(i);
+		}else if (e.containsKey("com.connectsy.events.attendants")){
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setType("vnd.android.cursor.dir/vnd.connectsy.event.attendant");
+			i.putExtra("com.connectsy.events.revision", eventRev);
+			startActivity(i);
+		}
 	}
 
 	private void update() {

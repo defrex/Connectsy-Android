@@ -49,7 +49,8 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 				return;
 			}
 			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.dir/vnd.connectsy.event.comment");
+			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+			i.putExtra("com.connectsy.events.comments", true);
 			i.putExtra("com.connectsy.events.revision", event.revision);
 			
 			if (notifications.size() == 1) {

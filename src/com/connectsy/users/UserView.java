@@ -65,7 +65,8 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
         ImageView abSearch = (ImageView)findViewById(R.id.ab_user_search);
         abSearch.setOnClickListener(this);
         
-        username = getIntent().getExtras().getString("com.connectsy.user.username");
+        Bundle e = getIntent().getExtras();
+        username = e.getString("com.connectsy.user.username");
         curUsername = UserManager.currentUsername(this);
 
         findViewById(R.id.user_view_events_button).setOnClickListener(this);
@@ -102,7 +103,10 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 
 		user = getUserManager().getUser();
 		updateUser();
-		updateTab(null);
+		if (e.containsKey("com.connectsy.user.tab"))
+			updateTab(e.getString("com.connectsy.user.tab"));
+		else
+			updateTab(null);
     	refresh();
     }
 	

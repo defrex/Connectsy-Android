@@ -45,8 +45,9 @@ public abstract class NotificationHandlerBase implements NotificationHandler {
 	protected void sendNotification(String title, String body, Intent i, 
 			String type) throws JSONException {
 		pending = false;
-		i = NotificationRedirect.wrapIntent(context, i, type);
-		PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
+//		i = NotificationRedirect.wrapIntent(context, i, type);
+		PendingIntent pi = PendingIntent.getActivity(context, 0, i, 
+				PendingIntent.FLAG_UPDATE_CURRENT);
 		Notification n = getNotification();
 		n.setLatestEventInfo(context, title, body, pi);
 		NotificationManager notManager = (NotificationManager) context

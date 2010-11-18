@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.DataManager;
@@ -31,7 +30,6 @@ public class CommentManager extends DataManager {
 		long created;
 		
 		public Comment(String json) throws JSONException {
-			Log.d(TAG, "comment json: "+json);
 			JSONObject obj = new JSONObject(json);
 			id = obj.getString("id");
 			nonce = obj.getString("nonce");
