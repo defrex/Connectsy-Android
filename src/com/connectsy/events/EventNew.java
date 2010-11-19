@@ -33,7 +33,6 @@ import com.connectsy.settings.MainMenu;
 import com.connectsy.users.UserManager;
 import com.connectsy.users.UserSelector;
 import com.connectsy.users.ContactCursor.Contact;
-import com.connectsy.users.UserManager.User;
 import com.connectsy.utils.DateUtils;
 import com.connectsy.utils.TimePickerDialog;
 import com.connectsy.utils.TimePickerDialog.OnTimeSetListener;

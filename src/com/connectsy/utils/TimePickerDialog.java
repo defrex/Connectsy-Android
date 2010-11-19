@@ -109,7 +109,7 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
     }
 
 	public void onClick(View v) {
-		cal.set(Calendar.HOUR_OF_DAY, new Date().getDate());
+		cal.set(Calendar.DAY_OF_MONTH, new Date().getDate());
 		if (v.getId() == R.id.time_picker_today){
 			view.findViewById(R.id.time_picker_today).setSelected(true);
 			view.findViewById(R.id.time_picker_tomorrow).setSelected(false);

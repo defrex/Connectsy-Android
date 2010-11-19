@@ -19,8 +19,6 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.ActionBarHandler;
 import com.connectsy.R;
-import com.connectsy.categories.CategoryManager.Category;
-import com.connectsy.data.DataManager;
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Filter;
 import com.connectsy.settings.MainMenu;
@@ -109,16 +107,8 @@ public class EventList extends Activity implements DataUpdateListener,
 	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		if (resultCode == RESULT_OK && requestCode == SELECT_CATEGORY){
-			try {
-				category = new Category(data.getExtras().getString("com.connectsy.category")).name;
-				DataManager.getCache(this).edit()
-						.putString("category_saved", category).commit();
-				//((TextView)findViewById(R.id.event_list_heading_text)).setText("Category: "+category);
-				updateData();
-				refresh();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			updateData();
+			refresh();
 		}
 	}
 	
