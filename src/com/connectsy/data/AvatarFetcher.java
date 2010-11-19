@@ -33,6 +33,8 @@ public class AvatarFetcher{
     private static AvatarFetcher instance = new AvatarFetcher();
 	private AvatarFetcher(){
 		for (int i=0;i<threadPool;i++) threadsAvailable[i] = true;
+		File f = new File(avatarPath);
+		if (!f.exists()) f.mkdir();
 	}
 
 	private final Handler handler = new Handler();
@@ -42,7 +44,7 @@ public class AvatarFetcher{
     private final int expiry = 1000 * 60 * 60; // 1 hour
     
     private static final String avatarPath = 
-		"/data/data/com.connectsy/files/AVATAR_";
+		"/data/data/com.connectsy/avatars/";
     private HashMap<String, ArrayList<ImageView>> q = 
     	new HashMap<String, ArrayList<ImageView>>();
     private HashMap<String, Integer> usernameOnThread = 

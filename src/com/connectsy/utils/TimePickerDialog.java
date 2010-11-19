@@ -19,17 +19,7 @@ import com.connectsy.R;
 public class TimePickerDialog extends AlertDialog implements OnClickListener, 
         OnTimeChangedListener, android.view.View.OnClickListener {
 
-    /**
-     * The callback interface used to indicate the user is done filling in
-     * the time (they clicked on the 'Set' button).
-     */
     public interface OnTimeSetListener {
-
-        /**
-         * @param view The view associated with this listener.
-         * @param hourOfDay The hour that was set.
-         * @param minute The minute that was set.
-         */
         void onTimeSet(Long timestamp);
     }
 
@@ -41,14 +31,8 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
     private Calendar cal;
     private View view;
 
-    /**
-     * @param context Parent.
-     * @param callBack How parent is notified.
-     * @param hourOfDay The initial hour.
-     * @param minute The initial minute.
-     * @param is24HourView Whether this is a 24 hour view, or AM/PM.
-     */
-    public TimePickerDialog(Context context, OnTimeSetListener callBack, Long timestamp) {
+    public TimePickerDialog(Context context, OnTimeSetListener callBack, 
+    		Long timestamp) {
         super(context);
         mCallback = callBack;
         
