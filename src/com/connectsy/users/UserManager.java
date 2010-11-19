@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.DataManager;
@@ -146,6 +147,7 @@ public class UserManager extends DataManager {
 	
 	public void refreshFollowing(int returnCode){
 		this.returnCode = returnCode;
+		Log.d(TAG, "refreshing following");
 		getFollowingRequest().execute();
 	}
 	

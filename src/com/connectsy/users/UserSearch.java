@@ -7,12 +7,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.R;
 import com.connectsy.data.ApiRequest;
@@ -36,6 +39,17 @@ public class UserSearch extends Activity implements OnClickListener,
         setContentView(R.layout.user_search);
         
         findViewById(R.id.ab_user_search).setOnClickListener(this);
+        ((ListView)findViewById(R.id.user_search_results))
+        		.setOnItemClickListener(new OnItemClickListener(){
+			public void onItemClick(AdapterView<?> av, View v,
+					int position, long id) {
+				String username = (String) av.getAdapter().getItem(position);
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+				i.putExtra("com.connectsy.user.username", username);
+				startActivity(i);
+			}
+        });
     }
 
     private void updateDisplay(String response){
@@ -61,7 +75,7 @@ public class UserSearch extends Activity implements OnClickListener,
     
     private void doSearch(){
         EditText search = (EditText)findViewById(R.id.user_search_box);
-        String q = search.getText().toString();
+        String q = search.getText().toString().toLowerCase();
         if (!q.equals("")){
 			requestPending = true;
 			setRefreshing(true);

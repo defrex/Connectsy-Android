@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,6 +69,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
         Bundle e = getIntent().getExtras();
         username = e.getString("com.connectsy.user.username");
         curUsername = UserManager.currentUsername(this);
+        Log.d(TAG, "userView with username: "+username+" curUsername: "+curUsername);
 
         findViewById(R.id.user_view_events_button).setOnClickListener(this);
         findViewById(R.id.user_view_followers_button).setOnClickListener(this);
@@ -149,8 +151,12 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     }
     
     private void updateFollowing(){
+		Log.d(TAG, "update following");
 		ArrayList<String> following = getUserManager().getFollowing();
-		if (following == null) return;
+		if (following == null){
+			Log.d(TAG, "update following, list null");
+			return;
+		}
         
         if (followingAdapter != null){
         	followingAdapter.update(following);
@@ -289,6 +295,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 		}else if (code == REFRESH_FOLLOWERS){
 			updateFollowers();
 		}else if (code == REFRESH_FOLLOWING){
+			Log.d(TAG, "refreshing following return with "+response);
 			updateFollowing();
 		}else if (code == FOLLOW){
 			findViewById(R.id.user_view_follow).setVisibility(View.GONE);

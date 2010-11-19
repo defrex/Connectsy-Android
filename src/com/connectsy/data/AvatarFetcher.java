@@ -167,7 +167,7 @@ public class AvatarFetcher{
 	}
 	
 	private void useFile(String username, ImageView v){
-		if (v != null){
+		if (v != null && new File(avatarPath+username+".png").exists()){
 			Log.d(TAG, username+" loading into view");
 			Bitmap b = BitmapFactory.decodeFile(avatarPath+username+".png");
 			v.setImageDrawable(new BitmapDrawable(b));
