@@ -1,56 +1,46 @@
 package com.connectsy.users;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 
-import com.connectsy.notifications.NotificationHandlerBase;
+import com.connectsy.notifications.NotificationHandler.NotificationContent;
+import com.connectsy.notifications.NotificationHandler.NotificationContentListener;
+import com.connectsy.notifications.NotificationHandler.NotificationContentProvider;
 
-public class FriendNotification extends NotificationHandlerBase {
+public class FriendNotification implements NotificationContentProvider {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "FriendNotification";
-	
-	@Override
-	public void send(Context context) throws JSONException {
-		if (!PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean("preference_notifications_follow", true))
-			return;
-		else
-			super.send(context);
-	}
-	
-	@Override
-	protected void prepareNotification() throws JSONException {
-		String title;
-		String body;
-		String username = notifications.get(0).getString("username");
+
+	public void prepNotification(Context context, 
+			ArrayList<JSONObject> nots, NotificationContentListener callback) 
+			throws JSONException {
+		NotificationContent not = new NotificationContent();
 		
-		Intent i = new Intent(Intent.ACTION_VIEW);
-		i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-		i.putExtra("com.connectsy.user.username", username);
-		i.putExtra("com.connectsy.user.tab", "following");
-		
-		if (notifications.size() == 1) {
-			title = "New Follower";
-			body = username+" is following you on Connectsy";
+		if (nots.size() == 1) {
+			String username = nots.get(0).getString("username");
+			
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setType("vnd.android.cursor.item/vnd.connectsy.user");
+			i.putExtra("com.connectsy.user.username", username);
+			i.putExtra("com.connectsy.user.tab", "following");
+			
+			not.intent = i;
+			not.username = username;
+			not.title = "New Follower";
+			not.body = username+" is following you";
+			not.ticker = "New follower";
 		} else {
-			title = "New Followers";
-			body = notifications.size() + " new people are following you";
+			not.title = "New Followers";
+			not.body = nots.size() + " new users are following you";
+			not.ticker = "New followers";
 		}
-		
-		sendNotification(title, body, i, "follow");
-	}
 
-	@Override
-	protected int getNotificationID() {
-		return 30;
-	}
-
-	@Override
-	protected String getTickerText() {
-		return "New Connectsy Follower";
+		callback.sendNotification(not);
 	}
 }

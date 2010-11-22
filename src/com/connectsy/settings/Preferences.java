@@ -40,12 +40,12 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 		if (preference.getKey().equals("avatar")){
 			startActivityForResult(new Intent(Intent.ACTION_PICK, 
 					Images.Media.INTERNAL_CONTENT_URI), SELECT_AVATAR);
-		}else if (preference.getKey().equals("preference_notifications")){
+		}else if (preference.getKey().equals("notifications")){
 			Context c = getBaseContext();
 			Intent i = new Intent();
 			i.setAction("com.connectsy.START_NOTIFICATIONS");
 			if (PreferenceManager.getDefaultSharedPreferences(c)
-					.getBoolean("preference_notifications", true)){
+					.getBoolean("notifications", true)){
 				c.startService(i);
 			}else{
 				c.stopService(i);

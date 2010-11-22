@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Main"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/FillAll">
+<LinearLayout style="@style/FillAll"
     android:orientation="vertical">
     <FrameLayout style="@style/ActionBarFrame">
         <ImageView style="@style/ActionBarBackground" />
@@ -48,5 +49,39 @@
 <!--            android:apiKey="" />-->
 <!--         -->
 <!--    </FrameLayout>-->
-    
+
 </LinearLayout>
+<!--    <LinearLayout style="@style/FillAll"-->
+<!--        android:id="@+id/notifications"-->
+<!--        android:orientation="vertical">-->
+<!--        -->
+<!--        <View style="@style/FullWidth"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:background="#444"-->
+<!--            android:layout_alignParentTop="true"/>-->
+<!--        <TextView style="@style/FullWidth"-->
+<!--            android:id="@+id/notification_bar"-->
+<!--            android:text="Notifications"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:background="@drawable/notification_bar_bg"-->
+<!--            android:gravity="center"-->
+<!--            android:textColor="#222"-->
+<!--            android:textSize="20dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:shadowColor="#fff"-->
+<!--            android:shadowDx="0"-->
+<!--            android:shadowDy="2"-->
+<!--            android:shadowRadius="2"/>-->
+<!--        <View style="@style/FullWidth"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:background="#444"-->
+<!--            android:id="@+id/notification_bar_border_bottom"/>-->
+<!--	    <LinearLayout style="@style/FullWidth"-->
+<!--	        android:orientation="vertical"-->
+<!--	        android:background="#fff"-->
+<!--	        android:id="@+id/notifications_body">-->
+<!--	        -->
+<!--            <View style="@style/VerticalSpring" />-->
+<!--	    </LinearLayout>-->
+<!--    </LinearLayout>-->
+</FrameLayout>

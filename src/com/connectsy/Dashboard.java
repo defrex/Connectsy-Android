@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
 import com.connectsy.events.EventList;
 import com.connectsy.events.EventNew;
@@ -18,6 +17,9 @@ import com.connectsy.users.UserSearch;
 //public class Dashboard extends MapActivity implements OnClickListener, 
 //		LocListener, ApiRequestListener {
 public class Dashboard extends Activity implements OnClickListener {
+	@SuppressWarnings("unused")
+	private static final String TAG = "Dashboard";
+
 //	private LocManager loc;
 //	private double lat;
 //	private double lng;
@@ -26,24 +28,14 @@ public class Dashboard extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
-
-//        ActionBarHandler abHandler = new ActionBarHandler(this);
-//        ImageView abNewEvent = (ImageView)findViewById(R.id.ab_new_event);
-//        abNewEvent.setOnClickListener(abHandler);
         
-        Button events_nearby = (Button)findViewById(R.id.dashboard_connections);
-        events_nearby.setOnClickListener(this);
-//        Button events_friends = (Button)findViewById(R.id.dashboard_events_friends);
-//        events_friends.setOnClickListener(this);
-//        Button events_category = (Button)findViewById(R.id.dashboard_events_category);
-//        events_category.setOnClickListener(this);
-        Button profile = (Button)findViewById(R.id.dashboard_profile);
-        profile.setOnClickListener(this);
-        Button search = (Button)findViewById(R.id.dashboard_search);
-        search.setOnClickListener(this);
-        Button new_event = (Button)findViewById(R.id.dashboard_new_event);
-        new_event.setOnClickListener(this);
+//        new NotificationBarManager(this);
 
+        findViewById(R.id.dashboard_connections).setOnClickListener(this);
+        findViewById(R.id.dashboard_profile).setOnClickListener(this);
+        findViewById(R.id.dashboard_search).setOnClickListener(this);
+        findViewById(R.id.dashboard_new_event).setOnClickListener(this);
+        
 //        MapView mapView = (MapView) findViewById(R.id.dashboard_map);
 //        mapView.setBuiltInZoomControls(true);
 //        mapView.getController().setZoom(13);
@@ -70,11 +62,6 @@ public class Dashboard extends Activity implements OnClickListener {
     		return;
 		}
 		Intent i = new Intent(this, EventList.class);
-//		if (v.getId() == R.id.dashboard_events_friends){
-//    		i.putExtra("filter", EventManager.Filter.FRIENDS);
-//    	}else if (v.getId() == R.id.dashboard_events_category){
-//    		i.putExtra("filter", EventManager.Filter.CATEGORY);
-//    	}
 		startActivity(i);
 	}
 	

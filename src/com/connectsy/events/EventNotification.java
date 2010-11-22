@@ -1,28 +1,42 @@
 package com.connectsy.events;
 
-import org.json.JSONException;
+import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.connectsy.data.DataManager.DataUpdateListener;
 import com.connectsy.events.EventManager.Event;
-import com.connectsy.notifications.NotificationHandlerBase;
+import com.connectsy.notifications.NotificationHandler.NotificationContent;
+import com.connectsy.notifications.NotificationHandler.NotificationContentListener;
+import com.connectsy.notifications.NotificationHandler.NotificationContentProvider;
 
-public class EventNotification extends NotificationHandlerBase implements DataUpdateListener {
+public class EventNotification implements DataUpdateListener, 
+		NotificationContentProvider {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "EventNotification";
 	private static final int GET_EVENT = 0;
+	private Context context;
+	private ArrayList<JSONObject> nots;
+	private NotificationContentListener callback;
+
+	public void prepNotification(Context context, 
+			ArrayList<JSONObject> nots, NotificationContentListener callback) 
+			throws JSONException {
+		this.context = context;
+		this.nots = nots;
+		this.callback = callback;
+		prepareNotification();
+	}
 	
-	@Override
 	protected void prepareNotification() throws JSONException {
-		String title;
-		String body;
-		Intent i;
-		if (notifications.size() == 1) {
-			String rev = notifications.get(0).getString("event_revision");
+		NotificationContent not = new NotificationContent();
+		if (nots.size() == 1) {
+			String rev = nots.get(0).getString("event_revision");
 			EventManager eventManager = new EventManager(context, this, null,
 					null);
 			Event event = eventManager.getEvent(rev);
@@ -30,26 +44,22 @@ public class EventNotification extends NotificationHandlerBase implements DataUp
 				eventManager.refreshEvent(rev, GET_EVENT);
 				return;
 			}
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(context);
-			if (!prefs.getBoolean("preference_notifications_public", true) &&
-					event.broadcast)
-				return;
-			if (!prefs.getBoolean("preference_notifications_private", true) &&
-					!event.broadcast)
-				return;
-			title = event.creator + " shared a plan";
-			body = event.what;
-			i = new Intent(Intent.ACTION_VIEW);
+			
+			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-			i.putExtra("com.connectsy.events.revision", event.revision);
+			i.putExtra("com.connectsy.events.revision", rev);
+			
+			not.intent = i;
+			not.title = event.creator + " shared a plan";
+			not.body = event.what;
+			not.ticker = "New Connectsy Event";
+			not.username = event.creator;
 		} else {
-			title = notifications.size()+" plans shared";
-			body = "";
-			i = new Intent(context, EventList.class);
-			i.putExtra("filter", EventManager.Filter.INVITED);
+			not.title = nots.size()+" plans shared";
+			not.body = "";
+			not.ticker = "New Connectsy Events";
 		}
-		sendNotification(title, body, i, "invite");
+		callback.sendNotification(not);
 	}
 
 	public void onDataUpdate(int code, String response) {
@@ -63,14 +73,4 @@ public class EventNotification extends NotificationHandlerBase implements DataUp
 	}
 
 	public void onRemoteError(int httpStatus, String response, int code) {}
-
-	@Override
-	protected int getNotificationID() {
-		return 50;
-	}
-
-	@Override
-	protected String getTickerText() {
-		return "New Connectsy Event";
-	}
 }

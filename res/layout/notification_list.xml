@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    style="@style/Main">
+    
+    <FrameLayout style="@style/ActionBarFrame">
+        <ImageView style="@style/ActionBarBackground" />
+        <LinearLayout style="@style/ActionBar" >
+            <ImageView style="@style/ActionBarLogo"
+                android:id="@+id/ab_logo" />
+            
+            <View style="@style/Spring" />
+        </LinearLayout>
+    </FrameLayout>
+	
+    <LinearLayout style="@style/Heading">
+        <TextView style="@style/HeadingText"
+            android:text="Notifications" />
+        <ImageView style="@style/HeadingBorder" />
+    </LinearLayout>
+    
+	<ListView style="@style/FillAll"
+	   android:id="@+id/notification_list"/>
+</LinearLayout>

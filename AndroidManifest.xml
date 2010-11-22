@@ -111,8 +111,9 @@
 				<category android:name="android.intent.category.HOME" />
 			</intent-filter>
 		</receiver>
-		<activity android:name=".notifications.NotificationRedirect"
+        <activity android:name=".notifications.NotificationRedirect"
                   android:theme="@android:style/Theme.NoDisplay"/>
+        <activity android:name=".notifications.NotificationList"/>
         
     </application>
     <supports-screens android:anyDensity="true"/>

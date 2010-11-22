@@ -2,8 +2,6 @@
 
 package com.connectsy.notifications;
 
-import java.util.HashMap;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,10 +17,6 @@ import com.connectsy.LocManager;
 import com.connectsy.data.ApiRequest;
 import com.connectsy.data.ApiRequest.ApiRequestListener;
 import com.connectsy.data.ApiRequest.Method;
-import com.connectsy.events.EventNotification;
-import com.connectsy.events.attendants.AttendantNotification;
-import com.connectsy.events.comments.CommentNotification;
-import com.connectsy.users.FriendNotification;
 
 public class NotificationListener implements ApiRequestListener {
 
@@ -49,19 +43,18 @@ public class NotificationListener implements ApiRequestListener {
 	Context context;
 	String clientId;
 	LocManager location;
-	HashMap<String, NotificationHandler> notificationHandlers;
+	private NotificationHandler notificationHandler;
 
 	private NotificationListener() {
 		// prep handler
 		handler = new Handler();
-		
-		notificationHandlers = new HashMap<String, NotificationHandler>();
-		notificationHandlers.put("invite", new EventNotification());
-		notificationHandlers.put("comment", new CommentNotification());
-		notificationHandlers.put("attendant", new AttendantNotification());
-		notificationHandlers.put("follow", new FriendNotification());
+		notificationHandler = new NotificationHandler();
 	}
-
+	
+	public NotificationHandler getHandler(){
+		return notificationHandler;
+	}
+	
 	public boolean isRunning() {
 		return running;
 	}
@@ -154,14 +147,7 @@ public class NotificationListener implements ApiRequestListener {
 				try {
 					JSONArray notifications = new JSONObject(response)
 							.getJSONArray("notifications");
-					for (int i=0;i<notifications.length();i++){
-						JSONObject notice = notifications.getJSONObject(i);
-						if (notificationHandlers.containsKey(notice.getString("type"))){
-							notificationHandlers.get(notice.getString("type")).add(notice);
-						}
-					}
-					for (NotificationHandler handler: notificationHandlers.values())
-						handler.send(context);
+					notificationHandler.send(context, notifications);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -180,8 +166,4 @@ public class NotificationListener implements ApiRequestListener {
 	}
 	// nothing to see here, please move along...
 	public void onApiRequestError(int httpStatus, String response, int retCode) {}
-
-	public HashMap<String, NotificationHandler> getNotificationHandlers() {
-		return notificationHandlers;
-	}
 }

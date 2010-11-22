@@ -1,44 +1,48 @@
 package com.connectsy.events.comments;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.events.EventList;
 import com.connectsy.events.EventManager;
 import com.connectsy.events.EventManager.Event;
-import com.connectsy.notifications.NotificationHandlerBase;
+import com.connectsy.notifications.NotificationHandler.NotificationContent;
+import com.connectsy.notifications.NotificationHandler.NotificationContentListener;
+import com.connectsy.notifications.NotificationHandler.NotificationContentProvider;
 
-public class CommentNotification extends NotificationHandlerBase implements DataUpdateListener {
+public class CommentNotification implements DataUpdateListener, 
+		NotificationContentProvider {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "CommentNotification";
 	private static final int GET_EVENT = 0;
-	
-	@Override
-	public void send(Context context) throws JSONException {
-		if (!PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean("preference_notifications_comment", true))
-			return;
-		else
-			super.send(context);
+	private Context context;
+	private ArrayList<JSONObject> nots;
+	private NotificationContentListener callback;
+
+	public void prepNotification(Context context, 
+			ArrayList<JSONObject> nots, 
+			NotificationContentListener callback) 
+			throws JSONException {
+		this.context = context;
+		this.nots = nots;
+		this.callback = callback;
+		prepareNotification();
 	}
 
-	@Override
-	protected void prepareNotification() throws JSONException {
-		String title;
-		String body = null;
-		Intent i;
+	private void prepareNotification() throws JSONException {
+		NotificationContent not = new NotificationContent();
 		Event event = null;
 		
 		boolean oneEvent = true;
-		String rev = notifications.get(0).getString("event_revision");
-		for (JSONObject notice: notifications)
-			if (!rev.equals(notice.getString("event_revision")))
+		String rev = nots.get(0).getString("event_revision");
+		for (int i=1;i<nots.size();i++)
+			if (!rev.equals(nots.get(i).getString("event_revision")))
 				oneEvent = false;
 		if (oneEvent){
 			EventManager eventManager = new EventManager(context, this, null,
@@ -48,31 +52,37 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 				eventManager.refreshEvent(rev, GET_EVENT);
 				return;
 			}
-			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-			i.putExtra("com.connectsy.events.comments", true);
-			i.putExtra("com.connectsy.events.revision", event.revision);
-			
-			if (notifications.size() == 1) {
-				String commenter = notifications.get(0).getString("commenter");
-				title = commenter+" posted a comment";
-				body = notifications.get(0).getString("comment");
+
+			if (nots.size() == 1) {
+				String commenter = nots.get(0).getString("commenter");
+				
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+				i.putExtra("com.connectsy.events.revision", rev);
+				i.putExtra("com.connectsy.events.comments", true);
+				
+				not.intent = i;
+				not.username = commenter;
+				not.title = commenter+" posted a comment";
+				not.body = nots.get(0).getString("comment");
 			} else {
-				title = notifications.size()+" comments";
-				body = "By";
-				for (JSONObject notice: notifications)
-					body += " "+notice.getString("commenter")+",";
-				body = body.substring(0, body.length()-1);
+				not.title = nots.size()+" comments";
+				not.body = "By";
+				for (int i=1;i<nots.size();i++)
+					not.body += " "+nots.get(i).getString("commenter")+",";
+				not.body = not.body.substring(0, not.body.length()-1);
+				not.ticker = "New Comment";
 			}
 		}else{
-			title = notifications.size()+" comments";
-			body = "By";
-			for (JSONObject notice: notifications)
-				body += " "+notice.getString("commenter")+",";
-			body = body.substring(0, body.length()-1);
-			i = new Intent(context, EventList.class);
+			not.title = nots.size()+" comments";
+			not.body = "By";
+			for (int i=1;i<nots.size();i++)
+				not.body += " "+nots.get(i)
+						.getString("commenter")+",";
+			not.body = not.body.substring(0, not.body.length()-1);
+			not.ticker = "New Comments";
 		}
-		sendNotification(title, body, i, "comment");
+		callback.sendNotification(not);
 	}
 	
 	public void onDataUpdate(int code, String response) {
@@ -86,14 +96,4 @@ public class CommentNotification extends NotificationHandlerBase implements Data
 	}
 
 	public void onRemoteError(int httpStatus, String response, int code) {}
-
-	@Override
-	protected int getNotificationID() {
-		return 20;
-	}
-
-	@Override
-	protected String getTickerText() {
-		return "New Connectsy Comment";
-	}
 }

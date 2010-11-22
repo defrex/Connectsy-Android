@@ -1,46 +1,47 @@
 package com.connectsy.events.attendants;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.connectsy.data.DataManager.DataUpdateListener;
-import com.connectsy.events.EventList;
 import com.connectsy.events.EventManager;
 import com.connectsy.events.EventManager.Event;
-import com.connectsy.notifications.NotificationHandlerBase;
+import com.connectsy.notifications.NotificationHandler.NotificationContent;
+import com.connectsy.notifications.NotificationHandler.NotificationContentListener;
+import com.connectsy.notifications.NotificationHandler.NotificationContentProvider;
 
-public class AttendantNotification extends NotificationHandlerBase implements 
-		DataUpdateListener {
+public class AttendantNotification implements DataUpdateListener, 
+		NotificationContentProvider {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "AttendantNotification";
 	private static final int GET_EVENT = 0;
-	
-	@Override
-	public void send(Context context) throws JSONException {
-		if (!PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean("preference_notifications_attend", true))
-			return;
-		else
-			super.send(context);
+	private Context context;
+	private ArrayList<JSONObject> nots;
+	private NotificationContentListener callback;
+
+	public void prepNotification(Context context, 
+			ArrayList<JSONObject> nots, NotificationContentListener callback) 
+			throws JSONException {
+		this.context = context;
+		this.nots = nots;
+		this.callback = callback;
+		prepareNotification();
 	}
 	
-	@Override
 	protected void prepareNotification() throws JSONException {
-		String title;
-		String body;
-		Intent i;
+		NotificationContent not = new NotificationContent();
 		Event event = null;
 		
 		boolean oneEvent = true;
-		String rev = notifications.get(0).getString("event_revision");
-		for (JSONObject notice: notifications)
-			if (!rev.equals(notice.getString("event_revision")))
+		String rev = nots.get(0).getString("event_revision");
+		for (int i=1;i<nots.size();i++)
+			if (!rev.equals(nots.get(i).getString("event_revision")))
 				oneEvent = false;
 		if (oneEvent){
 			EventManager eventManager = new EventManager(context, this, null,
@@ -50,25 +51,30 @@ public class AttendantNotification extends NotificationHandlerBase implements
 				eventManager.refreshEvent(rev, GET_EVENT);
 				return;
 			}
-			i = new Intent(Intent.ACTION_VIEW);
-			i.setType("vnd.android.cursor.item/vnd.connectsy.event");
-			i.putExtra("com.connectsy.events.attendants", true);
-			i.putExtra("com.connectsy.events.revision", event.revision);
-			
-			if (notifications.size() == 1) {
-				String att = notifications.get(0).getString("attendant");
-				title = att+" is in";
-				body = "plan: "+event.what;
+
+			if (nots.size() == 1) {
+				String att = nots.get(0).getString("attendant");
+				
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setType("vnd.android.cursor.item/vnd.connectsy.event");
+				i.putExtra("com.connectsy.events.revision", rev);
+				i.putExtra("com.connectsy.events.attendants", true);
+				
+				not.intent = i;
+				not.username = att;
+				not.title = att+" is in";
+				not.body = "plan: "+event.what;
 			} else {
-				title = notifications.size()+" users are in";
-				body = "";
+				not.title = nots.size()+" users are in";
+				not.body = "";
+				not.ticker = "New user in";
 			}
 		}else{
-			title = notifications.size()+" users are in";
-			body = "";
-			i = new Intent(context, EventList.class);
+			not.title = nots.size()+" users are in";
+			not.body = "";
+			not.ticker = "New users in";
 		}
-		sendNotification(title, body, i, "attendant");
+		callback.sendNotification(not);
 	}
 	
 	public void onDataUpdate(int code, String response) {
@@ -81,15 +87,4 @@ public class AttendantNotification extends NotificationHandlerBase implements
 		}
 	}
 	public void onRemoteError(int httpStatus, String response, int code) {}
-
-	@Override
-	protected int getNotificationID() {
-		return 10;
-	}
-
-	@Override
-	protected String getTickerText() {
-		return "Someone new is in on Connectsy";
-	}
-
 }

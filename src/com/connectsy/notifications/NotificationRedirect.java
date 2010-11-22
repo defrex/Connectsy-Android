@@ -21,20 +21,19 @@ public class NotificationRedirect extends Activity implements ServiceConnection 
 
 		Intent service = new Intent();
 		service.setAction("com.connectsy.START_NOTIFICATIONS");
-		startService(service);
 		bindService(service, this, BIND_AUTO_CREATE);
     }
 
 	public void onServiceConnected(ComponentName name, IBinder service) {
-		((NotificationServiceBinder)service).getListener().getNotificationHandlers()
-				.get(from).comfirmed(this);
+		((NotificationServiceBinder)service).clearPendingNotifications();
 		this.startActivity(next);
 		this.finish();
 	}
 
 	public void onServiceDisconnected(ComponentName name) {}
     
-    public static Intent wrapIntent(Context context, Intent intent, String notificationHandler){
+    public static Intent wrapIntent(Context context, Intent intent, 
+    		String notificationHandler){
     	Intent i = new Intent(context, NotificationRedirect.class);
     	i.putExtra("next_intent", intent);
     	i.putExtra("from", notificationHandler);

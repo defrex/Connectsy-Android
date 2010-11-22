@@ -3,6 +3,7 @@ package com.connectsy;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.connectsy.data.DataManager;
 import com.connectsy.users.Register;
@@ -17,10 +18,13 @@ public class Launcher extends Activity {
         	startActivity(new Intent(this, Register.class));
         	this.finish();
         }else{
-        	//start the notification service
-    		Intent i = new Intent();
-    		i.setAction("com.connectsy.START_NOTIFICATIONS");
-    		startService(i);
+    		if (PreferenceManager.getDefaultSharedPreferences(this)
+    				.getBoolean("notifications", true)){
+	        	//start the notification service
+	    		Intent i = new Intent();
+	    		i.setAction("com.connectsy.START_NOTIFICATIONS");
+	    		startService(i);
+    		}
     		
         	startActivity(new Intent(this, Dashboard.class));
         	this.finish();
