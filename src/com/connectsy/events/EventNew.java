@@ -191,8 +191,8 @@ public class EventNew extends Activity implements OnClickListener,
     	}else if (who == "private"){
 	        findViewById(R.id.events_new_friends_selected).setVisibility(View.VISIBLE);
 	        setEnabled(priv, pub);
-	        if (chosenUsers == null && chosenContacts == null)
-	        	selectFriends();
+//	        if (chosenUsers == null && chosenContacts == null)
+//	        	selectFriends();
     	}
 
     	final ScrollView scroll = (ScrollView)findViewById(R.id.events_new_scroller);

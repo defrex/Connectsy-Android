@@ -116,7 +116,7 @@
             android:paddingRight="10dp">
             <TextView style="@style/FormElementTitle"
                  android:id="@+id/events_new_friends_selected_text"
-                 android:text="No Followers Selected" />
+                 android:text="Invite followers" />
             <View style="@style/Spring" />
             <ImageView style="@style/WrapAll"
                 android:src="@drawable/icon_right_arrow_grey"/>
@@ -127,7 +127,7 @@
         <LinearLayout style="@style/EventNewOption">
             <TextView style="@style/EventNewOptionInput"
                android:id="@+id/events_new_sms"
-               android:hint="Share with SMS"/>
+               android:hint="Invite with SMS"/>
         </LinearLayout>
         
         <View style="@style/ListTitleBorderTop"/>
