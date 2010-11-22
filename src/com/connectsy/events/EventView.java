@@ -3,6 +3,7 @@ package com.connectsy.events;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -113,6 +114,15 @@ public class EventView extends Activity implements DataUpdateListener,
 					R.drawable.icon_check));
 		}
 		if (doRequest) {
+			String message;
+			if (curUserStatus == Status.ATTENDING)
+				message = "I'm In";
+			else
+				message = "I'm Out";
+			Toast t = Toast.makeText(this, message, 2000);
+			t.setGravity(Gravity.TOP, 0, 60);
+			t.show();
+			
 			getAttManager().setStatus(curUserStatus, ATT_SET);
 			pendingOperations++;
 			setRefreshing(true);
