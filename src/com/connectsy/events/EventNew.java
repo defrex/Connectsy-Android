@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -143,7 +144,7 @@ public class EventNew extends Activity implements OnClickListener,
 					display += "s";
 				display += " selected";
 				
-				((TextView)findViewById(R.id.events_new_friends_selected_text))
+				((TextView)findViewById(R.id.events_new_friends_selected))
 					.setText(display);
 			}else if (resultCode == RESULT_OK && requestCode == SELECT_CONTACTS){
 				Bundle e = data.getExtras();
@@ -186,10 +187,12 @@ public class EventNew extends Activity implements OnClickListener,
     	View pub = findViewById(R.id.events_new_radio_public);
     	View priv = findViewById(R.id.events_new_radio_private);
     	if (who == "public"){
-	        findViewById(R.id.events_new_friends_selected).setVisibility(View.GONE);
+	        findViewById(R.id.events_new_friends_selected_wrapper)
+	        		.setVisibility(View.GONE);
 	        setEnabled(pub, priv);
     	}else if (who == "private"){
-	        findViewById(R.id.events_new_friends_selected).setVisibility(View.VISIBLE);
+	        findViewById(R.id.events_new_friends_selected_wrapper)
+	        		.setVisibility(View.VISIBLE);
 	        setEnabled(priv, pub);
 //	        if (chosenUsers == null && chosenContacts == null)
 //	        	selectFriends();
@@ -206,15 +209,21 @@ public class EventNew extends Activity implements OnClickListener,
     private void submitData() {
     	String what = ((TextView) findViewById(R.id.events_new_what))
 				.getText().toString();
+    	boolean broadcast = findViewById(R.id.events_new_radio_public).isSelected();
     	if (what.equals("")){
     		toast("What are you doing later?");
+    		return;
+    	}else if (!broadcast 
+    			&& ((chosenUsers == null || chosenUsers.size() == 0) 
+    			 && (chosenContacts == null || chosenContacts.size() == 0))){
+    		toast("Please invite someone");
     		return;
     	}
     	
         eventManager = new EventManager(this, this, null, null);
         Event event = eventManager.new Event();
         event.creator = UserManager.currentUsername(this);
-        event.broadcast = findViewById(R.id.events_new_radio_public).isSelected();
+        event.broadcast = broadcast;
         event.what = what;
         
         String where = ((TextView) findViewById(R.id.events_new_where))

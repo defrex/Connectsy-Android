@@ -107,19 +107,13 @@
         </LinearLayout>
         
         <LinearLayout style="@style/EventNewOption"
-            android:id="@+id/events_new_friends_selected"
-            android:clickable="true" 
+            android:id="@+id/events_new_friends_selected_wrapper"
             android:visibility="gone"
-            android:focusable="true"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-            <TextView style="@style/FormElementTitle"
-                 android:id="@+id/events_new_friends_selected_text"
-                 android:text="Invite followers" />
-            <View style="@style/Spring" />
-            <ImageView style="@style/WrapAll"
-                android:src="@drawable/icon_right_arrow_grey"/>
+            android:orientation="vertical">
+            <View style="@style/ListTitleBorderTop"/>
+            <TextView style="@style/EventNewOptionInput"
+                 android:id="@+id/events_new_friends_selected"
+                 android:hint="Invite Followers" />
         </LinearLayout>
     
         <View style="@style/ListTitleBorderTop"/>

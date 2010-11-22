@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,7 @@ import com.connectsy.notifications.NotificationHandler.NotificationContentListen
 import com.connectsy.utils.Utils;
 
 public class NotificationList extends Activity {
+	@SuppressWarnings("unused")
 	private final String TAG = "NotificationList";
 	private NotificationServiceBinder binder;
 	private ArrayList<JSONObject> nots;
@@ -66,7 +66,7 @@ public class NotificationList extends Activity {
 					public void sendNotification(NotificationContent not) {
 						((TextView) view.findViewById(
 								R.id.notification_list_item_title))
-								.setText(Utils.maybeTruncate(not.title, 30));
+								.setText(not.title);
 						((TextView) view.findViewById(
 								R.id.notification_list_item_body))
 								.setText(Utils.maybeTruncate(not.body, 30));
