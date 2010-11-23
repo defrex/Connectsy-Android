@@ -29,8 +29,13 @@
                 android:src="@drawable/icon_check" />
         </LinearLayout>
     </FrameLayout>
-	
-	<LinearLayout style="@style/FullWidth"
+    
+    <ScrollView style="@style/FillAll">
+    
+    <LinearLayout style="@style/FullWidth"
+        android:orientation="vertical">
+    
+    <LinearLayout style="@style/FullWidth"
 	    android:orientation="horizontal"
 	    android:padding="5dp"
 	    android:gravity="center_vertical">
@@ -105,5 +110,6 @@
 <!--    <ListView android:id="@+id/comments_list"-->
 <!--        android:layout_width="fill_parent"-->
 <!--        android:layout_height="fill_parent"/>-->
-        
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>
