@@ -42,7 +42,8 @@ public class NotificationService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (intent.getAction().equals("com.connectsy.STOP_NOTIFICATIONS"))
+		String action = intent.getAction();
+		if (action != null && action.equals("com.connectsy.STOP_NOTIFICATIONS"))
 			stopSelf();
 		return Service.START_STICKY;
 	}
