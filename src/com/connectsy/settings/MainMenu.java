@@ -20,7 +20,7 @@ public class MainMenu {
         menu.add(0, MainMenu.MENU_LOGOUT, 0, R.string.menu_logout)
 			.setIcon(android.R.drawable.ic_lock_power_off);
         menu.add(0, MainMenu.MENU_NOTIFICATIONS, 0, R.string.menu_notifications)
-			.setIcon(R.drawable.menu_notifications);
+			.setIcon(R.drawable.ic_menu_notifications);
         return true;
 	}
 	
