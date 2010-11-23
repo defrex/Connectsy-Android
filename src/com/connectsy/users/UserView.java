@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy.ActionBarHandler;
@@ -218,14 +219,14 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 	
 	private void follow(){
 		getUserManager(true).follow(FOLLOW);
-        loadingDialog = ProgressDialog.show(this, "", "Following...", true);
+//        loadingDialog = ProgressDialog.show(this, "", "Following...", true);
 		operationsPending++;
 		setRefreshing(true);
 	}
 	
 	private void unfollow(){
 		getUserManager(true).unfollow(UNFOLLOW);
-        loadingDialog = ProgressDialog.show(this, "", "Unfollowing...", true);
+//        loadingDialog = ProgressDialog.show(this, "", "Unfollowing...", true);
 		operationsPending++;
 		setRefreshing(true);
 	}
@@ -293,13 +294,19 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
 			updateFollowing();
 		}else if (code == FOLLOW){
 			findViewById(R.id.user_view_follow).setVisibility(View.GONE);
-			loadingDialog.dismiss();
+//			loadingDialog.dismiss();
+			Toast t = Toast.makeText(this, "Following", 2000);
+			t.setGravity(Gravity.TOP, 0, 60);
+			t.show();
 			getUserManager(true).refreshUser(REFRESH_USER);
 			getUserManager(true).refreshFollowers(REFRESH_FOLLOWERS);
 			operationsPending += 2;
 		}else if (code == UNFOLLOW){
 			findViewById(R.id.user_view_unfollow).setVisibility(View.GONE);
-			loadingDialog.dismiss();
+//			loadingDialog.dismiss();
+			Toast t = Toast.makeText(this, "Not Following", 2000);
+			t.setGravity(Gravity.TOP, 0, 60);
+			t.show();
 			getUserManager(true).refreshUser(REFRESH_USER);
 			getUserManager(true).refreshFollowers(REFRESH_FOLLOWERS);
 			operationsPending += 2;
