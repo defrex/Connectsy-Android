@@ -13,7 +13,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.connectsy.R;
 import com.connectsy.events.EventNotification;
@@ -54,6 +53,7 @@ public class NotificationHandler {
 			NotificationContent not = new NotificationContent();
 			not.title = "Activity on Connectsy";
 			not.body = notifications.size()+" new notifications";
+			not.ticker = not.title;
 			callback.sendNotification(not);
 		}
 	}
@@ -91,7 +91,6 @@ public class NotificationHandler {
 			}
 		final String finalType = type;
 		
-		Log.d(TAG, "preping notification, type: "+type);
 		notificationContent.get(type).prepNotification(context, nots, 
 			new NotificationContentListener(){
 				public void sendNotification(NotificationContent not) {
@@ -103,7 +102,8 @@ public class NotificationHandler {
 					
 					PendingIntent pi = PendingIntent.getActivity(context, 0, 
 							not.intent, PendingIntent.FLAG_UPDATE_CURRENT);
-					Notification n = getNotification(not.ticker);
+					//TODO: fix not.ticker on next line
+					Notification n = getNotification("New activity on Connectsy");
 					n.setLatestEventInfo(context, not.title, not.body, pi);
 					NotificationManager notManager = (NotificationManager) 
 						context.getSystemService(Context.NOTIFICATION_SERVICE);
