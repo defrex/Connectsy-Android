@@ -108,10 +108,13 @@
             </intent-filter>
         </service>
         <receiver android:name=".notifications.NotificationBroadcastReciever">
-			<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-				<category android:name="android.intent.category.HOME" />
-			</intent-filter>
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
 		</receiver>
         
     </application>

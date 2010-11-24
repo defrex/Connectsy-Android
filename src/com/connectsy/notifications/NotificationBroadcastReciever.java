@@ -11,7 +11,6 @@ public class NotificationBroadcastReciever extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(TAG , "broadcast recieved, running service");
 		Intent i = new Intent();
 		i.setAction("com.connectsy.START_NOTIFICATIONS");
 		context.startService(i);
