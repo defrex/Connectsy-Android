@@ -33,19 +33,20 @@ public class NotificationService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		String action = intent.getAction();
-		if (action != null || !action.equals("com.connectsy.STOP_NOTIFICATIONS")) {
+		if (intent == null || intent.getAction() == null || 
+				!intent.getAction().equals("com.connectsy.STOP_NOTIFICATIONS"))
 			if (!listener.isRunning())
 				listener.start(this);
-		}
 		super.onStart(intent, startId);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		String action = intent.getAction();
-		if (action != null && action.equals("com.connectsy.STOP_NOTIFICATIONS"))
-			stopSelf();
+		if (intent != null){
+			String action = intent.getAction();
+			if (action != null && action.equals("com.connectsy.STOP_NOTIFICATIONS"))
+				stopSelf();
+		}
 		return Service.START_STICKY;
 	}
 }
