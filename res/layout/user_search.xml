@@ -10,7 +10,8 @@
         <LinearLayout style="@style/ActionBar" >
             <EditText style="@style/ActionBarSearch"
                 android:id="@+id/user_search_box"
-                android:hint="Search Users"/>
+                android:hint="Search Users"
+                android:singleLine="true"/>
             
             <ImageView style="@style/ActionBarSeparator" />
             <ImageView style="@style/ActionBarAction"

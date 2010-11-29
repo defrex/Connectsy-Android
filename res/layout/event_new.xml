@@ -58,7 +58,8 @@
 			   android:id="@+id/events_new_where"
                android:maxLength="25"
                android:hint="Where (optional)"
-            android:inputType="textCapSentences|textAutoCorrect"/>
+               android:singleLine="true"
+               android:inputType="textCapSentences|textAutoCorrect"/>
 	    </LinearLayout>
         
         <View style="@style/ListTitleBorderTop"/>

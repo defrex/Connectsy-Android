@@ -22,13 +22,15 @@
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content"
 		    android:hint="@string/auth_login_username"
-		    android:id="@+id/auth_login_username" />
+		    android:id="@+id/auth_login_username"
+		    android:singleLine="true"/>
 		<EditText
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content"
 		    android:hint="@string/auth_login_password"
 		    android:password="true"
-		    android:id="@+id/auth_login_password" />
+		    android:id="@+id/auth_login_password"
+		    android:singleLine="true"/>
 		
         <LinearLayout 
             android:layout_width="fill_parent"

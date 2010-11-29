@@ -23,17 +23,20 @@
     <EditText
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:hint="@string/auth_login_username"
         android:id="@+id/auth_register_username" />
 	<EditText
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content"
+	    android:singleLine="true"
 	    android:hint="@string/auth_login_password"
 	    android:password="true"
 	    android:id="@+id/auth_register_password" />
 	<EditText
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:singleLine="true"
 		android:hint="@string/auth_register_password2"
 		android:password="true"
 		android:id="@+id/auth_register_password2" />

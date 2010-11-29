@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.connectsy"
-      android:versionCode="1"
+      package="com.connectsy2"
+      android:versionCode="2"
       android:versionName="1.0">
     <application 
 	    	android:icon="@drawable/icon" 
@@ -103,8 +103,8 @@
         <activity android:name=".notifications.NotificationList"/>
         <service android:name=".notifications.NotificationService">
             <intent-filter>
-                <action android:name="com.connectsy.START_NOTIFICATIONS" />
-                <action android:name="com.connectsy.STOP_NOTIFICATIONS" />
+                <action android:name="com.connectsy2.START_NOTIFICATIONS" />
+                <action android:name="com.connectsy2.STOP_NOTIFICATIONS" />
             </intent-filter>
         </service>
         <receiver android:name=".notifications.NotificationBroadcastReciever">
