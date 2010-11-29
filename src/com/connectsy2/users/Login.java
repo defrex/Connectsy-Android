@@ -84,7 +84,7 @@ public class Login extends Activity implements OnClickListener,
     
 	public void onApiRequestFinish(int status, String strResponse, int code){
 		if (code == LOGIN){
-			username = username.toLowerCase();
+			username = username.toLowerCase().trim();
 			SharedPreferences data = DataManager.getCache(this);
 	        SharedPreferences.Editor dataEditor = data.edit(); 
 	        dataEditor.putString("token", strResponse);
