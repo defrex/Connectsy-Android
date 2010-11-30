@@ -24,6 +24,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy2.ActionBarHandler;
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.AvatarFetcher;
 import com.connectsy2.data.DataManager.DataUpdateListener;
 import com.connectsy2.events.EventManager;
@@ -58,6 +59,7 @@ public class UserView extends Activity implements OnClickListener, DataUpdateLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_view);
+        Analytics.pageView(this, this.getClass().getName());
 
         //set up logo clicks
         new ActionBarHandler(this);

@@ -3,12 +3,12 @@ package com.connectsy2.events.comments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.DataManager.DataUpdateListener;
 import com.connectsy2.events.EventManager;
 import com.connectsy2.events.EventManager.Event;
@@ -27,6 +27,7 @@ public class CommentList extends Activity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comment_list);
+        Analytics.pageView(this, this.getClass().getName());
 
         findViewById(R.id.ab_refresh).setOnClickListener(this);
         findViewById(R.id.ab_new_comment).setOnClickListener(this);

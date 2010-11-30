@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.connectsy2.ActionBarHandler;
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.DataManager.DataUpdateListener;
 import com.connectsy2.events.EventManager.Event;
 import com.connectsy2.events.attendants.AttendantManager;
@@ -42,6 +43,7 @@ public class EventView extends Activity implements DataUpdateListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_view);
+        Analytics.pageView(this, this.getClass().getName());
 
 		//set up logo clicks
         new ActionBarHandler(this);

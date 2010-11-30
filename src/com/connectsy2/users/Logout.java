@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.DataManager;
 
 public class Logout extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Analytics.pageView(this, this.getClass().getName());
         DataManager.cleanCache(this);
         
         //stop notification service

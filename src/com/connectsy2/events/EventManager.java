@@ -13,6 +13,7 @@ import android.content.Context;
 import android.location.Location;
 
 import com.connectsy2.LocManager;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.ApiRequest;
 import com.connectsy2.data.DataManager;
 import com.connectsy2.data.ApiRequest.Method;
@@ -199,6 +200,7 @@ public class EventManager extends DataManager {
 				"/events/", true, CREATE_EVENT);
 		r.setBodyString(json.toString());
 		r.execute();
+		Analytics.event(context, "Created", "Event");
 	}
 	
 	@Override

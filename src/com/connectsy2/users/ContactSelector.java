@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.users.ContactCursor.Contact;
 
 public class ContactSelector extends Activity implements OnClickListener {
@@ -25,6 +26,7 @@ public class ContactSelector extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_selector);
+        Analytics.pageView(this, this.getClass().getName());
         
         Button done = (Button)findViewById(R.id.user_select_done);
         done.setOnClickListener(this);

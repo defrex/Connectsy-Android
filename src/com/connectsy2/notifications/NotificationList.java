@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.AvatarFetcher;
 import com.connectsy2.data.DataManager;
 import com.connectsy2.notifications.NotificationHandler.NotificationContent;
@@ -126,6 +127,7 @@ public class NotificationList extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notification_list);
+        Analytics.pageView(this, this.getClass().getName());
         
         nots = new ArrayList<JSONObject>();
         try {

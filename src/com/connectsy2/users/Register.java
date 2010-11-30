@@ -12,12 +12,11 @@ import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.ApiRequest;
 import com.connectsy2.data.ApiRequest.ApiRequestListener;
 import com.connectsy2.data.ApiRequest.Method;
@@ -31,6 +30,7 @@ public class Register extends Activity implements OnClickListener, ApiRequestLis
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.auth_register);
+        Analytics.pageView(this, this.getClass().getName());
 
         findViewById(R.id.auth_register_button).setOnClickListener(this);
         findViewById(R.id.auth_register_login).setOnClickListener(this);

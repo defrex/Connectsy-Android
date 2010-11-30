@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.ApiRequest;
 import com.connectsy2.data.ApiRequest.ApiRequestListener;
 import com.connectsy2.data.ApiRequest.Method;
@@ -34,6 +35,7 @@ public class UserSearch extends Activity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_search);
+        Analytics.pageView(this, this.getClass().getName());
         
         findViewById(R.id.ab_user_search).setOnClickListener(this);
         ((ListView)findViewById(R.id.user_search_results))

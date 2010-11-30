@@ -1,7 +1,6 @@
 package com.connectsy2.events;
 
 import java.util.ArrayList;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +15,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +27,7 @@ import android.widget.Toast;
 
 import com.connectsy2.ActionBarHandler;
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.DataManager.DataUpdateListener;
 import com.connectsy2.events.EventManager.Event;
 import com.connectsy2.settings.MainMenu;
@@ -60,6 +59,7 @@ public class EventNew extends Activity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_new);
+        Analytics.pageView(this, this.getClass().getName());
 
         //set up logo clicks
         new ActionBarHandler(this);

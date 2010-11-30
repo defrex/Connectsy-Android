@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.DataManager.DataUpdateListener;
 import com.connectsy2.events.EventManager;
 import com.connectsy2.events.EventManager.Event;
@@ -23,6 +24,7 @@ import com.connectsy2.users.UserManager.User;
 
 public class AttendantList extends Activity implements OnClickListener, 
 		DataUpdateListener {
+	@SuppressWarnings("unused")
 	private String TAG = "AttendantList";
     private String eventRev;
     private Event event;
@@ -36,6 +38,7 @@ public class AttendantList extends Activity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attendant_list);
+        Analytics.pageView(this, this.getClass().getName());
         
         findViewById(R.id.ab_refresh).setOnClickListener(this);
         

@@ -24,6 +24,7 @@ public class UserManager extends DataManager {
 	private static final int GET_FOLLOWING = 2;
 	private static final int GET_FOLLOWERS = 3;
 	private static final int FOLLOW = 4;
+	private static final int CHANGE_PASSWORD = 5;
 	
 	private String username;
 	
@@ -199,6 +200,22 @@ public class UserManager extends DataManager {
 				"/users/"+username+"/avatar/", true, UPLOAD_AVATAR);
 		r.setBodyFile(file);
 		r.setHeader("Content-Type", context.getContentResolver().getType(avatar));
+		r.execute();
+	}
+	
+	public void changePassword(String oldPassword, String newPassword, 
+			int returnCode) throws IOException{
+		this.returnCode = returnCode;
+		ApiRequest r = new ApiRequest(this, context, Method.POST, 
+				"/users/"+username+"/", true, CHANGE_PASSWORD);
+		JSONObject body = new JSONObject();
+		try {
+			body.put("old_password", oldPassword);
+			body.put("new_password", newPassword);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		r.setBodyString(body.toString());
 		r.execute();
 	}
 	

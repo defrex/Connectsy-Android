@@ -2,8 +2,6 @@ package com.connectsy2.events;
 
 import java.util.ArrayList;
 
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
@@ -19,6 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.connectsy2.ActionBarHandler;
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.DataManager.DataUpdateListener;
 import com.connectsy2.events.EventManager.Filter;
 import com.connectsy2.settings.MainMenu;
@@ -41,6 +40,7 @@ public class EventList extends Activity implements DataUpdateListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
+        Analytics.pageView(this, this.getClass().getName());
         
         findViewById(R.id.ab_new_event).setOnClickListener(
         		new ActionBarHandler(this));

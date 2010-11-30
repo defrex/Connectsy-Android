@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.ApiRequest;
 import com.connectsy2.data.DataManager;
 import com.connectsy2.data.ApiRequest.Method;
@@ -132,6 +133,7 @@ public class CommentManager extends DataManager {
 		}
 		request.setBodyString(body.toString());
 		request.execute();
+		Analytics.event(context, "Created", "Comment");
 	}
 	
 	@Override

@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.DataManager.DataUpdateListener;
 
 public class UserSelector extends Activity implements OnClickListener, 
@@ -29,6 +30,7 @@ public class UserSelector extends Activity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_selector);
+        Analytics.pageView(this, this.getClass().getName());
         
         manager = new UserManager(this, this, UserManager.currentUsername(this));
         findViewById(R.id.user_select_done).setOnClickListener(this);

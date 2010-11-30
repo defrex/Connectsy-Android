@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.connectsy2.Dashboard;
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.ApiRequest;
 import com.connectsy2.data.DataManager;
 import com.connectsy2.data.ApiRequest.ApiRequestListener;
@@ -33,6 +34,7 @@ public class Login extends Activity implements OnClickListener,
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.auth_login);
+        Analytics.pageView(this, this.getClass().getName());
 
         findViewById(R.id.auth_login_button).setOnClickListener(this);
         findViewById(R.id.auth_login_reg).setOnClickListener(this);

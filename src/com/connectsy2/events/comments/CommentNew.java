@@ -11,12 +11,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 
 public class CommentNew extends Activity implements OnClickListener {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comment_new);
+        Analytics.pageView(this, this.getClass().getName());
 
         Button post = (Button)findViewById(R.id.comment_new_submit);
         post.setOnClickListener(this);

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/preference_category_user">
-		<Preference 
-		    android:key="avatar"
-		    android:title="@string/preference_avatar">
+        <Preference 
+            android:key="avatar"
+            android:title="@string/preference_avatar">
+        </Preference>
+        <Preference 
+            android:key="password"
+            android:title="@string/preference_password">
         </Preference>
     </PreferenceCategory>
     

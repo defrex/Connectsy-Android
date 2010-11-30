@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.connectsy2.R;
+import com.connectsy2.data.Analytics;
 import com.connectsy2.events.EventList;
 import com.connectsy2.events.EventNew;
 import com.connectsy2.settings.MainMenu;
+import com.connectsy2.users.UserManager;
 import com.connectsy2.users.UserSearch;
 
 //public class Dashboard extends MapActivity implements OnClickListener, 
@@ -29,6 +31,7 @@ public class Dashboard extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
+        Analytics.pageView(this, this.getClass().getName());
         
 //        new NotificationBarManager(this);
 
@@ -50,9 +53,8 @@ public class Dashboard extends Activity implements OnClickListener {
 		if (v.getId() == R.id.dashboard_profile){
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setType("vnd.android.cursor.item/vnd.connectsy.user");
-			SharedPreferences data = getSharedPreferences("consy", 0);
-			String username = data.getString("username", null);
-			i.putExtra("com.connectsy2.user.username", username);
+			i.putExtra("com.connectsy2.user.username", 
+					UserManager.currentUsername(this));
 			startActivity(i);
     		return;
 		}else if (v.getId() == R.id.dashboard_search){

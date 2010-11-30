@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
+import com.connectsy2.data.Analytics;
 import com.connectsy2.data.ApiRequest;
 import com.connectsy2.data.DataManager;
 import com.connectsy2.data.ApiRequest.ApiRequestListener;
@@ -149,6 +150,10 @@ public class AttendantManager extends DataManager implements ApiRequestListener 
 					"/events/"+eventID+"/attendants/", true, SET_ATTS);
 			r.setBodyString(kwargs.toString());
 			r.execute();
+			if (status == Status.ATTENDING)
+				Analytics.event(context, "Attending", "In");
+			else
+				Analytics.event(context, "Attending", "Out");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
