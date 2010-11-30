@@ -2,6 +2,9 @@ package com.connectsy2.settings;
 
 import java.io.IOException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,7 +21,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.Images;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,6 +84,13 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 		}else if (key.equals("password")){
 			showDialog(CHANGE_PASSWORD);
 		}
+//		else if (key.equals("social_twitter")){
+//			OAuthSignpostClient client = new OAuthSignpostClient(
+//					Settings.TWITTER_KEY, Settings.TWITTER_SECRET, "oob");
+//	        Twitter jtwit = new Twitter("yourtwittername", client);
+//	        URI url = client.authorizeUrl();
+//	        startActivityForResult(new Intent())
+//		}
 		return ret;
 	}
 
@@ -123,8 +132,15 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	public void onRemoteError(int httpStatus, String response, int code) {
 		if (loadingDialog != null) loadingDialog.dismiss();
 		if (code == CHANGE_PASSWORD){
-			toast("Password Change Error: "+httpStatus);
-			Log.d(TAG, response);
+			try {
+				JSONObject e = new JSONObject(response);
+				if (e.getString("error").equals("INVALID_PASSWORD"))
+					toast("Invalid password, please try again");
+				else
+					toast("Password Change Error: "+httpStatus);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -19,6 +18,7 @@ import com.connectsy2.data.DataManager.DataUpdateListener;
 import com.connectsy2.users.UserManager.User;
 
 public class FriendsAdapter extends BaseAdapter implements ListAdapter {
+	@SuppressWarnings("unused")
 	private static final String TAG = "FriendsAdapter";
 	Context context;
 	ArrayList<Object> friends;

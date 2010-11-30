@@ -2,14 +2,12 @@ package com.connectsy2;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import com.connectsy2.R;
 import com.connectsy2.data.Analytics;
 import com.connectsy2.events.EventList;
 import com.connectsy2.events.EventNew;

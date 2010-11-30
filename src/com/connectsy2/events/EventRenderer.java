@@ -3,7 +3,6 @@ package com.connectsy2.events;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -62,11 +61,7 @@ public class EventRenderer implements DataUpdateListener {
 		username.setOnClickListener(userClick);
 
 		TextView what = (TextView) view.findViewById(R.id.event_what);
-		if (event.what == null)
-			Log.d(TAG, "event.what null");
-		else if (what == null)
-			Log.d(TAG, "wat textview null");
-		else
+		if (event.what != null && what != null)
 			what.setText(event.what);
 		
 		if (!truncate){

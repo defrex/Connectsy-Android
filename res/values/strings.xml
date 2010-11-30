@@ -47,6 +47,8 @@
     <string name="preference_category_user">User preferences</string>
     <string name="preference_avatar">Select Profile Picture</string>
     <string name="preference_password">Change Password</string>
+    <string name="preference_category_social">Social Networks</string>
+    <string name="preference_social_twitter">Authorize Twitter</string>
     <string name="preference_category_notifications">Push Notifications</string>
     <string name="preference_notifications">Enable Notifications</string>
     <string name="preference_category_notification_sound">Notification Sound</string>

@@ -1,5 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceScreen android:title="@string/preference_category_notifications">
+        <CheckBoxPreference
+            android:key="notifications"
+            android:defaultValue="true"
+            android:title="@string/preference_notifications"/>
+        
+        <PreferenceCategory 
+            android:title="@string/preference_category_notification_sound">
+                
+            <CheckBoxPreference
+                android:key="notification_sound"
+                android:defaultValue="true"
+                android:dependency="notifications"
+                android:title="@string/preference_notification_sound"/>
+            
+            <Preference 
+                android:key="notification_sound_uri"
+                android:dependency="notifications"
+                android:title="@string/preference_notification_sound_uri">
+            </Preference>
+        
+        </PreferenceCategory>
+        <PreferenceCategory 
+            android:title="@string/preference_category_notification_types">
+            <CheckBoxPreference
+                android:key="notifications_invite"
+                android:dependency="notifications"
+                android:defaultValue="true"
+                android:title="@string/preference_notifications_invite"/>
+            
+            <CheckBoxPreference
+                android:key="notifications_comment"
+                android:dependency="notifications"
+                android:defaultValue="true"
+                android:title="@string/preference_notifications_comment"/>
+            
+            <CheckBoxPreference
+                android:key="notifications_attendant"
+                android:dependency="notifications"
+                android:defaultValue="true"
+                android:title="@string/preference_notifications_attend"/>
+            
+            <CheckBoxPreference
+                android:key="notifications_follow"
+                android:dependency="notifications"
+                android:defaultValue="true"
+                android:title="@string/preference_notifications_follow"/>
+            
+        </PreferenceCategory>
+    </PreferenceScreen>
+    
     <PreferenceCategory android:title="@string/preference_category_user">
         <Preference 
             android:key="avatar"
@@ -11,54 +63,11 @@
         </Preference>
     </PreferenceCategory>
     
-    <PreferenceScreen android:title="@string/preference_category_notifications">
-        <CheckBoxPreference
-            android:key="notifications"
-            android:defaultValue="true"
-            android:title="@string/preference_notifications"/>
-        
-        <PreferenceCategory 
-            android:title="@string/preference_category_notification_sound">
-	            
-	        <CheckBoxPreference
-	            android:key="notification_sound"
-	            android:defaultValue="true"
-	            android:dependency="notifications"
-	            android:title="@string/preference_notification_sound"/>
-	        
-	        <Preference 
-	            android:key="notification_sound_uri"
-	            android:dependency="notifications"
-	            android:title="@string/preference_notification_sound_uri">
-	        </Preference>
-        
-        </PreferenceCategory>
-        <PreferenceCategory 
-            android:title="@string/preference_category_notification_types">
-	        <CheckBoxPreference
-	            android:key="notifications_invite"
-	            android:dependency="notifications"
-	            android:defaultValue="true"
-	            android:title="@string/preference_notifications_invite"/>
-	        
-	        <CheckBoxPreference
-	            android:key="notifications_comment"
-	            android:dependency="notifications"
-	            android:defaultValue="true"
-	            android:title="@string/preference_notifications_comment"/>
-	        
-	        <CheckBoxPreference
-	            android:key="notifications_attendant"
-	            android:dependency="notifications"
-	            android:defaultValue="true"
-	            android:title="@string/preference_notifications_attend"/>
-	        
-	        <CheckBoxPreference
-	            android:key="notifications_follow"
-	            android:dependency="notifications"
-	            android:defaultValue="true"
-	            android:title="@string/preference_notifications_follow"/>
-	        
-        </PreferenceCategory>
-    </PreferenceScreen>
+<!--    <PreferenceCategory android:title="@string/preference_category_social">-->
+<!--        <Preference -->
+<!--            android:key="social_twitter"-->
+<!--            android:title="@string/preference_social_twitter">-->
+<!--        </Preference>-->
+<!--    </PreferenceCategory>-->
+    
 </PreferenceScreen>

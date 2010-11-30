@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.connectsy2.R;
 import com.connectsy2.events.EventNotification;
@@ -123,7 +122,6 @@ public class NotificationHandler {
 				ticker, System.currentTimeMillis());
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		if (doSound){
-			Log.d(TAG, "notification sound uri: "+sound);
 			if (sound != null)
 				notification.sound = Uri.parse(sound);
 			else
