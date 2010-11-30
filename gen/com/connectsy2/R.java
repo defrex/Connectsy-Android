@@ -273,15 +273,19 @@ public final class R {
         public static final int menu_notifications=0x7f080003;
         public static final int menu_settings=0x7f080002;
         public static final int preference_avatar=0x7f080025;
+        public static final int preference_category_notification_sound=0x7f080028;
+        public static final int preference_category_notification_types=0x7f08002b;
         public static final int preference_category_notifications=0x7f080026;
         public static final int preference_category_user=0x7f080024;
+        public static final int preference_notification_sound=0x7f080029;
+        public static final int preference_notification_sound_uri=0x7f08002a;
         public static final int preference_notifications=0x7f080027;
-        public static final int preference_notifications_attend=0x7f08002c;
-        public static final int preference_notifications_comment=0x7f08002b;
-        public static final int preference_notifications_follow=0x7f08002d;
-        public static final int preference_notifications_invite=0x7f080028;
-        public static final int preference_notifications_private=0x7f08002a;
-        public static final int preference_notifications_public=0x7f080029;
+        public static final int preference_notifications_attend=0x7f080030;
+        public static final int preference_notifications_comment=0x7f08002f;
+        public static final int preference_notifications_follow=0x7f080031;
+        public static final int preference_notifications_invite=0x7f08002c;
+        public static final int preference_notifications_private=0x7f08002e;
+        public static final int preference_notifications_public=0x7f08002d;
     }
     public static final class style {
         public static final int ActionBar=0x7f090027;

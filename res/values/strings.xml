@@ -48,6 +48,10 @@
     <string name="preference_avatar">Select Profile Picture</string>
     <string name="preference_category_notifications">Push Notifications</string>
     <string name="preference_notifications">Enable Notifications</string>
+    <string name="preference_category_notification_sound">Notification Sound</string>
+    <string name="preference_notification_sound">Notification Sound</string>
+    <string name="preference_notification_sound_uri">Select Notification Sound</string>
+    <string name="preference_category_notification_types">Notification Types</string>
     <string name="preference_notifications_invite">New Plans</string>
     <string name="preference_notifications_public">Public Plans</string>
     <string name="preference_notifications_private">Private Plans</string>

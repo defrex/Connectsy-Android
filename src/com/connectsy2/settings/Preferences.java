@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -25,6 +27,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	private static final String TAG = "Preferances";
 	private static final int SELECT_AVATAR = 0;
 	private static final int UPLOAD_AVATAR = 1;
+	private static final int SELECT_TONE = 2;
 	private ProgressDialog loadingDialog;
 
 	@Override
@@ -37,6 +40,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, 
 			Preference preference){
 		boolean ret = super.onPreferenceTreeClick(preferenceScreen, preference);
+		if (preference.getKey() == null) return ret;
 		if (preference.getKey().equals("avatar")){
 			startActivityForResult(new Intent(Intent.ACTION_PICK, 
 					Images.Media.INTERNAL_CONTENT_URI), SELECT_AVATAR);
@@ -50,13 +54,25 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 			}else{
 				c.stopService(i);
 			}
+		}else if (preference.getKey().equals("notification_sound_uri")){
+			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, 
+					RingtoneManager.TYPE_NOTIFICATION);
+			intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, 
+					"Select Tone");
+			String uri = PreferenceManager.getDefaultSharedPreferences(this)
+					.getString("notification_sound_uri", null);
+			if (uri != null)
+				intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, 
+						Uri.parse(uri));
+			this.startActivityForResult(intent, SELECT_TONE);
 		}
 		return ret;
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (requestCode == SELECT_AVATAR && resultCode == Activity.RESULT_OK) {
+		if (requestCode == SELECT_AVATAR && resultCode == Activity.RESULT_OK) {
 			Uri selectedImage = data.getData();
 			try {
 				new UserManager(this, this, UserManager.currentUsername(this))
@@ -66,6 +82,16 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+	    }else if (requestCode == SELECT_TONE 
+	    		&& resultCode == Activity.RESULT_OK) {
+	    	Uri uri = data.getParcelableExtra(
+	    			RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+	    	if (uri != null){
+	    		SharedPreferences prefs = 
+	    				PreferenceManager.getDefaultSharedPreferences(this);
+	    		prefs.edit().putString("notification_sound_uri", 
+	    				uri.toString()).commit();
+	    	}
 	    }
 	    super.onActivityResult(requestCode, resultCode, data);
 	}

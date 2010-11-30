@@ -12,7 +12,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.connectsy2.R;
 import com.connectsy2.events.EventNotification;
@@ -24,7 +27,6 @@ public class NotificationHandler {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "NotificationHandlerBase";
-	private Notification notification;
 	private HashMap<String, NotificationContentProvider> notificationContent;
 	private ArrayList<JSONObject> nots = new ArrayList<JSONObject>();
 	
@@ -71,14 +73,15 @@ public class NotificationHandler {
 			throws JSONException{
 		if (notifications.length() == 0) return;
 		
-		if (!PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean("notifications", true))
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		
+		if (!prefs.getBoolean("notifications", true))
 			return;
 		
 		for (int i=0;i<notifications.length();i++){
 			JSONObject not = notifications.getJSONObject(i);
-			if (PreferenceManager.getDefaultSharedPreferences(context)
-					.getBoolean("notifications_"+not.getString("type"), true))
+			if (prefs.getBoolean("notifications_"+not.getString("type"), true))
 				nots.add(not);
 		}
 		if (nots.size() == 0) return;
@@ -103,7 +106,9 @@ public class NotificationHandler {
 					PendingIntent pi = PendingIntent.getActivity(context, 0, 
 							not.intent, PendingIntent.FLAG_UPDATE_CURRENT);
 					//TODO: fix not.ticker on next line
-					Notification n = getNotification("New activity on Connectsy");
+					Notification n = getNotification("New activity on Connectsy",
+							prefs.getBoolean("notification_sound", true),
+							prefs.getString("notification_sound_uri", null));
 					n.setLatestEventInfo(context, not.title, not.body, pi);
 					NotificationManager notManager = (NotificationManager) 
 						context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -112,15 +117,21 @@ public class NotificationHandler {
 			});
 	}
 
-	private Notification getNotification(String ticker) {
-		if (notification == null) {
-			notification = new Notification(R.drawable.notification,
-					ticker, System.currentTimeMillis());
-			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			
-			notification.ledARGB = 0xff00ff00;
-			notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+	private Notification getNotification(String ticker, Boolean doSound, 
+			String sound) {
+		Notification notification = new Notification(R.drawable.notification,
+				ticker, System.currentTimeMillis());
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		if (doSound){
+			Log.d(TAG, "notification sound uri: "+sound);
+			if (sound != null)
+				notification.sound = Uri.parse(sound);
+			else
+				notification.defaults |= Notification.DEFAULT_SOUND;
 		}
+		
+		notification.ledARGB = 0xff00ff00;
+		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 		return notification;
 	}
 
