@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
-import com.connectsy2.R;
 import com.connectsy2.events.EventNew;
 
 public class ActionBarHandler implements OnClickListener{

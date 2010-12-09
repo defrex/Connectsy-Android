@@ -31,6 +31,7 @@ import com.connectsy2.R;
 import com.connectsy2.data.Analytics;
 import com.connectsy2.data.AvatarFetcher;
 import com.connectsy2.data.DataManager.DataUpdateListener;
+import com.connectsy2.social.TwitterAuth;
 import com.connectsy2.users.UserManager;
 
 public class Preferences extends PreferenceActivity implements DataUpdateListener {
@@ -41,6 +42,7 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 	private static final int UPLOAD_AVATAR = 1;
 	private static final int SELECT_TONE = 2;
 	private static final int CHANGE_PASSWORD = 3;
+	private static final int TWITTER_AUTH = 4;
 	private ProgressDialog loadingDialog;
 
 	@Override
@@ -84,13 +86,10 @@ public class Preferences extends PreferenceActivity implements DataUpdateListene
 		}else if (key.equals("password")){
 			showDialog(CHANGE_PASSWORD);
 		}
-//		else if (key.equals("social_twitter")){
-//			OAuthSignpostClient client = new OAuthSignpostClient(
-//					Settings.TWITTER_KEY, Settings.TWITTER_SECRET, "oob");
-//	        Twitter jtwit = new Twitter("yourtwittername", client);
-//	        URI url = client.authorizeUrl();
-//	        startActivityForResult(new Intent())
-//		}
+		else if (key.equals("social_twitter")){
+	        startActivityForResult(new Intent(this, TwitterAuth.class), 
+	        		TWITTER_AUTH);
+		}
 		return ret;
 	}
 
